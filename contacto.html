@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Contacto – RUT.tools</title>
+<meta name="description" content="Contáctanos por WhatsApp o correo. Respondemos rápido consultas sobre planes, acceso y herramientas de RUT."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0e0f11;--surface:#16181c;--surface2:#1e2127;--border:rgba(255,255,255,0.08);--border-strong:rgba(255,255,255,0.15);--text:#f0f0ef;--muted:#7a7b7d;--accent:#e63946;--accent-dim:rgba(230,57,70,0.1);--green:#25D366;--green-bg:rgba(37,211,102,0.1)}
+body{background:var(--bg);color:var(--text);font-family:'Sora',sans-serif;min-height:100vh;display:flex;flex-direction:column}
+header{border-bottom:1px solid var(--border);padding:1.25rem 2rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg);z-index:10}
+.logo{font-size:1rem;font-weight:700;letter-spacing:-0.02em;display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--text)}
+.logo-dot{width:8px;height:8px;background:var(--accent);border-radius:50%}
+.back-link{color:var(--muted);text-decoration:none;font-size:.82rem;font-weight:500;transition:color .15s}
+.back-link:hover{color:var(--text)}
+main{flex:1;display:flex;flex-direction:column;align-items:center;padding:5rem 1.5rem 3rem}
+.hero{text-align:center;margin-bottom:3rem;max-width:480px}
+.hero-label{font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:.75rem}
+.hero h1{font-size:clamp(1.75rem,4vw,2.25rem);font-weight:700;letter-spacing:-0.04em;line-height:1.1;margin-bottom:.75rem}
+.hero p{color:var(--muted);font-size:.9rem;font-weight:300;line-height:1.6}
+
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;width:100%;max-width:640px;margin-bottom:1rem}
+
+.contact-option{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.5rem;text-decoration:none;color:var(--text);display:flex;flex-direction:column;gap:.75rem;transition:border-color .2s}
+.contact-option:hover{border-color:var(--border-strong)}
+.contact-option.wa{border-color:rgba(37,211,102,.3);background:var(--green-bg)}
+.contact-option.wa:hover{border-color:rgba(37,211,102,.6)}
+.contact-icon{font-size:1.75rem}
+.contact-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.contact-title{font-size:.95rem;font-weight:600}
+.contact-sub{font-size:.78rem;color:var(--muted);line-height:1.5}
+.contact-action{font-size:.75rem;font-weight:600;color:var(--accent);margin-top:.25rem}
+.contact-option.wa .contact-action{color:var(--green)}
+
+.form-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:2rem;width:100%;max-width:640px}
+.form-title{font-size:.78rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:1.5rem}
+.form-group{margin-bottom:1.25rem}
+.form-group label{display:block;font-size:.72rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.5rem}
+.form-group input,.form-group textarea,.form-group select{width:100%;background:var(--surface2);border:1px solid var(--border-strong);border-radius:10px;color:var(--text);font-family:'Sora',sans-serif;font-size:.875rem;padding:.8rem 1rem;outline:none;transition:border-color .15s}
+.form-group input::placeholder,.form-group textarea::placeholder{color:rgba(255,255,255,.2)}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:var(--accent)}
+.form-group textarea{min-height:120px;resize:vertical;line-height:1.6}
+.form-group select{appearance:none;cursor:pointer}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.submit-btn{width:100%;padding:.9rem;background:var(--accent);color:#fff;border:none;border-radius:10px;font-family:'Sora',sans-serif;font-size:.9rem;font-weight:600;cursor:pointer;transition:opacity .15s;margin-top:.5rem}
+.submit-btn:hover{opacity:.88}
+.submit-btn:active{transform:scale(.98)}
+.success-msg{background:rgba(47,158,68,.1);border:1px solid rgba(47,158,68,.3);border-radius:10px;padding:1rem 1.25rem;font-size:.85rem;color:#2f9e44;text-align:center;display:none;margin-top:1rem}
+
+footer{border-top:1px solid var(--border);padding:1.5rem 2rem;text-align:center;margin-top:2rem}
+footer p{color:var(--muted);font-size:.75rem}
+footer a{color:var(--muted);text-decoration:underline}
+
+@media(max-width:560px){
+  header{padding:1rem}
+  main{padding:3rem 1rem 2rem}
+  .contact-grid{grid-template-columns:1fr}
+  .form-row{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="index.html"><div class="logo-dot"></div>RUT.tools</a>
+  <a class="back-link" href="index.html">← Volver al inicio</a>
+</header>
+
+<main>
+  <div class="hero">
+    <p class="hero-label">Contacto</p>
+    <h1>¿En qué te podemos ayudar?</h1>
+    <p>Para planes, consultas o propuestas. Respondemos rápido.</p>
+  </div>
+
+  <div class="contact-grid">
+    <a class="contact-option wa" href="https://wa.me/56993149165?text=Hola%2C%20tengo%20una%20consulta%20sobre%20RUT.tools" target="_blank">
+      <div class="contact-icon">💬</div>
+      <div>
+        <div class="contact-label">Más rápido</div>
+        <div class="contact-title">WhatsApp</div>
+        <div class="contact-sub">Respuesta en minutos. Ideal para contratar un plan o resolver dudas rápidas.</div>
+        <div class="contact-action">+56 9 9314 9165 →</div>
+      </div>
+    </a>
+
+    <a class="contact-option" href="mailto:contacto@rut.tools">
+      <div class="contact-icon">✉️</div>
+      <div>
+        <div class="contact-label">Correo</div>
+        <div class="contact-title">Email</div>
+        <div class="contact-sub">Para propuestas formales, integraciones o consultas que requieran más detalle.</div>
+        <div class="contact-action">contacto@rut.tools →</div>
+      </div>
+    </a>
+  </div>
+
+  <div class="form-card">
+    <p class="form-title">O déjanos un mensaje</p>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Nombre</label>
+        <input type="text" id="f-nombre" placeholder="Tu nombre"/>
+      </div>
+      <div class="form-group">
+        <label>Correo</label>
+        <input type="email" id="f-email" placeholder="tu@correo.com"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Asunto</label>
+      <select id="f-asunto">
+        <option value="">Selecciona un asunto</option>
+        <option>Contratar un plan</option>
+        <option>Consulta técnica</option>
+        <option>Propuesta comercial</option>
+        <option>Problema con el sitio</option>
+        <option>Otro</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Mensaje</label>
+      <textarea id="f-mensaje" placeholder="Cuéntanos en qué podemos ayudarte..."></textarea>
+    </div>
+    <button class="submit-btn" onclick="enviarFormulario()">Enviar mensaje por WhatsApp</button>
+    <div class="success-msg" id="success-msg">✓ Abriendo WhatsApp con tu mensaje...</div>
+  </div>
+</main>
+
+<footer>
+  <p>RUT.tools · <a href="index.html">Inicio</a> · <a href="privacidad.html">Privacidad</a></p>
+</footer>
+
+<script>
+function enviarFormulario(){
+  var nombre = document.getElementById('f-nombre').value.trim();
+  var email = document.getElementById('f-email').value.trim();
+  var asunto = document.getElementById('f-asunto').value;
+  var mensaje = document.getElementById('f-mensaje').value.trim();
+
+  if(!nombre || !email || !mensaje){
+    alert('Por favor completa nombre, correo y mensaje.');
+    return;
+  }
+
+  var texto = 'Hola, me contacto desde RUT.tools.\n\n' +
+    'Nombre: ' + nombre + '\n' +
+    'Correo: ' + email + '\n' +
+    (asunto ? 'Asunto: ' + asunto + '\n' : '') +
+    '\nMensaje:\n' + mensaje;
+
+  var url = 'https://wa.me/56993149165?text=' + encodeURIComponent(texto);
+  document.getElementById('success-msg').style.display = 'block';
+  setTimeout(function(){ window.open(url, '_blank'); }, 400);
+}
+</script>
+</body>
+</html>

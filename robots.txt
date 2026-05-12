@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://rutvalidador.netlify.app/sitemap.xml
