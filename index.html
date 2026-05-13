@@ -893,17 +893,7 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
   updateValUI();
   updatePhaseUI();
 
-  // On load: if code already active, apply plan UI
-  (function(){
-    var p = getPlan();
-    if(p){
-      setTimeout(function(){
-        showCodeBadge('gen', p.plan);
-        showCodeBadge('val', p.plan);
-        applyPlanToUI(p);
-      }, 50);
-    }
-  })();
+  // Plan UI applied via updatePhaseUI() on load
 
   // ── ACTIVAR CÓDIGO (SUPABASE) ──
   window.activarCodigo=function(panel){
