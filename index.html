@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Validador de RUT Chile Gratis y Online – Verifica tu RUT | RUT.tools</title>
+
+<!-- SEO Meta Tags -->
+<meta name="keywords" content="validador RUT Chile, validar RUT online, generador RUT Chile, verificador RUT, digito verificador RUT, RUT valido, herramienta RUT, validar RUT gratis"/>
+<meta name="author" content="RUT.tools"/>
+<meta name="robots" content="index, follow"/>
+<link rel="canonical" href="https://rutvalidador.netlify.app"/>
+
+<!-- Open Graph -->
+<meta property="og:type" content="website"/>
+<meta property="og:url" content="https://rutvalidador.netlify.app"/>
+<meta property="og:title" content="Validador de RUT Chile – Gratis y Online | RUT.tools"/>
+<meta property="og:description" content="Valida y genera RUTs chilenos válidos al instante. La herramienta más rápida y confiable para verificar el dígito verificador de cualquier RUT chileno."/>
+<meta property="og:locale" content="es_CL"/>
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Validador de RUT Chile – Gratis | RUT.tools"/>
+<meta name="twitter:description" content="Valida y genera RUTs chilenos válidos al instante. Gratis, sin registro."/>
+
+<!-- Schema Markup -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "RUT.tools – Validador de RUT Chile",
+  "url": "https://rutvalidador.netlify.app",
+  "description": "Valida y genera RUTs chilenos válidos al instante. Verifica el dígito verificador de cualquier RUT de forma gratuita.",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Web",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "CLP"
+  },
+  "inLanguage": "es-CL",
+  "countryOfOrigin": "CL"
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "¿Cómo validar un RUT chileno?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Ingresa el RUT completo incluyendo el dígito verificador en el campo de validación. La herramienta calcula automáticamente si el dígito verificador es correcto usando el algoritmo módulo 11."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Cómo se calcula el dígito verificador del RUT?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "El dígito verificador del RUT chileno se calcula usando el algoritmo módulo 11. Se multiplican los dígitos del RUT por la serie 2,3,4,5,6,7 de derecha a izquierda, se suman los productos y se aplica módulo 11. El resultado determina si el verificador es un número del 0 al 9 o la letra K."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Es gratis el validador de RUT?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Sí, RUT.tools ofrece 10 validaciones gratuitas por día sin necesidad de registro. Para validaciones ilimitadas existen planes de pago desde .990 CLP al mes."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Para qué sirve el generador de RUT?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "El generador de RUT crea números de RUT matemáticamente válidos para uso exclusivo en testing y desarrollo de software. Los RUTs generados no corresponden necesariamente a personas reales."
+      }
+    }
+  ]
+}
+</script>
+<meta name="description" content="Valida y genera RUTs chilenos válidos al instante. Verifica el dígito verificador de cualquier RUT gratis. La herramienta más rápida de Chile para validar RUT online."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Sora:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0e0f11;--surface:#16181c;--surface2:#1e2127;--border:rgba(255,255,255,0.08);--border-strong:rgba(255,255,255,0.15);--text:#f0f0ef;--muted:#7a7b7d;--accent:#e63946;--accent-dim:rgba(230,57,70,0.1);--green:#2f9e44;--green-bg:rgba(47,158,68,0.1);--red-bg:rgba(224,49,49,0.1);--wa:#25D366}
+body{background:var(--bg);color:var(--text);font-family:'Sora',sans-serif;min-height:100vh;display:flex;flex-direction:column}
+
+/* HEADER */
+header{border-bottom:1px solid var(--border);padding:1.25rem 2rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg);z-index:10}
+.logo{font-size:1rem;font-weight:700;letter-spacing:-0.02em;display:flex;align-items:center;gap:8px}
+.logo-dot{width:8px;height:8px;background:var(--accent);border-radius:50%}
+nav{display:flex;gap:1.5rem;align-items:center}
+nav a{color:var(--muted);text-decoration:none;font-size:0.82rem;font-weight:500;transition:color .15s;cursor:pointer}
+nav a:hover{color:var(--text)}
+.nav-wa{background:var(--wa);color:#fff;padding:6px 14px;border-radius:100px;font-size:.78rem;font-weight:600;text-decoration:none;display:flex;align-items:center;gap:6px;transition:opacity .15s}
+.nav-wa:hover{opacity:.88;color:#fff}
+
+main{flex:1;display:flex;flex-direction:column;align-items:center;padding:5rem 1.5rem 2rem}
+.hero{text-align:center;margin-bottom:3.5rem;max-width:560px}
+.hero h1{font-size:clamp(2rem,5vw,3rem);font-weight:700;letter-spacing:-0.04em;line-height:1.1;margin-bottom:1rem}
+.hero h1 span{color:var(--accent)}
+.hero p{color:var(--muted);font-size:1rem;font-weight:300;line-height:1.6}
+
+/* CARD */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:16px;width:100%;max-width:540px;overflow:hidden}
+.tabs{display:flex;border-bottom:1px solid var(--border)}
+.tab{flex:1;padding:1rem;background:none;border:none;color:var(--muted);font-family:'Sora',sans-serif;font-size:.875rem;font-weight:600;cursor:pointer;transition:all .15s}
+.tab.active{color:var(--text);background:var(--surface2);border-bottom:2px solid var(--accent)}
+.tab:hover:not(.active){color:var(--text);background:rgba(255,255,255,.03)}
+.panel{display:none;padding:2rem}
+.panel.active{display:block}
+
+label{display:block;font-size:.72rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.5rem}
+.input-row{display:flex;gap:10px;margin-bottom:1rem}
+input[type="text"]{flex:1;background:var(--surface2);border:1px solid var(--border-strong);border-radius:10px;color:var(--text);font-family:'DM Mono',monospace;font-size:1.2rem;font-weight:500;padding:.85rem 1rem;outline:none;transition:border-color .15s;letter-spacing:.05em}
+input[type="text"]::placeholder{color:rgba(255,255,255,.18);font-size:1rem}
+input[type="text"]:focus{border-color:var(--accent)}
+input[type="number"]{background:var(--surface2);border:1px solid var(--border-strong);border-radius:8px;color:var(--text);font-family:'DM Mono',monospace;font-size:1rem;padding:.5rem .75rem;width:80px;outline:none;transition:border-color .15s}
+input[type="number"]:focus{border-color:var(--accent)}
+
+.btn{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:0 1.25rem;font-family:'Sora',sans-serif;font-size:.875rem;font-weight:600;cursor:pointer;transition:opacity .15s,transform .1s;white-space:nowrap}
+.btn:hover{opacity:.88}
+.btn:active{transform:scale(.97)}
+.btn-full{width:100%;padding:.85rem;font-size:.9rem}
+.btn-outline{background:transparent;border:1px solid var(--border-strong);color:var(--text);font-family:'Sora',sans-serif;font-size:.78rem;font-weight:500;border-radius:8px;padding:5px 12px;cursor:pointer;transition:background .15s}
+.btn-outline:hover{background:var(--surface2)}
+.btn-wa{background:var(--wa);color:#fff;border:none;border-radius:10px;padding:.75rem 1.25rem;font-family:'Sora',sans-serif;font-size:.85rem;font-weight:600;cursor:pointer;transition:opacity .15s;width:100%;display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none}
+.btn-wa:hover{opacity:.88}
+
+.result{border-radius:10px;padding:1rem 1.25rem;margin-top:1rem;display:none;animation:fadeIn .2s ease}
+.result.valid{background:var(--green-bg);border:1px solid rgba(47,158,68,.3);display:flex;align-items:center;gap:12px}
+.result.invalid{background:var(--red-bg);border:1px solid rgba(224,49,49,.3);display:flex;align-items:flex-start;gap:12px}
+.result-icon{font-size:1.4rem;flex-shrink:0}
+.result-text strong{display:block;font-size:.875rem;font-weight:600;margin-bottom:2px}
+.result-text span{font-size:.8rem;opacity:.75;line-height:1.5}
+.divider{height:1px;background:var(--border);margin:1.5rem 0}
+.limit-bar-wrap{margin-top:1.25rem}
+.limit-bar-label{display:flex;justify-content:space-between;font-size:.72rem;color:var(--muted);margin-bottom:6px}
+.limit-bar-track{background:var(--surface2);border-radius:100px;height:4px;overflow:hidden}
+.limit-bar-fill{height:100%;background:var(--accent);border-radius:100px;transition:width .4s ease}
+.upgrade-hint{margin-top:.75rem;font-size:.75rem;color:var(--muted);text-align:center}
+.upgrade-hint a{color:var(--accent);text-decoration:none;cursor:pointer}
+.upgrade-hint a:hover{text-decoration:underline}
+.upload-zone{border:1px dashed var(--border-strong);border-radius:10px;padding:1.25rem;text-align:center;margin-top:1rem}
+.upload-zone p{font-size:.8rem;color:var(--muted);margin-top:6px}
+.upload-zone span{font-size:.72rem;opacity:.6}
+.upload-locked{opacity:.45;pointer-events:none}
+.lock-badge{display:block;text-align:center;font-size:.65rem;font-weight:600;background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:3px 10px;border-radius:100px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;width:fit-content;margin-inline:auto}
+.gen-count-row{display:flex;align-items:center;gap:12px;margin-bottom:1rem}
+.gen-count-row label{margin:0;flex-shrink:0}
+.rut-list{margin-top:1.25rem;display:flex;flex-direction:column;gap:8px;max-height:300px;overflow-y:auto}
+.rut-item{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:.65rem 1rem;display:flex;align-items:center;justify-content:space-between;animation:slideIn .2s ease}
+.rut-item code{font-family:'DM Mono',monospace;font-size:.95rem;letter-spacing:.04em}
+.phase-pills{display:flex;gap:6px;margin-bottom:1.25rem;flex-wrap:wrap}
+.phase-pill{flex:1;min-width:90px;border-radius:8px;padding:.5rem .6rem;text-align:center;border:1px solid var(--border);font-size:.7rem;font-weight:600;transition:all .2s}
+.phase-pill.done{background:var(--green-bg);border-color:rgba(47,158,68,.3);color:var(--green)}
+.phase-pill.active{background:var(--accent-dim);border-color:rgba(230,57,70,.4);color:var(--accent)}
+.phase-pill.pending{color:var(--muted)}
+.phase-pill .pill-label{display:block;font-size:.65rem;opacity:.7;font-weight:400;margin-top:2px}
+.info-chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:1rem}
+.chip{font-size:.68rem;background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:3px 9px;border-radius:100px}
+
+/* PLAN BADGE */
+.plan-badge{display:inline-flex;align-items:center;gap:6px;background:var(--green-bg);border:1px solid rgba(47,158,68,.3);color:var(--green);font-size:.72rem;font-weight:600;padding:4px 10px;border-radius:100px;margin-bottom:1rem}
+
+/* ACCESS CODE BOX */
+.code-box{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:1.25rem;margin-top:1.5rem}
+.code-box-title{font-size:.75rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.75rem}
+.code-input-row{display:flex;gap:8px}
+.code-input{flex:1;background:var(--bg);border:1px solid var(--border-strong);border-radius:8px;color:var(--text);font-family:'DM Mono',monospace;font-size:.95rem;font-weight:500;padding:.65rem .875rem;outline:none;transition:border-color .15s;letter-spacing:.1em;text-transform:uppercase}
+.code-input:focus{border-color:var(--accent)}
+.code-input::placeholder{text-transform:none;letter-spacing:0;font-size:.85rem;color:rgba(255,255,255,.2)}
+.code-btn{background:var(--surface);border:1px solid var(--border-strong);color:var(--text);font-family:'Sora',sans-serif;font-size:.78rem;font-weight:600;border-radius:8px;padding:.65rem 1rem;cursor:pointer;transition:all .15s;white-space:nowrap}
+.code-btn:hover{background:var(--border-strong)}
+.code-result{margin-top:.6rem;font-size:.75rem;line-height:1.5;display:none}
+.code-result.ok{color:var(--green)}
+.code-result.err{color:var(--accent)}
+
+/* NATIVE AD */
+.native-ad{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1rem 1.25rem;width:100%;max-width:540px;margin-top:1.25rem;display:flex;align-items:center;gap:14px;text-decoration:none;transition:border-color .2s;cursor:pointer}
+.native-ad:hover{border-color:var(--border-strong)}
+.native-ad-icon{width:40px;height:40px;background:var(--surface2);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+.native-ad-body{flex:1}
+.native-ad-body p{font-size:.82rem;color:var(--text);line-height:1.4;font-weight:500}
+.native-ad-body span{font-size:.7rem;color:var(--muted)}
+.native-ad-tag{font-size:.6rem;color:var(--muted);background:var(--surface2);border:1px solid var(--border);padding:2px 7px;border-radius:100px;text-transform:uppercase;letter-spacing:.06em;flex-shrink:0}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:100;display:none;align-items:center;justify-content:center;padding:1rem}
+.modal-overlay.open{display:flex;animation:fadeIn .2s ease}
+.modal{background:var(--surface);border:1px solid var(--border-strong);border-radius:18px;width:100%;max-width:400px;overflow:hidden}
+.modal-header{padding:1.25rem 1.5rem 1rem;border-bottom:1px solid var(--border)}
+.modal-header h3{font-size:.95rem;font-weight:600}
+.modal-header p{font-size:.72rem;color:var(--muted);margin-top:2px}
+.ad-placeholder{background:var(--surface2);margin:1.5rem;border-radius:12px;height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;border:1px dashed var(--border-strong);position:relative}
+.ad-placeholder-label{font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;position:absolute;top:10px;right:12px}
+.ad-placeholder-icon{font-size:2.5rem}
+.ad-placeholder p{font-size:.78rem;color:var(--muted)}
+.ad-progress-bar{height:3px;background:var(--surface2);margin:0 1.5rem;border-radius:100px;overflow:hidden}
+.ad-progress-fill{height:100%;background:var(--accent);border-radius:100px;width:0%;transition:width .1s linear}
+.modal-footer{padding:1.25rem 1.5rem;display:flex;flex-direction:column;gap:8px}
+.modal-countdown{text-align:center;font-size:.78rem;color:var(--muted)}
+.modal-countdown strong{color:var(--text)}
+.reward-ready{background:var(--green-bg);border:1px solid rgba(47,158,68,.3);border-radius:10px;padding:.75rem 1rem;text-align:center;font-size:.85rem;font-weight:600;color:var(--green);cursor:pointer;animation:fadeIn .3s ease;display:none}
+.modal-cancel{background:transparent;border:none;color:var(--muted);font-family:'Sora',sans-serif;font-size:.75rem;cursor:pointer;text-align:center;padding:4px;opacity:.5}
+
+/* PRICING */
+.pricing-section{width:100%;max-width:1020px;margin-top:5rem;padding:0 .5rem}
+.section-label{font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:.75rem;text-align:center}
+.section-header{text-align:center;margin-bottom:2.5rem}
+.section-header h2{font-size:clamp(1.5rem,3vw,2rem);font-weight:700;letter-spacing:-0.03em;margin-bottom:.5rem}
+.section-header p{color:var(--muted);font-size:.9rem}
+.pricing-block-title{font-size:.78rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:1rem;padding-left:2px}
+.plans-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:3rem}
+.plan-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.5rem;display:flex;flex-direction:column;gap:.85rem;position:relative;transition:border-color .2s}
+.plan-card:hover{border-color:var(--border-strong)}
+.plan-card.featured{border-color:var(--accent);background:linear-gradient(160deg,rgba(230,57,70,.07) 0%,var(--surface) 60%)}
+.featured-badge{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;font-size:.62rem;font-weight:700;padding:3px 12px;border-radius:100px;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap}
+.plan-name{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--muted)}
+.plan-price{display:flex;align-items:baseline;gap:4px}
+.plan-price .amount{font-size:1.65rem;font-weight:700;letter-spacing:-0.03em}
+.plan-price .period{font-size:.75rem;color:var(--muted)}
+.plan-price .free-label{font-size:1.4rem;font-weight:700;color:var(--muted)}
+.plan-limit{font-size:.78rem;color:var(--muted);padding:.5rem 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);line-height:1.5}
+.plan-limit strong{color:var(--text)}
+.plan-features{display:flex;flex-direction:column;gap:6px;flex:1}
+.feat{display:flex;align-items:flex-start;gap:7px;font-size:.77rem;line-height:1.4}
+.feat.yes{color:var(--text)}
+.feat.no{color:var(--muted)}
+.feat-icon{flex-shrink:0;margin-top:1px;font-size:.85rem}
+.plan-cta-wa{background:var(--wa);border:none;color:#fff;font-family:'Sora',sans-serif;font-size:.78rem;font-weight:600;border-radius:8px;padding:.6rem;cursor:pointer;transition:opacity .15s;text-align:center;text-decoration:none;display:block}
+.plan-cta-wa:hover{opacity:.88}
+.plan-cta{background:var(--surface2);border:1px solid var(--border-strong);color:var(--text);font-family:'Sora',sans-serif;font-size:.78rem;font-weight:600;border-radius:8px;padding:.6rem;cursor:pointer;transition:all .15s;text-align:center}
+.plan-cta:hover{background:var(--border-strong)}
+.plan-cta.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.plan-cta.primary:hover{opacity:.88}
+
+/* CONTACT */
+.contact-section{margin-top:4rem;text-align:center;max-width:480px}
+.contact-section h3{font-size:1.1rem;font-weight:600;margin-bottom:.5rem}
+.contact-section p{color:var(--muted);font-size:.85rem;margin-bottom:1.25rem;line-height:1.6}
+.contact-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.contact-email{display:inline-flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border-strong);border-radius:10px;padding:.75rem 1.25rem;font-size:.875rem;color:var(--text);text-decoration:none;transition:border-color .15s}
+.contact-email:hover{border-color:var(--accent)}
+.contact-wa{display:inline-flex;align-items:center;gap:8px;background:var(--wa);border-radius:10px;padding:.75rem 1.25rem;font-size:.875rem;color:#fff;text-decoration:none;transition:opacity .15s;font-weight:600}
+.contact-wa:hover{opacity:.88}
+
+/* FLOATING WA */
+.wa-float{position:fixed;bottom:1.5rem;right:1.5rem;z-index:50;background:var(--wa);color:#fff;border-radius:100px;padding:.75rem 1.25rem;font-family:'Sora',sans-serif;font-size:.82rem;font-weight:600;text-decoration:none;display:flex;align-items:center;gap:8px;box-shadow:0 4px 20px rgba(37,211,102,.3);transition:opacity .15s,transform .15s}
+.wa-float:hover{opacity:.92;transform:translateY(-2px)}
+
+footer{border-top:1px solid var(--border);padding:2rem;text-align:center;margin-top:4rem}
+footer p{color:var(--muted);font-size:.75rem;line-height:1.8}
+footer a{color:var(--muted);text-decoration:underline}
+.tyc-text{max-width:560px;margin:1.5rem auto 0;text-align:left;font-size:.71rem;color:var(--muted);line-height:1.8;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1rem 1.25rem}
+.tyc-text strong{color:var(--text)}
+
+    /* USER LOGIN MODAL */
+    .user-btn{background:var(--accent-dim);border:1px solid var(--accent);border-radius:100px;width:34px;height:34px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;flex-shrink:0}
+    .user-btn:hover{background:var(--accent);opacity:.9}
+    .user-btn:hover svg{fill:#fff}
+    .user-btn svg{fill:var(--accent);transition:fill .2s}
+    .user-btn.logged{border-color:var(--green);background:var(--green);border-radius:100px}
+    .user-btn.logged svg{display:none}
+    .user-initial{display:none;color:#fff;font-size:.8rem;font-weight:700;font-family:"Sora",sans-serif;line-height:1}
+    .user-btn.logged .user-initial{display:block}
+    .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;display:none;align-items:center;justify-content:center;padding:1rem}
+    .modal-bg.open{display:flex;animation:fadeIn .15s ease}
+    .user-modal{background:var(--surface);border:1px solid var(--border-strong);border-radius:16px;width:100%;max-width:360px;padding:2rem}
+    .user-modal h3{font-size:1.05rem;font-weight:700;margin-bottom:.35rem}
+    .user-modal p{font-size:.78rem;color:var(--muted);margin-bottom:1.5rem;line-height:1.5}
+    .u-field{margin-bottom:.875rem}
+    .u-field label{display:block;font-size:.65rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.35rem}
+    .u-field input{width:100%;background:var(--surface2);border:1px solid var(--border-strong);border-radius:8px;color:var(--text);font-family:"Sora",sans-serif;font-size:.875rem;padding:.7rem .9rem;outline:none;transition:border-color .15s}
+    .u-field input:focus{border-color:var(--accent)}
+    .u-field input::placeholder{color:rgba(255,255,255,.2)}
+    .u-login-btn{width:100%;padding:.8rem;background:var(--accent);color:#fff;border:none;border-radius:8px;font-family:"Sora",sans-serif;font-size:.875rem;font-weight:600;cursor:pointer;transition:opacity .15s;margin-top:.25rem}
+    .u-login-btn:hover{opacity:.88}
+    .u-error{font-size:.75rem;color:var(--accent);margin-top:.5rem;display:none}
+    .u-logged-view{display:none;text-align:center}
+    .u-avatar{width:56px;height:56px;background:var(--green-bg);border:2px solid rgba(47,158,68,.4);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:1.5rem}
+    .u-plan-badge{display:inline-block;background:var(--green-bg);border:1px solid rgba(47,158,68,.3);color:var(--green);font-size:.72rem;font-weight:600;padding:4px 12px;border-radius:100px;margin-bottom:1rem}
+    .u-logout{width:100%;padding:.7rem;background:transparent;border:1px solid var(--border-strong);color:var(--muted);font-family:"Sora",sans-serif;font-size:.82rem;border-radius:8px;cursor:pointer;transition:all .15s;margin-top:.5rem}
+    .u-logout:hover{border-color:var(--accent);color:var(--accent)}
+    .modal-close{float:right;background:none;border:none;color:var(--muted);font-size:1rem;cursor:pointer;padding:0;line-height:1}
+    .modal-close:hover{color:var(--text)}
+
+    @keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideIn{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:translateX(0)}}
+@media(max-width:860px){.plans-grid{grid-template-columns:repeat(2,1fr)}.casos-grid{grid-template-columns:repeat(2,1fr)!important}}
+@media(max-width:520px){.casos-grid{grid-template-columns:1fr!important}}
+@media(max-width:520px){header{padding:1rem}.nav-wa span{display:none}main{padding:3rem 1rem 2rem}.plans-grid{grid-template-columns:1fr}.panel{padding:1.5rem}.wa-float{padding:.75rem 1rem;font-size:.75rem}}
+</style>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-HY2JWNDTDX"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-HY2JWNDTDX');</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+<!-- MODAL AD -->
+<div class="modal-overlay" id="ad-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modal-title">Generando tus RUTs</h3>
+      <p id="modal-subtitle">Mira este breve anuncio para continuar</p>
+    </div>
+    <div class="ad-placeholder">
+      <span class="ad-placeholder-label">Anuncio</span>
+      <div class="ad-placeholder-icon">📢</div>
+      <!-- Reemplaza con código de tu red publicitaria -->
+      <p>Espacio publicitario</p>
+    </div>
+    <div class="ad-progress-bar"><div class="ad-progress-fill" id="ad-progress"></div></div>
+    <div class="modal-footer">
+      <div class="modal-countdown" id="modal-countdown">Continúa en <strong id="ad-secs">10</strong> segundos…</div>
+      <div class="reward-ready" id="reward-btn" onclick="claimReward()">✓ &nbsp;¡Listo! Recibir mis RUTs</div>
+      <button class="modal-cancel" onclick="closeModal()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- FLOATING WHATSAPP -->
+<a class="wa-float" href="https://wa.me/56993149165?text=Hola%2C%20quiero%20contratar%20un%20plan%20de%20RUT.tools" target="_blank">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.118 1.528 5.855L.057 23.58a.75.75 0 00.916.917l5.733-1.473A11.943 11.943 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75a9.694 9.694 0 01-4.951-1.358l-.355-.211-3.676.944.973-3.562-.232-.368A9.694 9.694 0 012.25 12C2.25 6.615 6.615 2.25 12 2.25S21.75 6.615 21.75 12 17.385 21.75 12 21.75z"/></svg>
+  <span>Contratar plan</span>
+</a>
+
+<header>
+  <div class="logo"><div class="logo-dot"></div>RUT.tools</div>
+  <nav>
+    <a onclick="goTo('tool')">Herramienta</a>
+    <a onclick="goTo('precios')">Planes</a>
+    <a class="nav-wa" href="contacto.html">Contacto</a>
+    <button class="user-btn" id="user-nav-btn" onclick="openUserModal()" title="Iniciar sesión">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+      <span class="user-initial" id="user-initial"></span>
+    </button>
+  </nav>
+</header>
+
+<main>
+<div class="hero">
+    <h1>Valida y genera<br/><span>RUTs chilenos</span></h1>
+    <p>Herramienta gratuita para uso personal.<br/>Planes profesionales para empresas y desarrolladores.</p>
+  </div>
+
+  <div style="width:100%;max-width:540px;display:flex;justify-content:flex-end;margin-top:-2rem;margin-bottom:1rem">
+    <a href="otras-herramientas.html" style="display:inline-flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border-strong);color:var(--text);font-size:.88rem;font-weight:600;text-decoration:none;padding:9px 20px;border-radius:8px;font-family:Sora,sans-serif;transition:border-color .15s" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border-strong)'">Otras herramientas →</a>
+  </div>
+
+  <div class="card" id="tool">
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('validar')">Validar RUT</button>
+      <button class="tab" onclick="switchTab('generar')">Generar RUTs</button>
+    </div>
+
+    <!-- VALIDAR -->
+    <div class="panel active" id="panel-validar">
+      <div id="val-plan-badge" style="display:none"><div class="plan-badge">⚡ Plan activo: <span id="val-plan-name"></span></div></div>
+      <label>Ingresa un RUT</label>
+      <div class="input-row">
+        <input type="text" id="rut-input" placeholder="12.345.678-9" maxlength="12" oninput="formatRutInput(this)" onkeydown="if(event.key==='Enter')validar()"/>
+        <button class="btn" onclick="validar()">Validar</button>
+      </div>
+      <div class="result" id="result-box"></div>
+      <div class="limit-bar-wrap">
+        <div class="limit-bar-label"><span>Uso hoy</span><span id="val-label">0 / 10</span></div>
+        <div class="limit-bar-track"><div class="limit-bar-fill" id="val-bar" style="width:0%"></div></div>
+      </div>
+      <p class="upgrade-hint" id="val-upgrade-hint">Plan gratis: 10 validaciones/día · <a onclick="goTo('precios')">Ver planes →</a></p>
+      <div class="divider"></div>
+      <span class="lock-badge" id="excel-lock">🔒 Pro · Plus · Business</span>
+      <div class="upload-zone upload-locked" id="excel-zone">
+        <div style="font-size:1.5rem">📊</div>
+        <p>Validación masiva desde Excel</p>
+        <span>Sube un .xlsx o .csv con cientos de RUTs y valídalos todos a la vez</span>
+      </div>
+      <div class="info-chips"><span class="chip">12345678-9</span><span class="chip">12.345.678-9</span><span class="chip">123456789</span></div>
+
+      <!-- ACCESS CODE -->
+      <div class="code-box">
+        <div class="code-box-title">¿Tienes un código de acceso?</div>
+        <div class="code-input-row">
+          <input type="text" class="code-input" id="code-input-val" placeholder="Ej: PRO-2847" maxlength="12"/>
+          <button class="code-btn" onclick="activarCodigo('val')">Activar</button>
+        </div>
+        <div class="code-result" id="code-result-val"></div>
+      </div>
+    </div>
+
+    <!-- GENERAR -->
+    <div class="panel" id="panel-generar">
+      <div id="gen-plan-badge" style="display:none"><div class="plan-badge">⚡ Plan activo: <span id="gen-plan-name"></span></div></div>
+      <div class="phase-pills" id="phase-pills">
+        <div class="phase-pill active" id="pill-0">10 gratis<span class="pill-label">Sin anuncio</span></div>
+        <div class="phase-pill pending" id="pill-1">+10<span class="pill-label">1 anuncio</span></div>
+        <div class="phase-pill pending" id="pill-2">+10<span class="pill-label">1 anuncio</span></div>
+      </div>
+      <div class="gen-count-row">
+        <label>Cantidad</label>
+        <input type="number" id="gen-count" value="10" min="1" max="10"/>
+        <span id="gen-max-hint" style="font-size:.75rem;color:var(--muted)">máx. 10 por vez</span>
+      </div>
+      <button class="btn btn-full" id="gen-btn" onclick="solicitarGenerar()">Generar 10 RUTs gratis</button>
+      <p id="gen-hint" style="font-size:.72rem;color:var(--muted);text-align:center;margin-top:8px;line-height:1.5">
+        Primera tanda sin anuncio · <a onclick="goTo('precios')" style="color:var(--accent);cursor:pointer;text-decoration:none">Planes sin límite →</a>
+      </p>
+      <div class="rut-list" id="rut-list"></div>
+      <p id="gen-note" style="display:none;margin-top:1rem;font-size:.72rem;color:var(--muted);line-height:1.6">RUTs válidos matemáticamente para <strong style="color:var(--text)">testing y desarrollo</strong> únicamente.</p>
+
+      <!-- ACCESS CODE -->
+      <div class="code-box" style="margin-top:1.5rem">
+        <div class="code-box-title">¿Tienes un código de acceso?</div>
+        <div class="code-input-row">
+          <input type="text" class="code-input" id="code-input-gen" placeholder="Ej: DEV-5531" maxlength="12"/>
+          <button class="code-btn" onclick="activarCodigo('gen')">Activar</button>
+        </div>
+        <div class="code-result" id="code-result-gen"></div>
+      </div>
+    </div>
+    </div>
+
+  </div>
+
+  <!-- NATIVE AD -->
+  <a class="native-ad" href="#" onclick="return false">
+    <div class="native-ad-icon">🚀</div>
+    <div class="native-ad-body">
+      <p>¿Desarrollas en Chile? Conecta pagos con RUT en minutos</p>
+      <span>Integración bancaria simple para tu app o negocio</span>
+    </div>
+    <span class="native-ad-tag">Patrocinado</span>
+  </a>
+
+
+  <!-- CASOS DE USO -->
+  <div style="width:100%;max-width:720px;margin-top:5rem;padding:0 .5rem">
+    <div style="text-align:center;margin-bottom:2.5rem">
+      <p style="font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:.75rem">¿Para quién es?</p>
+      <h2 style="font-size:clamp(1.4rem,3vw,1.9rem);font-weight:700;letter-spacing:-0.03em;margin-bottom:.5rem">Hecho para cada situación</h2>
+      <p style="color:var(--muted);font-size:.9rem">Tres herramientas, tres problemas reales resueltos.</p>
+    </div>
+
+    <div class="casos-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px">
+
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.5rem;display:flex;flex-direction:column;gap:.75rem">
+        <div style="font-size:1.75rem">🧮</div>
+        <p style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--accent)">Contador</p>
+        <p style="font-size:.85rem;font-weight:600;line-height:1.3">Tienes cientos de RUTs de clientes mal formateados en Excel</p>
+        <p style="font-size:.78rem;color:var(--muted);line-height:1.6;flex:1">Sube el archivo, el organizador detecta y formatea todos los RUTs en segundos. Sin tocar nombres ni otros datos.</p>
+        <a href="otras-herramientas.html" style="font-size:.75rem;color:var(--accent);text-decoration:none;font-weight:600">Organizar Excel →</a>
+      </div>
+
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.5rem;display:flex;flex-direction:column;gap:.75rem">
+        <div style="font-size:1.75rem">👨‍💻</div>
+        <p style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--accent)">Desarrollador</p>
+        <p style="font-size:.85rem;font-weight:600;line-height:1.3">Necesitas RUTs válidos para testear tu formulario o base de datos</p>
+        <p style="font-size:.78rem;color:var(--muted);line-height:1.6;flex:1">Genera hasta 10.000 RUTs matemáticamente válidos con un clic. Exporta directo a CSV o Excel listo para usar.</p>
+        <a onclick="document.querySelector('.tab:last-child') && switchTab('generar'); document.getElementById('tool').scrollIntoView({behavior:'smooth'})" style="font-size:.75rem;color:var(--accent);text-decoration:none;font-weight:600;cursor:pointer">Generar RUTs →</a>
+      </div>
+
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.5rem;display:flex;flex-direction:column;gap:.75rem">
+        <div style="font-size:1.75rem">🏢</div>
+        <p style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--accent)">Empresa</p>
+        <p style="font-size:.85rem;font-weight:600;line-height:1.3">Recibes RUTs de clientes o proveedores y quieres verificar que sean correctos</p>
+        <p style="font-size:.78rem;color:var(--muted);line-height:1.6;flex:1">Valida cualquier RUT al instante. Si el dígito verificador es incorrecto, te dice cuál debería ser.</p>
+        <a onclick="switchTab('validar');document.getElementById('tool').scrollIntoView({behavior:'smooth'})" style="font-size:.75rem;color:var(--accent);text-decoration:none;font-weight:600;cursor:pointer">Validar RUT →</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PRICING -->
+  <div class="pricing-section" id="precios">
+    <div class="section-header">
+      <p class="section-label">Planes</p>
+      <h2>Elige tu plan</h2>
+      <p>Paga por WhatsApp y recibe tu código de acceso al instante.</p>
+    </div>
+
+    <!-- HOW IT WORKS -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:2rem;max-width:680px;margin:0 auto 3.5rem">
+      <p style="font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:1.5rem;text-align:center">¿Cómo funciona?</p>
+      <div style="display:flex;flex-direction:column;gap:0">
+
+        <div style="display:flex;gap:1rem;align-items:flex-start;padding-bottom:1.25rem;border-bottom:1px solid var(--border)">
+          <div style="width:32px;height:32px;background:var(--accent-dim);border:1px solid rgba(230,57,70,.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;color:var(--accent);flex-shrink:0">1</div>
+          <div>
+            <p style="font-size:.875rem;font-weight:600;margin-bottom:3px">Elige tu plan</p>
+            <p style="font-size:.78rem;color:var(--muted);line-height:1.5">Revisa los planes de validador o generador y elige el que se ajuste a tu uso.</p>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:1rem;align-items:flex-start;padding:1.25rem 0;border-bottom:1px solid var(--border)">
+          <div style="width:32px;height:32px;background:var(--accent-dim);border:1px solid rgba(230,57,70,.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;color:var(--accent);flex-shrink:0">2</div>
+          <div>
+            <p style="font-size:.875rem;font-weight:600;margin-bottom:3px">Escríbenos por WhatsApp</p>
+            <p style="font-size:.78rem;color:var(--muted);line-height:1.5">Haz clic en el botón del plan que elegiste. Te llega un mensaje pre-escrito con el plan seleccionado.</p>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:1rem;align-items:flex-start;padding:1.25rem 0;border-bottom:1px solid var(--border)">
+          <div style="width:32px;height:32px;background:var(--accent-dim);border:1px solid rgba(230,57,70,.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;color:var(--accent);flex-shrink:0">3</div>
+          <div>
+            <p style="font-size:.875rem;font-weight:600;margin-bottom:3px">Realiza el pago</p>
+            <p style="font-size:.78rem;color:var(--muted);line-height:1.5">Te enviamos el link de pago. Aceptamos tarjetas de crédito, débito y transferencia bancaria.</p>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:1rem;align-items:flex-start;padding:1.25rem 0;border-bottom:1px solid var(--border)">
+          <div style="width:32px;height:32px;background:var(--accent-dim);border:1px solid rgba(230,57,70,.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;color:var(--accent);flex-shrink:0">4</div>
+          <div>
+            <p style="font-size:.875rem;font-weight:600;margin-bottom:3px">Recibe tu código de acceso</p>
+            <p style="font-size:.78rem;color:var(--muted);line-height:1.5">Una vez confirmado el pago, te enviamos un código único por WhatsApp. Ejemplo: <span style="font-family:DM Mono,monospace;font-size:.8rem;color:var(--text)">PRO-2847</span></p>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:1rem;align-items:flex-start;padding-top:1.25rem">
+          <div style="width:32px;height:32px;background:var(--green-bg);border:1px solid rgba(47,158,68,.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;color:var(--green);flex-shrink:0">5</div>
+          <div>
+            <p style="font-size:.875rem;font-weight:600;margin-bottom:3px">Actívalo en el sitio</p>
+            <p style="font-size:.78rem;color:var(--muted);line-height:1.5">Ingresa el código en la herramienta correspondiente y tu plan queda activo al instante. Sin registro, sin contraseña.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <p class="pricing-block-title">Validador de RUT</p>
+    <div class="plans-grid">
+      <div class="plan-card">
+        <div class="plan-name">Gratis</div>
+        <div class="plan-price"><span class="free-label">$0</span></div>
+        <div class="plan-limit"><strong>10 validaciones</strong> por día</div>
+        <div class="plan-features">
+          <div class="feat yes"><span class="feat-icon">✓</span>Validación individual</div>
+          <div class="feat no"><span class="feat-icon">✗</span>Validación masiva Excel</div>
+          <div class="feat no"><span class="feat-icon">✗</span>Sin publicidad</div>
+        </div>
+        <button class="plan-cta" onclick="goTo('tool')">Usar gratis</button>
+      </div>
+      <div class="plan-card">
+        <div class="plan-name">Pro</div>
+        <div class="plan-price"><span class="amount">$3.990</span><span class="period">/mes</span></div>
+        <div class="plan-limit"><strong>100 validaciones</strong> por día</div>
+        <div class="plan-features">
+          <div class="feat yes"><span class="feat-icon">✓</span>Validación individual</div>
+          <div class="feat yes"><span class="feat-icon">✓</span>Validación masiva Excel</div>
+          <div class="feat yes"><span class="feat-icon">✓</span>Sin publicidad</div>
+        </div>
+        <a class="plan-cta-wa" href="https://wa.me/56993149165?text=Hola%2C%20quiero%20contratar%20el%20plan%20Pro%20Validador%20%28%243.990%2Fmes%29" target="_blank">💬 Contratar por WhatsApp</a>
+      </div>
+      <div class="plan-card featured">
+        <div class="featured-badge">Popular</div>
+        <div class="plan-name">Plus</div>
+        <div class="plan-price"><span class="amount">$7.990</span><span class="period">/mes</span></div>
+        <div class="plan-limit"><strong>500 validaciones</strong> por día</div>
+        <div class="plan-features">
+          <div class="feat yes"><span class="feat-icon">✓</span>Validación individual</div>
+          <div class="feat yes"><span class="feat-icon">✓</span>Validación masiva Excel</div>
+          <div class="feat yes"><span class="feat-icon">✓</span>Sin publicidad</div>
+        </div>
+        <a class="plan-cta-wa" href="https://wa.me/56993149165?text=Hola%2C%20quiero%20contratar%20el%20plan%20Plus%20Validador%20%28%247.990%2Fmes%29" target="_blank">💬 Contratar por WhatsApp</a>
+      </div>
+      <div class="plan-card">
+        <div class="plan-name">Business</div>
+        <div class="plan-price"><span class="amount">$14.990</span><span class="period">/mes</span></div>
+        <div class="plan-limit"><strong>1.000 validaciones</strong> por día</div>
+        <div class="plan-features">
+          <div class="feat yes"><span class="feat-icon">✓</span>Validación individual</div>
+          <div class="feat yes"><span class="feat-icon">✓</span>Validación masiva Excel</div>
+          <div class="feat yes"><span class="feat-icon">✓</span>Sin publicidad</div>
+        </div>
+        <a class="plan-cta-wa" href="https://wa.me/56993149165?text=Hola%2C%20quiero%20contratar%20el%20plan%20Business%20Validador%20%2814.990%2Fmes%29" target="_blank">💬 Contratar por WhatsApp</a>
+      </div>
+    </div>
+
+    <p class="pricing-block-title">Generador de RUT</p>
+    <div class="plans-grid">
+      <div class="plan-card">
+        <div class="plan-name">Gratis</div>
+        <div class="plan-price"><span class="free-label">$0</span></div>
+        <div class="plan-limit"><strong>30 RUTs/día</strong><br/>10 gratis · 20 con anuncio</div>
+        <div class="plan-features">
+          <div class="feat yes"><span class="feat-icon">✓</span>Copia individual</div>
+          <div class="feat no"><span class="feat-icon">✗</span>Exportar CSV / Excel</div>
+          <div class="feat no"><span class="feat-icon">✗</span>Sin publicidad</div>
+        </div>
+        <button class="plan-cta" onclick="switchTab('generar');goTo('tool')">Usar gratis</button>
+      </div>
+      <div class="plan-card">
+        <div class="plan-name">Dev</div>
+        <div class="plan-price"><span class="amount">$3.990</span><span class="period">/mes</span></div>
+        <div class="plan-limit"><strong>500 RUTs</strong> por generación</div>
+        <div class="plan-features">
+          <div class="feat yes"><span class="feat-icon">✓</span>Copia individual</div>
+          <div class="feat yes"><span class="feat-icon">✓</span>Exportar CSV / Excel</div>
+          <div class="feat yes"><span class="feat-icon">✓</span>Sin publicidad</div>
+        </div>
+        <a class="plan-cta-wa" href="https://wa.me/56993149165?text=Hola%2C%20quiero%20contratar%20el%20plan%20Dev%20Generador%20%28%243.990%2Fmes%29" target="_blank">💬 Contratar por WhatsApp</a>
+      </div>
+      <div class="plan-card featured">
+        <div class="featured-badge">Popular</div>
+        <div class="plan-name">Pro</div>
+        <div class="plan-price"><span class="amount">$7.990</span><span class="period">/mes</span></div>
+        <div class="plan-limit"><strong>1.000 RUTs</strong> por generación</div>
+        <div class="plan-features">
+          <div class="feat yes"><span class="feat-icon">✓</span>Copia individual</div>
+          <div class="feat yes"><span class="feat-icon">✓</span>Exportar CSV / Excel</div>
+          <div class="feat yes"><span class="feat-icon">✓</span>Sin publicidad</div>
+        </div>
+        <a class="plan-cta-wa" href="https://wa.me/56993149165?text=Hola%2C%20quiero%20contratar%20el%20plan%20Pro%20Generador%20%28%247.990%2Fmes%29" target="_blank">💬 Contratar por WhatsApp</a>
+      </div>
+      <div class="plan-card">
+        <div class="plan-name">Business</div>
+        <div class="plan-price"><span class="amount">$14.990</span><span class="period">/mes</span></div>
+        <div class="plan-limit"><strong>10.000 RUTs</strong> por generación</div>
+        <div class="plan-features">
+          <div class="feat yes"><span class="feat-icon">✓</span>Copia individual</div>
+          <div class="feat yes"><span class="feat-icon">✓</span>Exportar CSV / Excel</div>
+          <div class="feat yes"><span class="feat-icon">✓</span>Sin publicidad</div>
+        </div>
+        <a class="plan-cta-wa" href="https://wa.me/56993149165?text=Hola%2C%20quiero%20contratar%20el%20plan%20Business%20Generador%20%2814.990%2Fmes%29" target="_blank">💬 Contratar por WhatsApp</a>
+      </div>
+    </div>
+
+    <!-- HOW IT WORKS -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.75rem;max-width:600px;margin:0 auto 3rem">
+      <p style="font-size:.75rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:1.25rem">¿Cómo funciona?</p>
+      <div style="display:flex;flex-direction:column;gap:1rem">
+        <div style="display:flex;gap:12px;align-items:flex-start">
+          <div style="width:28px;height:28px;background:var(--accent-dim);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;color:var(--accent);flex-shrink:0">1</div>
+          <div><p style="font-size:.85rem;font-weight:500">Escríbenos por WhatsApp</p><p style="font-size:.78rem;color:var(--muted);margin-top:2px">Dinos qué plan quieres y te enviamos el link de pago.</p></div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start">
+          <div style="width:28px;height:28px;background:var(--accent-dim);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;color:var(--accent);flex-shrink:0">2</div>
+          <div><p style="font-size:.85rem;font-weight:500">Realiza el pago</p><p style="font-size:.78rem;color:var(--muted);margin-top:2px">Aceptamos tarjetas, débito y transferencia.</p></div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start">
+          <div style="width:28px;height:28px;background:var(--accent-dim);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;color:var(--accent);flex-shrink:0">3</div>
+          <div><p style="font-size:.85rem;font-weight:500">Recibe tu código de acceso</p><p style="font-size:.78rem;color:var(--muted);margin-top:2px">Te enviamos un código único. Ingrésalo en la herramienta y tu plan queda activo al instante.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="contact-section" id="contacto">
+    <h3>¿Tienes dudas?</h3>
+    <p>Para planes, consultas o propuestas. Respondemos rápido.</p>
+    <a class="contact-wa" href="contacto.html" style="text-decoration:none">Ir a la página de contacto →</a>
+  </div>
+
+</main>
+
+
+  <!-- SEO CONTENT -->
+  <section style='width:100%;max-width:720px;margin-top:5rem;padding:0 0.5rem'>
+
+    <article style='margin-bottom:3rem'>
+      <h2 style='font-size:1.4rem;font-weight:700;letter-spacing:-0.03em;margin-bottom:1rem'>¿Qué es el RUT chileno?</h2>
+      <p style='color:var(--muted);line-height:1.8;font-size:.9rem;margin-bottom:1rem'>
+        El <strong style='color:var(--text)'>RUT (Rol Único Tributario)</strong> es el número de identificación oficial que utiliza Chile para identificar a personas naturales y empresas ante el Estado. Es equivalente al DNI en otros países, pero con una particularidad: incluye un <strong style='color:var(--text)'>dígito verificador</strong> al final que permite comprobar matemáticamente si el número es válido.
+      </p>
+      <p style='color:var(--muted);line-height:1.8;font-size:.9rem;margin-bottom:1rem'>
+        El RUT se usa en absolutamente todos los trámites oficiales en Chile: abrir una cuenta bancaria, emitir boletas o facturas, declarar impuestos ante el SII, firmar contratos, registrarse en el Registro Civil, postular a empleos y mucho más. Sin un RUT válido, ningún trámite puede completarse.
+      </p>
+      <p style='color:var(--muted);line-height:1.8;font-size:.9rem'>
+        El formato estándar del RUT es <strong style='color:var(--text)'>XX.XXX.XXX-Y</strong>, donde los primeros dígitos son el número base y la última letra o número es el dígito verificador, que puede ser un número del 0 al 9 o la letra K.
+      </p>
+    </article>
+
+    <article style='margin-bottom:3rem'>
+      <h2 style='font-size:1.4rem;font-weight:700;letter-spacing:-0.03em;margin-bottom:1rem'>¿Cómo funciona el dígito verificador del RUT?</h2>
+      <p style='color:var(--muted);line-height:1.8;font-size:.9rem;margin-bottom:1rem'>
+        El <strong style='color:var(--text)'>dígito verificador</strong> se calcula usando el <strong style='color:var(--text)'>algoritmo módulo 11</strong>. Este algoritmo toma los dígitos del número base del RUT de derecha a izquierda, los multiplica por la secuencia 2, 3, 4, 5, 6, 7 (que se repite si hay más dígitos), suma todos los resultados y aplica una división por 11.
+      </p>
+      <p style='color:var(--muted);line-height:1.8;font-size:.9rem;margin-bottom:1rem'>
+        El resultado determina el dígito verificador: si el resto es 0, el verificador es 0; si es 1, el verificador es K; para el resto de los casos, el verificador es 11 menos el resto. Esta es la razón por la que a veces el dígito verificador es la letra K — no es un error, es parte del algoritmo.
+      </p>
+      <p style='color:var(--muted);line-height:1.8;font-size:.9rem'>
+        Nuestro <strong style='color:var(--text)'>validador de RUT</strong> aplica este algoritmo automáticamente en milisegundos, sin necesidad de hacer el cálculo a mano. Simplemente ingresa el RUT completo y sabrás al instante si es válido o no, y en caso de error, te dirá cuál debería ser el dígito correcto.
+      </p>
+    </article>
+
+    <article style='margin-bottom:3rem'>
+      <h2 style='font-size:1.4rem;font-weight:700;letter-spacing:-0.03em;margin-bottom:1rem'>¿Para qué sirve un rutificador?</h2>
+      <p style='color:var(--muted);line-height:1.8;font-size:.9rem;margin-bottom:1rem'>
+        Un <strong style='color:var(--text)'>rutificador</strong> es una herramienta online que permite validar si un RUT chileno es matemáticamente correcto. Es especialmente útil en estos casos:
+      </p>
+      <ul style='color:var(--muted);line-height:2;font-size:.9rem;padding-left:1.25rem;margin-bottom:1rem'>
+        <li><strong style='color:var(--text)'>Desarrolladores de software</strong> — para generar RUTs válidos al crear formularios, bases de datos de prueba o sistemas que requieren RUT.</li>
+        <li><strong style='color:var(--text)'>Contadores y administrativos</strong> — para verificar que los RUTs de clientes o proveedores estén bien escritos antes de emitir facturas o documentos oficiales.</li>
+        <li><strong style='color:var(--text)'>Empresas</strong> — para limpiar bases de datos con RUTs incorrectos antes de cargarlos en sistemas contables o de RRHH.</li>
+        <li><strong style='color:var(--text)'>Personas naturales</strong> — para verificar que anotaron bien su propio RUT o el de otra persona en un formulario.</li>
+      </ul>
+      <p style='color:var(--muted);line-height:1.8;font-size:.9rem'>
+        Es importante destacar que un RUT matemáticamente válido no garantiza que sea un RUT real asignado a una persona o empresa. El validador solo confirma que el dígito verificador es correcto según el algoritmo módulo 11.
+      </p>
+    </article>
+
+    <article style='margin-bottom:3rem'>
+      <h2 style='font-size:1.4rem;font-weight:700;letter-spacing:-0.03em;margin-bottom:1rem'>¿Cómo validar un RUT online gratis?</h2>
+      <p style='color:var(--muted);line-height:1.8;font-size:.9rem;margin-bottom:1rem'>
+        Con <strong style='color:var(--text)'>RUT.tools</strong> puedes validar cualquier RUT chileno en segundos y de forma completamente gratuita. El proceso es simple:
+      </p>
+      <ol style='color:var(--muted);line-height:2;font-size:.9rem;padding-left:1.25rem;margin-bottom:1rem'>
+        <li>Ingresa el RUT completo en el campo de validación, incluyendo el dígito verificador.</li>
+        <li>Puedes escribirlo con o sin puntos y con o sin guión — la herramienta lo interpreta correctamente.</li>
+        <li>Haz clic en Validar o presiona Enter.</li>
+        <li>En menos de un segundo sabrás si el RUT es válido o no, y si hay un error, te indicará cuál es el dígito verificador correcto.</li>
+      </ol>
+      <p style='color:var(--muted);line-height:1.8;font-size:.9rem'>
+        No almacenamos ningún RUT ingresado. Todo el procesamiento ocurre directamente en tu navegador, sin enviar datos a ningún servidor.
+      </p>
+    </article>
+
+    <!-- FAQ -->
+    <article style='margin-bottom:3rem'>
+      <h2 style='font-size:1.4rem;font-weight:700;letter-spacing:-0.03em;margin-bottom:1.5rem'>Preguntas frecuentes</h2>
+
+      <div style='display:flex;flex-direction:column;gap:1px;background:var(--border);border-radius:12px;overflow:hidden'>
+
+        <div style='background:var(--surface);padding:1.25rem'>
+          <p style='font-size:.875rem;font-weight:600;margin-bottom:.5rem'>¿Puedo validar el RUT de una empresa?</p>
+          <p style='font-size:.82rem;color:var(--muted);line-height:1.6'>Sí. El algoritmo de validación es el mismo para personas naturales y empresas. Las empresas en Chile también tienen RUT con dígito verificador.</p>
+        </div>
+
+        <div style='background:var(--surface);padding:1.25rem'>
+          <p style='font-size:.875rem;font-weight:600;margin-bottom:.5rem'>¿Qué significa que el dígito verificador sea K?</p>
+          <p style='font-size:.82rem;color:var(--muted);line-height:1.6'>La letra K equivale al número 10 en el algoritmo módulo 11. No es un error — es completamente válido y muchos RUTs chilenos terminan en K.</p>
+        </div>
+
+        <div style='background:var(--surface);padding:1.25rem'>
+          <p style='font-size:.875rem;font-weight:600;margin-bottom:.5rem'>¿El generador de RUT crea RUTs de personas reales?</p>
+          <p style='font-size:.82rem;color:var(--muted);line-height:1.6'>No necesariamente. El generador crea números que son matemáticamente válidos, pero no consulta ninguna base de datos oficial. Están diseñados exclusivamente para testing y desarrollo de software.</p>
+        </div>
+
+        <div style='background:var(--surface);padding:1.25rem'>
+          <p style='font-size:.875rem;font-weight:600;margin-bottom:.5rem'>¿Es seguro ingresar mi RUT aquí?</p>
+          <p style='font-size:.82rem;color:var(--muted);line-height:1.6'>Sí. La validación ocurre completamente en tu navegador usando JavaScript. No enviamos ningún dato a servidores externos ni almacenamos ningún RUT ingresado.</p>
+        </div>
+
+        <div style='background:var(--surface);padding:1.25rem'>
+          <p style='font-size:.875rem;font-weight:600;margin-bottom:.5rem'>¿Cuántos RUTs puedo validar gratis?</p>
+          <p style='font-size:.82rem;color:var(--muted);line-height:1.6'>El plan gratuito permite 10 validaciones por día. Para validaciones masivas o uso profesional, tenemos planes desde .990 CLP al mes que incluyen validación masiva desde Excel.</p>
+        </div>
+
+        <div style='background:var(--surface);padding:1.25rem'>
+          <p style='font-size:.875rem;font-weight:600;margin-bottom:.5rem'>¿Cómo sé si un RUT existe realmente?</p>
+          <p style='font-size:.82rem;color:var(--muted);line-height:1.6'>Esta herramienta solo verifica si el RUT es matemáticamente válido. Para confirmar si un RUT pertenece a una persona o empresa real, debes consultar directamente el SII (sii.cl) o el Registro Civil.</p>
+        </div>
+
+      </div>
+    </article>
+
+  </section>
+  <!-- END SEO CONTENT -->
+
+<footer>
+  <p>RUT.tools · No almacenamos datos ingresados. <a href="#tyc">Términos y condiciones</a> · <a href="privacidad.html">Privacidad</a></p>
+  <p style="margin-top:6px;font-size:.68rem;opacity:.5">Última actualización: mayo 2026 · v1.2</p>
+  <div class="tyc-text" id="tyc">
+    <strong>Términos y condiciones</strong><br/>
+    Esta herramienta es provista con fines exclusivamente informativos y de desarrollo de software. El uso de RUTs generados o validados para cualquier acto fraudulento, suplantación de identidad o actividad ilegal es de exclusiva responsabilidad del usuario. El operador no almacena ni comparte ningún dato ingresado.<br/><br/>
+    <strong>Privacidad</strong><br/>
+    No almacenamos ningún RUT ni dato personal que ingreses. Todo el procesamiento ocurre en tu navegador. Usamos Google Analytics para medir tráfico de forma anónima. <a href="privacidad.html" style="color:var(--accent)">Leer política de privacidad completa →</a>
+  </div>
+</footer>
+
+<script>
+var _sb = null;
+try {
+  _sb = supabase.createClient(
+    'https://jcuhqhlbzgubnhhuqiqo.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpjdWhxaGxiemd1Ym5oaHVxaXFvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2MTQ4MDcsImV4cCI6MjA5NDE5MDgwN30.o9fl_4LT1pSabuZvo9MBhDfsvq-noZekZNlGnZ7yWJU'
+  );
+} catch(e) { console.log('Supabase init error:', e); }
+
+(function(){
+
+  // ── STATE ──
+  var td=new Date().toDateString();
+  if(localStorage.getItem('_vd')!==td){localStorage.setItem('_vu','0');localStorage.setItem('_vd',td);}
+  if(localStorage.getItem('_gd')!==td){localStorage.setItem('_gp','0');localStorage.setItem('_gd',td);}
+  var valUsed=parseInt(localStorage.getItem('_vu')||'0');
+  var genPhase=parseInt(localStorage.getItem('_gp')||'0');
+  var activeCodes=JSON.parse(localStorage.getItem('_ac')||'[]');
+
+  function saveVal(){localStorage.setItem('_vu',valUsed);}
+  function saveGen(){localStorage.setItem('_gp',genPhase);}
+
+  // ── PLAN ACTIVO ──
+  function getPlan(){
+    for(var i=0;i<activeCodes.length;i++){
+      var cached=localStorage.getItem('_cd_'+activeCodes[i]);
+      if(cached) try{return JSON.parse(cached);}catch(e){}
+    }
+    return null;
+  }
+
+  function getValLimit(){
+    var p=getPlan();
+    return (p&&p.valLimit)?p.valLimit:10;
+  }
+
+  function getGenUnlocked(){
+    var p=getPlan();
+    return (p&&p.genLimit)?true:false;
+  }
+
+  // ── UPDATE UI ──
+  function updateValUI(){
+    var lim=getValLimit();
+    document.getElementById('val-label').textContent=valUsed+' / '+lim;
+    document.getElementById('val-bar').style.width=Math.min(100,(valUsed/lim)*100)+'%';
+    var p=getPlan();
+    if(p&&p.valLimit){
+      document.getElementById('val-plan-badge').style.display='block';
+      document.getElementById('val-plan-name').textContent=p.plan;
+      document.getElementById('val-upgrade-hint').style.display='none';
+    }
+  }
+
+  function updatePhaseUI(){
+    var unlocked=getGenUnlocked();
+    var pills=['pill-0','pill-1','pill-2'];
+    var btn=document.getElementById('gen-btn');
+    var hint=document.getElementById('gen-hint');
+
+    if(unlocked){
+      var p=getPlan();
+      document.getElementById('gen-plan-badge').style.display='block';
+      document.getElementById('gen-plan-name').textContent=p.plan;
+      document.getElementById('phase-pills').style.display='none';
+      document.getElementById('gen-max-hint').textContent='máx. '+p.genLimit+' por vez';
+      document.getElementById('gen-count').max=p.genLimit;
+      document.getElementById('gen-count').value=Math.min(parseInt(document.getElementById('gen-count').value),p.genLimit);
+      btn.textContent='Generar RUTs — Plan '+p.plan;
+      btn.disabled=false;
+      hint.style.display='none';
+      return;
+    }
+
+    pills.forEach(function(id,i){
+      var el=document.getElementById(id);
+      el.className='phase-pill '+(i<genPhase?'done':i===genPhase?'active':'pending');
+    });
+    if(genPhase===0){btn.textContent='Generar 10 RUTs gratis';hint.innerHTML='Primera tanda sin anuncio · <a onclick="goTo(\'precios\')" style="color:var(--accent);cursor:pointer;text-decoration:none">Planes sin límite →</a>';btn.disabled=false;}
+    else if(genPhase===1){btn.textContent='Obtener 10 RUTs más — ver anuncio';hint.innerHTML='Segunda tanda · 1 anuncio breve · <a onclick="goTo(\'precios\')" style="color:var(--accent);cursor:pointer;text-decoration:none">Planes sin anuncios →</a>';btn.disabled=false;}
+    else if(genPhase===2){btn.textContent='Obtener 10 RUTs más — ver anuncio';hint.innerHTML='Tercera tanda · 1 anuncio breve · <a onclick="goTo(\'precios\')" style="color:var(--accent);cursor:pointer;text-decoration:none">Planes sin anuncios →</a>';btn.disabled=false;}
+    else{btn.textContent='Límite diario alcanzado (30 RUTs)';btn.disabled=true;hint.innerHTML='Vuelve mañana o <a onclick="goTo(\'precios\')" style="color:var(--accent);cursor:pointer;text-decoration:none">elige un plan →</a>';}
+  }
+
+  updateValUI();
+  updatePhaseUI();
+
+  // ── ACTIVAR CÓDIGO (SUPABASE) ──
+  window.activarCodigo=function(panel){
+    var inputId=panel==='val'?'code-input-val':'code-input-gen';
+    var resultId=panel==='val'?'code-result-val':'code-result-gen';
+    var code=document.getElementById(inputId).value.trim().toUpperCase();
+    var el=document.getElementById(resultId);
+    el.style.display='block';
+    if(!code){el.className='code-result err';el.textContent='Ingresa un código.';return;}
+    if(activeCodes.indexOf(code)>-1){el.className='code-result ok';el.textContent='✓ Este código ya está activo.';return;}
+    el.className='code-result ok';el.textContent='Verificando...';
+    if(!_sb){el.className='code-result err';el.textContent='Error de conexión. Intenta más tarde.';return;}
+    _sb.from('codigos').select('*').eq('codigo',code).eq('activo',true).single().then(function(res){
+      if(res.error||!res.data){el.className='code-result err';el.textContent='Código inválido. Verifica o contáctanos por WhatsApp.';return;}
+      var d=res.data;
+      var planData={plan:d.plan,valLimit:d.val_limit,genLimit:d.gen_limit,noAds:true};
+      activeCodes.push(code);
+      localStorage.setItem('_ac',JSON.stringify(activeCodes));
+      localStorage.setItem('_cd_'+code,JSON.stringify(planData));
+      // Log activation
+      _sb.from('activaciones').insert({codigo:code}).then(function(){});
+      // Update count
+      _sb.from('codigos').update({veces_activado:d.veces_activado+1}).eq('id',d.id).then(function(){});
+      el.className='code-result ok';
+      el.textContent='✓ Plan "'+d.plan+'" activado correctamente.';
+      document.getElementById(inputId).value='';
+      updateValUI();
+      updatePhaseUI();
+    });
+  };
+
+  // ── NAV ──
+  window.switchTab=function(t){document.querySelectorAll('.tab').forEach(function(el,i){el.classList.toggle('active',(i===0&&t==='validar')||(i===1&&t==='generar'));});document.getElementById('panel-validar').classList.toggle('active',t==='validar');document.getElementById('panel-generar').classList.toggle('active',t==='generar');};
+  window.goTo=function(id){var el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});};
+
+  // ── RUT ──
+  function getDV(n){var s=1,m=0;for(var r=n;r;r=Math.floor(r/10))s=(s+r%10*(9-m++%6))%11;return String.fromCharCode(s?s-1+48:107);}
+  function clean(v){return v.replace(/[.\s-]/g,'').toUpperCase();}
+  function fmtN(n){return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g,'.');}
+  function fmtR(n,d){return fmtN(n)+'-'+d;}
+  window.formatRutInput=function(el){var v=clean(el.value).replace(/[^0-9K]/g,'');if(v.length>1){var d=v.slice(-1);var ns=v.slice(0,-1).replace(/^0+/,'')||'0';if(/^\d+$/.test(ns))el.value=fmtN(parseInt(ns))+'-'+d;else el.value=v;}else el.value=v;};
+
+  // ── VALIDAR ──
+  window.validar=function(){
+    var box=document.getElementById('result-box');
+    var lim=getValLimit();
+    if(valUsed>=lim){
+      box.className='result invalid';box.style.display='flex';
+      box.innerHTML='<div class="result-icon">🔒</div><div class="result-text"><strong>Límite diario alcanzado</strong><span>Llegaste a las '+lim+' validaciones de hoy.<br/><a onclick="goTo(\'precios\')" style="color:var(--accent);cursor:pointer">Ver planes →</a></span></div>';
+      return;
+    }
+    var raw=clean(document.getElementById('rut-input').value);
+    if(raw.length<2){box.className='result invalid';box.style.display='flex';box.innerHTML='<div class="result-icon">⚠️</div><div class="result-text"><strong>Ingresa un RUT</strong><span>El campo no puede estar vacío.</span></div>';return;}
+    var dv=raw.slice(-1);var ns=raw.slice(0,-1).replace(/^0+/,'');var num=parseInt(ns);
+    if(isNaN(num)||ns.length<6||ns.length>8){box.className='result invalid';box.style.display='flex';box.innerHTML='<div class="result-icon">❌</div><div class="result-text"><strong>Formato inválido</strong><span>El número debe tener entre 6 y 8 dígitos.</span></div>';return;}
+    valUsed++;saveVal();updateValUI();
+    var exp=getDV(num);var ok=dv===exp;
+    box.style.display='flex';
+    if(ok){box.className='result valid';box.innerHTML='<div class="result-icon">✅</div><div class="result-text"><strong>RUT válido</strong><span>'+fmtR(num,dv)+' — dígito verificador correcto.</span></div>';}
+    else{box.className='result invalid';box.innerHTML='<div class="result-icon">❌</div><div class="result-text"><strong>Dígito verificador incorrecto</strong><span>El RUT <strong>'+fmtR(num,dv)+'</strong> no es válido. El dígito correcto es <strong style="color:var(--text)">'+exp+'</strong>.</span></div>';}
+  };
+
+  // ── AD MODAL ──
+  var adTimer=null,pendingAction=null;
+  window.solicitarGenerar=function(){
+    var unlocked=getGenUnlocked();
+    if(unlocked){ejecutarGenerar();return;}
+    if(genPhase>=3){updatePhaseUI();return;}
+    if(genPhase===0){ejecutarGenerar();}
+    else{pendingAction='generar';openModal('Obteniendo 10 RUTs más','Mira este breve anuncio para continuar');}
+  };
+  function openModal(title,sub){
+    document.getElementById('modal-title').textContent=title;
+    document.getElementById('modal-subtitle').textContent=sub;
+    document.getElementById('ad-modal').classList.add('open');
+    document.getElementById('reward-btn').style.display='none';
+    document.getElementById('modal-countdown').style.display='block';
+    document.getElementById('ad-progress').style.width='0%';
+    var secs=10;
+    document.getElementById('ad-secs').textContent=secs;
+    clearInterval(adTimer);
+    adTimer=setInterval(function(){secs--;document.getElementById('ad-secs').textContent=secs;document.getElementById('ad-progress').style.width=((10-secs)/10*100)+'%';if(secs<=0){clearInterval(adTimer);document.getElementById('modal-countdown').style.display='none';document.getElementById('reward-btn').style.display='block';document.getElementById('ad-progress').style.width='100%';}},1000);
+  }
+  window.claimReward=function(){closeModal();if(pendingAction==='generar')ejecutarGenerar();pendingAction=null;};
+  window.closeModal=function(){clearInterval(adTimer);document.getElementById('ad-modal').classList.remove('open');};
+  document.getElementById('ad-modal').addEventListener('click',function(e){if(e.target===this)closeModal();});
+
+  function ejecutarGenerar(){
+    var p=getPlan();
+    var maxCount=p&&p.genLimit?p.genLimit:10;
+    var count=Math.min(maxCount,Math.max(1,parseInt(document.getElementById('gen-count').value)||10));
+    var list=document.getElementById('rut-list');
+    var used=new Set();var n=0;
+    while(n<count){var num=Math.floor(Math.random()*(25000000-1000000+1))+1000000;if(used.has(num))continue;used.add(num);var dv=getDV(num);var rut=fmtR(num,dv);var div=document.createElement('div');div.className='rut-item';div.style.animationDelay=n*0.04+'s';div.innerHTML='<code>'+rut+'</code><button class="btn-outline" onclick="copyRut(\''+rut+'\',this)">Copiar</button>';list.appendChild(div);n++;}
+    if(!p||!p.genLimit){genPhase++;saveGen();}
+    updatePhaseUI();
+    document.getElementById('gen-note').style.display='block';
+  }
+
+  window.copyRut=function(rut,btn){navigator.clipboard.writeText(rut).then(function(){btn.textContent='¡Copiado!';setTimeout(function(){btn.textContent='Copiar';},1500);});};
+
+  // ── USER AUTH ──
+  if(_sb) _sb.auth.getSession().then(function(res){
+    if(res.data && res.data.session) onUserLogin(res.data.session.user);
+  });
+
+  window.openUserModal=function(){
+    document.getElementById('user-modal-bg').classList.add('open');
+  };
+  window.closeUserModal=function(){
+    document.getElementById('user-modal-bg').classList.remove('open');
+  };
+
+  window.userLogin=function(){
+    var email=document.getElementById('u-email').value.trim();
+    var pass=document.getElementById('u-pass').value;
+    var errEl=document.getElementById('u-error');
+    errEl.style.display='none';
+    if(!_sb){errEl.style.display='block';errEl.textContent='Error de conexión.';return;}
+    _sb.auth.signInWithPassword({email:email,password:pass}).then(function(res){
+      if(res.error){errEl.style.display='block';return;}
+      onUserLogin(res.data.user);
+    });
+  };
+
+  function onUserLogin(user){
+    document.getElementById('u-login-view').style.display='none';
+    document.getElementById('u-logged-view').style.display='block';
+    document.getElementById('u-email-label').textContent=user.email;
+    var btn=document.getElementById('user-nav-btn');
+    btn.classList.add('logged');
+    document.getElementById('user-initial').textContent=user.email.charAt(0).toUpperCase();
+    if(user.email==='lisandrodvicente2000@gmail.com'){
+      document.getElementById('creator-btn').style.display='block';
+    }
+    // Load plan
+    if(_sb){
+      _sb.from('usuario_planes').select('*').eq('user_id',user.id).eq('activo',true).single().then(function(res){
+        if(res.data){
+          var p=res.data;
+          document.getElementById('u-plan-label').textContent='Plan '+p.plan;
+          // Apply plan
+          var planData={plan:p.plan,valLimit:p.val_limit,genLimit:p.gen_limit,noAds:true};
+          localStorage.setItem('_cd_user_'+user.id, JSON.stringify(planData));
+          if(activeCodes.indexOf('user_'+user.id)<0){
+            activeCodes.push('user_'+user.id);
+            localStorage.setItem('_ac',JSON.stringify(activeCodes));
+          }
+          updateValUI();
+          updatePhaseUI();
+        } else {
+          document.getElementById('u-plan-label').textContent='Plan gratuito';
+        }
+      });
+    }
+  }
+
+  window.userLogout=function(){
+    if(_sb) _sb.auth.signOut().then(function(){
+      document.getElementById('user-nav-btn').classList.remove('logged');
+      document.getElementById('user-initial').textContent='';
+      document.getElementById('creator-btn').style.display='none';
+      document.getElementById('u-login-view').style.display='block';
+      document.getElementById('u-logged-view').style.display='none';
+      document.getElementById('u-email').value='';
+      document.getElementById('u-pass').value='';
+      closeUserModal();
+      // Remove user plan
+      activeCodes=activeCodes.filter(function(c){return c.indexOf('user_')<0;});
+      localStorage.setItem('_ac',JSON.stringify(activeCodes));
+      updateValUI();
+      updatePhaseUI();
+    });
+  };
+
+})();
+</script>
+
+<!-- USER LOGIN MODAL -->
+<div class="modal-bg" id="user-modal-bg" onclick="if(event.target===this)closeUserModal()">
+  <div class="user-modal">
+    <button class="modal-close" onclick="closeUserModal()">✕</button>
+
+    <!-- LOGIN VIEW -->
+    <div id="u-login-view">
+      <h3>Iniciar sesión</h3>
+      <p>Accede a tu plan desde cualquier dispositivo.</p>
+      <div class="u-field">
+        <label>Correo</label>
+        <input type="email" id="u-email" placeholder="tu@correo.com" onkeydown="if(event.key==='Enter')userLogin()"/>
+      </div>
+      <div class="u-field">
+        <label>Contraseña</label>
+        <input type="password" id="u-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')userLogin()"/>
+      </div>
+      <button class="u-login-btn" onclick="userLogin()">Ingresar</button>
+      <div class="u-error" id="u-error">Correo o contraseña incorrectos.</div>
+    </div>
+
+    <!-- LOGGED VIEW -->
+    <div class="u-logged-view" id="u-logged-view">
+      <div class="u-avatar">✓</div>
+      <div id="u-email-label" style="font-size:.82rem;color:var(--muted);margin-bottom:.75rem"></div>
+      <div class="u-plan-badge" id="u-plan-label">Cargando plan...</div>
+      <a id="creator-btn" href="panel.html" style="display:none;width:100%;padding:.7rem;background:var(--accent-dim);border:1px solid rgba(230,57,70,.4);color:var(--accent);font-family:'Sora',sans-serif;font-size:.82rem;font-weight:600;border-radius:8px;text-align:center;text-decoration:none;margin-top:.5rem;transition:background .15s" onmouseover="this.style.background='var(--accent-dim)'" >⚡ Panel de creador</a>
+      <button class="u-logout" onclick="userLogout()">Cerrar sesión</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

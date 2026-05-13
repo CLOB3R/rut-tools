@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Panel — RUT.tools</title>
+<meta name="robots" content="noindex,nofollow"/>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Sora:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0e0f11;--surface:#16181c;--surface2:#1e2127;--border:rgba(255,255,255,0.08);--border-strong:rgba(255,255,255,0.15);--text:#f0f0ef;--muted:#7a7b7d;--accent:#e63946;--accent-dim:rgba(230,57,70,0.1);--green:#2f9e44;--green-bg:rgba(47,158,68,0.1);--red-bg:rgba(224,49,49,0.1)}
+body{background:var(--bg);color:var(--text);font-family:'Sora',sans-serif;min-height:100vh}
+
+/* LOGIN */
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1.5rem}
+.login-card{background:var(--surface);border:1px solid var(--border-strong);border-radius:16px;padding:2.5rem;width:100%;max-width:380px}
+.login-logo{display:flex;align-items:center;gap:8px;font-size:1rem;font-weight:700;margin-bottom:2rem}
+.logo-dot{width:8px;height:8px;background:var(--accent);border-radius:50%}
+.login-card h2{font-size:1.25rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:.5rem}
+.login-card p{font-size:.8rem;color:var(--muted);margin-bottom:1.75rem}
+.field{margin-bottom:1rem}
+.field label{display:block;font-size:.68rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.4rem}
+.field input{width:100%;background:var(--surface2);border:1px solid var(--border-strong);border-radius:10px;color:var(--text);font-family:'Sora',sans-serif;font-size:.875rem;padding:.75rem 1rem;outline:none;transition:border-color .15s}
+.field input:focus{border-color:var(--accent)}
+.field input::placeholder{color:rgba(255,255,255,.2)}
+.login-btn{width:100%;padding:.85rem;background:var(--accent);color:#fff;border:none;border-radius:10px;font-family:'Sora',sans-serif;font-size:.9rem;font-weight:600;cursor:pointer;transition:opacity .15s;margin-top:.5rem}
+.login-btn:hover{opacity:.88}
+.login-error{background:var(--red-bg);border:1px solid rgba(224,49,49,.3);border-radius:8px;padding:.65rem 1rem;font-size:.78rem;color:var(--accent);margin-top:.75rem;display:none}
+
+/* ADMIN LAYOUT */
+.admin{display:none;flex-direction:column;min-height:100vh}
+.admin-header{background:var(--surface);border-bottom:1px solid var(--border);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
+.admin-logo{display:flex;align-items:center;gap:8px;font-size:.95rem;font-weight:700}
+.admin-user{display:flex;align-items:center;gap:12px;font-size:.78rem;color:var(--muted)}
+.logout-btn{background:transparent;border:1px solid var(--border-strong);color:var(--muted);font-family:'Sora',sans-serif;font-size:.72rem;padding:5px 12px;border-radius:8px;cursor:pointer;transition:all .15s}
+.logout-btn:hover{border-color:var(--accent);color:var(--accent)}
+.admin-content{flex:1;padding:2rem;max-width:1100px;margin:0 auto;width:100%}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:2rem}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.25rem}
+.stat-label{font-size:.68rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.5rem}
+.stat-value{font-size:1.75rem;font-weight:700;letter-spacing:-0.03em}
+.stat-sub{font-size:.72rem;color:var(--muted);margin-top:.25rem}
+
+/* SECTIONS */
+.section{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.5rem;margin-bottom:1.5rem}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem}
+.section-title{font-size:.85rem;font-weight:600}
+.section-sub{font-size:.72rem;color:var(--muted);margin-top:2px}
+
+/* FORM */
+.form-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:1rem}
+.form-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem}
+.f-group label{display:block;font-size:.65rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.35rem}
+.f-group input,.f-group select{width:100%;background:var(--surface2);border:1px solid var(--border-strong);border-radius:8px;color:var(--text);font-family:'Sora',sans-serif;font-size:.82rem;padding:.6rem .875rem;outline:none;transition:border-color .15s}
+.f-group input:focus,.f-group select:focus{border-color:var(--accent)}
+.f-group input::placeholder{color:rgba(255,255,255,.2)}
+.f-group select option{background:var(--surface2)}
+.create-btn{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:.65rem 1.25rem;font-family:'Sora',sans-serif;font-size:.82rem;font-weight:600;cursor:pointer;transition:opacity .15s}
+.create-btn:hover{opacity:.88}
+.success-toast{background:var(--green-bg);border:1px solid rgba(47,158,68,.3);border-radius:8px;padding:.6rem 1rem;font-size:.78rem;color:var(--green);display:none;margin-top:.75rem}
+
+/* TABLE */
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.78rem}
+th{text-align:left;font-size:.65rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;padding:.5rem .75rem;border-bottom:1px solid var(--border)}
+td{padding:.65rem .75rem;border-bottom:1px solid var(--border);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,.02)}
+.badge{display:inline-block;font-size:.65rem;font-weight:600;padding:2px 8px;border-radius:100px;text-transform:uppercase;letter-spacing:.05em}
+.badge.active{background:var(--green-bg);color:var(--green);border:1px solid rgba(47,158,68,.3)}
+.badge.inactive{background:var(--red-bg);color:var(--accent);border:1px solid rgba(224,49,49,.3)}
+.code-text{font-family:'DM Mono',monospace;font-size:.82rem;letter-spacing:.04em}
+.action-btn{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'Sora',sans-serif;font-size:.65rem;padding:3px 10px;border-radius:6px;cursor:pointer;transition:all .15s}
+.action-btn:hover{border-color:var(--accent);color:var(--accent)}
+.action-btn.deact:hover{border-color:var(--green);color:var(--green)}
+.empty-state{text-align:center;padding:2rem;color:var(--muted);font-size:.82rem}
+
+.tab-row{display:flex;gap:8px;margin-bottom:1.5rem}
+.tab-btn{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'Sora',sans-serif;font-size:.78rem;font-weight:500;padding:6px 16px;border-radius:8px;cursor:pointer;transition:all .15s}
+.tab-btn.active{background:var(--surface2);border-color:var(--accent);color:var(--text)}
+
+@media(max-width:860px){.stats-grid{grid-template-columns:repeat(2,1fr)}.form-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.admin-content{padding:1rem}.stats-grid{grid-template-columns:1fr 1fr}.form-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-wrap" id="login-screen">
+  <div class="login-card">
+    <div class="login-logo"><div class="logo-dot"></div>RUT.tools</div>
+
+    <!-- PASO 1: Email + Pass -->
+    <div id="step-full">
+      <h2>Panel de administración</h2>
+      <p>Acceso restringido. Solo personal autorizado.</p>
+      <div class="field">
+        <label>Correo</label>
+        <input type="email" id="login-email" placeholder="correo@ejemplo.com" onkeydown="if(event.key==='Enter')login()"/>
+      </div>
+      <div class="field">
+        <label>Contraseña</label>
+        <input type="password" id="login-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')login()"/>
+      </div>
+      <button class="login-btn" onclick="login()">Ingresar</button>
+      <div class="login-error" id="login-error">Correo o contraseña incorrectos.</div>
+    </div>
+
+    <!-- PASO 2: Solo PIN -->
+    <div id="step-pin" style="display:none">
+      <h2>Ingresa tu PIN</h2>
+      <div class="field" style="margin-top:1.5rem">
+        <input type="password" id="login-pin" placeholder="••••" maxlength="4" inputmode="numeric"
+          style="font-size:2rem;letter-spacing:.5em;text-align:center;padding:1rem"
+          onkeydown="if(event.key==='Enter')loginPin()"/>
+      </div>
+      <button class="login-btn" id="pin-submit-btn" onclick="loginPin()">Entrar</button>
+      <div class="login-error" id="pin-error">PIN incorrecto.</div>
+      <button onclick="usarOtraCuenta()" style="width:100%;background:none;border:none;color:var(--muted);font-family:Sora,sans-serif;font-size:.72rem;cursor:pointer;margin-top:.75rem;padding:4px">Cerrar sesión y usar otra cuenta</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div class="admin" id="admin-panel">
+  <div class="admin-header">
+    <div class="admin-logo"><div class="logo-dot"></div>RUT.tools · Admin</div>
+    <div class="admin-user">
+      <span id="admin-email-label"></span>
+      <button class="logout-btn" onclick="logout()">Cerrar sesión</button>
+    </div>
+  </div>
+
+  <div class="admin-content">
+
+    <!-- STATS -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Total códigos</div>
+        <div class="stat-value" id="stat-total">—</div>
+        <div class="stat-sub">creados</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Activos</div>
+        <div class="stat-value" id="stat-active" style="color:var(--green)">—</div>
+        <div class="stat-sub">en uso</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Inactivos</div>
+        <div class="stat-value" id="stat-inactive" style="color:var(--accent)">—</div>
+        <div class="stat-sub">desactivados</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Activaciones</div>
+        <div class="stat-value" id="stat-activaciones">—</div>
+        <div class="stat-sub">totales</div>
+      </div>
+    </div>
+
+    <!-- TABS -->
+    <div class="tab-row">
+      <button class="tab-btn active" onclick="showTab('codigos')">Códigos</button>
+      <button class="tab-btn" onclick="showTab('crear')">Crear código</button>
+      <button class="tab-btn" onclick="showTab('activaciones')">Activaciones</button>
+    </div>
+
+    <!-- TAB: CODIGOS -->
+    <div id="tab-codigos">
+      <div class="section">
+        <div class="section-header">
+          <div>
+            <div class="section-title">Códigos de acceso</div>
+            <div class="section-sub">Todos los códigos creados</div>
+          </div>
+          <button class="create-btn" onclick="loadCodigos()" style="background:var(--surface2);color:var(--text);border:1px solid var(--border-strong)">↻ Actualizar</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Código</th>
+                <th>Plan</th>
+                <th>Val/día</th>
+                <th>Gen/vez</th>
+                <th>Activaciones</th>
+                <th>Vence</th>
+                <th>Estado</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody id="codigos-tbody">
+              <tr><td colspan="8" class="empty-state">Cargando...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: CREAR -->
+    <div id="tab-crear" style="display:none">
+      <div class="section">
+        <div class="section-header">
+          <div>
+            <div class="section-title">Crear nuevo código</div>
+            <div class="section-sub">Genera un código de acceso para un cliente</div>
+          </div>
+        </div>
+        <div class="form-grid">
+          <div class="f-group">
+            <label>Código</label>
+            <input type="text" id="new-codigo" placeholder="PRO-0001" style="text-transform:uppercase"/>
+          </div>
+          <div class="f-group">
+            <label>Plan</label>
+            <select id="new-plan" onchange="autoFill()">
+              <option value="">Selecciona</option>
+              <option value="Pro Validador">Pro Validador</option>
+              <option value="Plus Validador">Plus Validador</option>
+              <option value="Business Validador">Business Validador</option>
+              <option value="Dev Generador">Dev Generador</option>
+              <option value="Pro Generador">Pro Generador</option>
+              <option value="Business Generador">Business Generador</option>
+              <option value="Personalizado">Personalizado</option>
+            </select>
+          </div>
+          <div class="f-group">
+            <label>Vence (opcional)</label>
+            <input type="date" id="new-vence"/>
+          </div>
+        </div>
+        <div class="form-grid">
+          <div class="f-group">
+            <label>Validaciones/día</label>
+            <input type="number" id="new-val" placeholder="100"/>
+          </div>
+          <div class="f-group">
+            <label>RUTs/generación</label>
+            <input type="number" id="new-gen" placeholder="500"/>
+          </div>
+          <div class="f-group" style="display:flex;align-items:flex-end">
+            <button class="create-btn" style="width:100%;padding:.6rem" onclick="generarCodigo()">⚡ Generar código aleatorio</button>
+          </div>
+        </div>
+        <button class="create-btn" onclick="crearCodigo()">Crear código</button>
+        <div class="success-toast" id="create-toast"></div>
+      </div>
+    </div>
+
+    <!-- TAB: ACTIVACIONES -->
+    <div id="tab-activaciones" style="display:none">
+      <div class="section">
+        <div class="section-header">
+          <div>
+            <div class="section-title">Registro de activaciones</div>
+            <div class="section-sub">Últimas 50 activaciones de códigos</div>
+          </div>
+          <button class="create-btn" onclick="loadActivaciones()" style="background:var(--surface2);color:var(--text);border:1px solid var(--border-strong)">↻ Actualizar</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Código</th><th>Fecha</th></tr>
+            </thead>
+            <tbody id="activaciones-tbody">
+              <tr><td colspan="2" class="empty-state">Cargando...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://jcuhqhlbzgubnhhuqiqo.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpjdWhxaGxiemd1Ym5oaHVxaXFvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2MTQ4MDcsImV4cCI6MjA5NDE5MDgwN30.o9fl_4LT1pSabuZvo9MBhDfsvq-noZekZNlGnZ7yWJU';
+let sb;
+try {
+  sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+} catch(e) {
+  document.body.innerHTML = '<div style="color:red;padding:2rem;font-family:sans-serif">Error al conectar con Supabase: ' + e.message + '</div>';
+}
+
+// CHECK SESSION ON LOAD
+sb.auth.getSession().then(({data}) => {
+  if(data.session){
+    // Session exists - show PIN step
+    document.getElementById('step-full').style.display = 'none';
+    document.getElementById('step-pin').style.display = 'block';
+    document.getElementById('pin-email-label').textContent = data.session.user.email;
+    window._sessionUser = data.session.user;
+  }
+});
+
+// LOGIN FULL
+async function login(){
+  const email = document.getElementById('login-email').value.trim();
+  const pass = document.getElementById('login-pass').value;
+  const errEl = document.getElementById('login-error');
+  errEl.style.display = 'none';
+  const {data, error} = await sb.auth.signInWithPassword({email, password: pass});
+  if(error){ errEl.style.display='block'; return; }
+  // After full login, go straight to admin (first time)
+  showAdmin(data.user);
+}
+
+// LOGIN PIN
+var _pinAttempts = 0;
+var MAX_ATTEMPTS = 3;
+
+async function loginPin(){
+  const pin = document.getElementById('login-pin').value.trim();
+  const errEl = document.getElementById('pin-error');
+  errEl.style.display = 'none';
+  const user = window._sessionUser;
+  if(!user){ location.reload(); return; }
+
+  if(_pinAttempts >= MAX_ATTEMPTS){
+    errEl.style.display = 'block';
+    errEl.textContent = 'Demasiados intentos. Cerrando sesión...';
+    document.getElementById('login-pin').disabled = true;
+    document.querySelector('.u-login-btn') && (document.querySelector('.u-login-btn').disabled = true);
+    document.getElementById('pin-submit-btn').disabled = true;
+    setTimeout(function(){
+      sb.auth.signOut().then(function(){ location.reload(); });
+    }, 2000);
+    return;
+  }
+
+  const {data, error} = await sb.from('admin_pin').select('pin').eq('user_id', user.id).single();
+  if(error || !data || data.pin !== pin){
+    _pinAttempts++;
+    var restantes = MAX_ATTEMPTS - _pinAttempts;
+    errEl.style.display = 'block';
+    errEl.textContent = restantes > 0 
+      ? 'PIN incorrecto. Te quedan ' + restantes + ' intento' + (restantes === 1 ? '' : 's') + '.'
+      : 'Demasiados intentos. Cerrando sesión...';
+    document.getElementById('login-pin').value = '';
+    if(restantes === 0){
+      document.getElementById('login-pin').disabled = true;
+      document.getElementById('pin-submit-btn').disabled = true;
+      setTimeout(function(){
+        sb.auth.signOut().then(function(){ location.reload(); });
+      }, 2000);
+    }
+    return;
+  }
+  _pinAttempts = 0;
+  showAdmin(user);
+}
+
+function usarOtraCuenta(){
+  sb.auth.signOut().then(() => {
+    document.getElementById('step-pin').style.display = 'none';
+    document.getElementById('step-full').style.display = 'block';
+  });
+}
+
+function showAdmin(user){
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('admin-panel').style.display = 'flex';
+  document.getElementById('admin-email-label').textContent = user.email;
+  loadStats();
+  loadCodigos();
+}
+
+async function logout(){
+  await sb.auth.signOut();
+  location.reload();
+}
+
+// TABS
+function showTab(tab){
+  ['codigos','crear','activaciones'].forEach(t => {
+    document.getElementById('tab-'+t).style.display = t===tab ? 'block' : 'none';
+  });
+  document.querySelectorAll('.tab-btn').forEach((btn,i) => {
+    btn.classList.toggle('active', ['codigos','crear','activaciones'][i] === tab);
+  });
+  if(tab==='activaciones') loadActivaciones();
+}
+
+// STATS
+async function loadStats(){
+  const {data: codes} = await sb.from('codigos').select('activo');
+  const {data: acts} = await sb.from('activaciones').select('id');
+  if(codes){
+    document.getElementById('stat-total').textContent = codes.length;
+    document.getElementById('stat-active').textContent = codes.filter(c=>c.activo).length;
+    document.getElementById('stat-inactive').textContent = codes.filter(c=>!c.activo).length;
+  }
+  if(acts) document.getElementById('stat-activaciones').textContent = acts.length;
+}
+
+// LOAD CODIGOS
+async function loadCodigos(){
+  const {data, error} = await sb.from('codigos').select('*').order('fecha_creacion', {ascending:false});
+  const tbody = document.getElementById('codigos-tbody');
+  if(error || !data || data.length===0){
+    tbody.innerHTML = '<tr><td colspan="8" class="empty-state">No hay códigos aún. Crea el primero.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = data.map(c => `
+    <tr>
+      <td><span class="code-text">${c.codigo}</span></td>
+      <td>${c.plan}</td>
+      <td>${c.val_limit ?? '—'}</td>
+      <td>${c.gen_limit ?? '—'}</td>
+      <td>${c.veces_activado}</td>
+      <td>${c.fecha_expiracion ? new Date(c.fecha_expiracion).toLocaleDateString('es-CL') : '—'}</td>
+      <td><span class="badge ${c.activo ? 'active' : 'inactive'}">${c.activo ? 'Activo' : 'Inactivo'}</span></td>
+      <td><button class="action-btn ${c.activo ? '' : 'deact'}" onclick="toggleCodigo('${c.id}',${c.activo})">${c.activo ? 'Desactivar' : 'Activar'}</button></td>
+    </tr>
+  `).join('');
+}
+
+// TOGGLE CODIGO
+async function toggleCodigo(id, activo){
+  await sb.from('codigos').update({activo: !activo}).eq('id', id);
+  loadCodigos();
+  loadStats();
+}
+
+// AUTOFILL PLAN
+function autoFill(){
+  const plan = document.getElementById('new-plan').value;
+  const vals = {
+    'Pro Validador': [100, null],
+    'Plus Validador': [500, null],
+    'Business Validador': [1000, null],
+    'Dev Generador': [null, 500],
+    'Pro Generador': [null, 1000],
+    'Business Generador': [null, 10000],
+  };
+  if(vals[plan]){
+    document.getElementById('new-val').value = vals[plan][0] || '';
+    document.getElementById('new-gen').value = vals[plan][1] || '';
+  }
+}
+
+// GENERAR CODIGO ALEATORIO
+function generarCodigo(){
+  const plan = document.getElementById('new-plan').value;
+  const prefix = {
+    'Pro Validador':'PRO','Plus Validador':'PLUS','Business Validador':'BIZ',
+    'Dev Generador':'DEV','Pro Generador':'GPRO','Business Generador':'GBIZ',
+    'Personalizado':'CUSTOM'
+  }[plan] || 'COD';
+  const num = Math.floor(Math.random()*9000)+1000;
+  document.getElementById('new-codigo').value = prefix+'-'+num;
+}
+
+// CREAR CODIGO
+async function crearCodigo(){
+  const codigo = document.getElementById('new-codigo').value.trim().toUpperCase();
+  const plan = document.getElementById('new-plan').value;
+  const val = parseInt(document.getElementById('new-val').value) || null;
+  const gen = parseInt(document.getElementById('new-gen').value) || null;
+  const vence = document.getElementById('new-vence').value || null;
+  const toast = document.getElementById('create-toast');
+
+  if(!codigo || !plan){ toast.style.display='block'; toast.style.color='var(--accent)'; toast.textContent='Completa el código y el plan.'; return; }
+
+  const {error} = await sb.from('codigos').insert({
+    codigo, plan,
+    val_limit: val,
+    gen_limit: gen,
+    fecha_expiracion: vence ? new Date(vence).toISOString() : null,
+    activo: true,
+    veces_activado: 0
+  });
+
+  if(error){
+    toast.style.display='block'; toast.style.color='var(--accent)';
+    toast.textContent = error.code === '23505' ? 'Ese código ya existe.' : 'Error al crear el código.';
+    return;
+  }
+
+  toast.style.display='block'; toast.style.color='var(--green)';
+  toast.textContent = '✓ Código "'+codigo+'" creado correctamente.';
+  document.getElementById('new-codigo').value='';
+  document.getElementById('new-plan').value='';
+  document.getElementById('new-val').value='';
+  document.getElementById('new-gen').value='';
+  document.getElementById('new-vence').value='';
+  loadStats();
+  setTimeout(()=>{ toast.style.display='none'; }, 3000);
+}
+
+// LOAD ACTIVACIONES
+async function loadActivaciones(){
+  const {data} = await sb.from('activaciones').select('*').order('fecha', {ascending:false}).limit(50);
+  const tbody = document.getElementById('activaciones-tbody');
+  if(!data || data.length===0){
+    tbody.innerHTML = '<tr><td colspan="2" class="empty-state">Sin activaciones aún.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = data.map(a => `
+    <tr>
+      <td><span class="code-text">${a.codigo}</span></td>
+      <td>${new Date(a.fecha).toLocaleString('es-CL')}</td>
+    </tr>
+  `).join('');
+}
+</script>
+</body>
+</html>
