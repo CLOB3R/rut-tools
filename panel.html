@@ -98,6 +98,24 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .boff{background:var(--red-bg);color:var(--accent);border:1px solid rgba(224,49,49,.3);font-size:.65rem;padding:2px 8px;border-radius:100px}
 .ctb{font-family:'Sora',monospace;letter-spacing:.04em}
 .okmsg{font-size:.72rem;color:var(--green);margin-top:.5rem;display:none}
+.copy-cod-btn{background:none;border:1px solid var(--border);color:var(--muted);font-family:'Sora',sans-serif;font-size:.65rem;padding:2px 7px;border-radius:6px;cursor:pointer;transition:all .15s;margin-left:4px}
+.copy-cod-btn:hover{border-color:var(--green);color:var(--green)}
+/* COMENTARIOS */
+.com-item{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:1rem;margin-bottom:.75rem}
+.com-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem}
+.com-fecha{font-size:.65rem;color:var(--muted)}
+.com-nuevo{font-size:.6rem;font-weight:700;color:var(--accent);background:var(--accent-dim);border:1px solid rgba(230,57,70,.3);padding:1px 7px;border-radius:100px;text-transform:uppercase}
+.com-msg{font-size:.8rem;color:var(--text);line-height:1.55;margin-bottom:.75rem}
+.com-reply{font-size:.75rem;color:var(--green);background:rgba(47,158,68,.08);border:1px solid rgba(47,158,68,.2);border-radius:8px;padding:.5rem .75rem;margin-bottom:.75rem}
+.com-reply::before{content:'↩ Respuesta: ';font-weight:600}
+.com-actions{display:flex;gap:6px;align-items:center}
+.com-reply-input{flex:1;background:var(--surface);border:1px solid var(--border-strong);border-radius:8px;color:var(--text);font-family:'Sora',sans-serif;font-size:.75rem;padding:.45rem .75rem;outline:none;transition:border-color .15s}
+.com-reply-input:focus{border-color:var(--green)}
+.com-reply-btn{background:var(--green-bg);border:1px solid rgba(47,158,68,.3);color:var(--green);font-family:'Sora',sans-serif;font-size:.72rem;font-weight:600;padding:.45rem .875rem;border-radius:8px;cursor:pointer;white-space:nowrap;transition:all .15s}
+.com-reply-btn:hover{background:rgba(47,158,68,.2)}
+.com-del-btn{background:none;border:1px solid rgba(255,107,107,.25);color:#ff6b6b;font-family:'Sora',sans-serif;font-size:.72rem;padding:.45rem .75rem;border-radius:8px;cursor:pointer;transition:all .15s}
+.com-del-btn:hover{border-color:#ff6b6b;background:rgba(255,107,107,.08)}
+.com-empty{text-align:center;padding:2rem;color:var(--muted);font-size:.82rem}
 @media(max-width:700px){.stats{grid-template-columns:1fr 1fr}.g3{grid-template-columns:1fr}.ah{padding:1rem}}
 </style>
 </head>
@@ -156,6 +174,8 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <div class="stat"><div class="sl">Activos</div><div class="sv" id="sa" style="color:var(--green)">—</div></div>
       <div class="stat"><div class="sl">Inactivos</div><div class="sv" id="si" style="color:var(--accent)">—</div></div>
       <div class="stat"><div class="sl">Activaciones</div><div class="sv" id="sac">—</div></div>
+      <div class="stat"><div class="sl">Comentarios</div><div class="sv" id="scom">—</div></div>
+      <div class="stat"><div class="sl">Sin leer</div><div class="sv" id="scom-new" style="color:var(--accent)">—</div></div>
     </div>
 
     <div class="sec">
@@ -195,6 +215,14 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <tbody id="ctb"><tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--muted)">Cargando...</td></tr></tbody>
         </table>
       </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-hdr">
+        <div class="sec-t">Comentarios de usuarios</div>
+        <button class="sbtn" onclick="lcoms()">↻ Actualizar</button>
+      </div>
+      <div id="coms-list"><div class="com-empty">Cargando...</div></div>
     </div>
   </div>
 </div>
@@ -277,7 +305,7 @@ function showAdmin() {
   document.getElementById('step-pin').style.display = 'none';
   document.getElementById('admin').style.display = 'flex';
   document.getElementById('aem').textContent = sessionUser.email;
-  ls(); lc();
+  ls(); lc(); lcoms();
 }
 
 async function otherAccount() {
@@ -290,12 +318,69 @@ async function doLogout() { await sb.auth.signOut(); location.reload(); }
 async function ls() {
   var r1 = await sb.from('codigos').select('activo');
   var r2 = await sb.from('activaciones').select('id');
+  var r3 = await sb.from('comentarios').select('leido');
   if(r1.data) {
     document.getElementById('st').textContent = r1.data.length;
     document.getElementById('sa').textContent = r1.data.filter(function(c){return c.activo}).length;
     document.getElementById('si').textContent = r1.data.filter(function(c){return !c.activo}).length;
   }
   if(r2.data) document.getElementById('sac').textContent = r2.data.length;
+  if(r3.data) {
+    document.getElementById('scom').textContent = r3.data.length;
+    document.getElementById('scom-new').textContent = r3.data.filter(function(c){return !c.leido}).length;
+  }
+}
+
+function copCod(btn, cod) {
+  navigator.clipboard.writeText(cod).then(function(){
+    btn.textContent = '✓';
+    btn.style.color = 'var(--green)';
+    btn.style.borderColor = 'rgba(47,158,68,.4)';
+    setTimeout(function(){ btn.textContent = '⎘'; btn.style.color = ''; btn.style.borderColor = ''; }, 1500);
+  });
+}
+
+async function lcoms() {
+  var r = await sb.from('comentarios').select('*').order('fecha', {ascending: false});
+  var el = document.getElementById('coms-list');
+  if(!r.data || r.data.length === 0) {
+    el.innerHTML = '<div class="com-empty">No hay comentarios aún.</div>';
+    return;
+  }
+  // Mark unread as read
+  var unread = r.data.filter(function(c){return !c.leido}).map(function(c){return c.id});
+  if(unread.length) sb.from('comentarios').update({leido:true}).in('id', unread).then(function(){ls();});
+
+  el.innerHTML = r.data.map(function(c){
+    var fecha = new Date(c.fecha).toLocaleString('es-CL', {day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+    var nuevoBadge = !c.leido ? '<span class="com-nuevo">Nuevo</span>' : '';
+    var replyHtml = c.respuesta ? '<div class="com-reply">'+esc(c.respuesta)+'</div>' : '';
+    return '<div class="com-item" id="com-'+c.id+'">'
+      + '<div class="com-meta"><span class="com-fecha">'+fecha+' · '+esc(c.pagina||'index')+'</span>'+nuevoBadge+'</div>'
+      + '<div class="com-msg">'+esc(c.mensaje)+'</div>'
+      + replyHtml
+      + '<div class="com-actions">'
+      + '<input class="com-reply-input" id="ri-'+c.id+'" placeholder="Escribe una respuesta..." value="'+esc(c.respuesta||'')+'"/>'
+      + '<button class="com-reply-btn" onclick="responderCom(\''+c.id+'\')">Responder</button>'
+      + '<button class="com-del-btn" onclick="eliminarCom(\''+c.id+'\')">Eliminar</button>'
+      + '</div></div>';
+  }).join('');
+}
+
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+async function responderCom(id) {
+  var input = document.getElementById('ri-'+id);
+  var resp = input ? input.value.trim() : '';
+  if(!resp) return;
+  await sb.from('comentarios').update({respuesta: resp, fecha_respuesta: new Date().toISOString()}).eq('id', id);
+  lcoms();
+}
+
+async function eliminarCom(id) {
+  if(!confirm('¿Eliminar este comentario?')) return;
+  await sb.from('comentarios').delete().eq('id', id);
+  lcoms(); ls();
 }
 
 async function lc() {
@@ -312,7 +397,7 @@ async function lc() {
     var badge = c.activo ? '<span class="bon">Activo</span>' : '<span class="boff">Inactivo</span>';
     var tbtn = '<button class="sbtn" data-id="' + c.id + '" data-activo="' + c.activo + '" onclick="tog(this)">' + (c.activo ? 'Desactivar' : 'Activar') + '</button>';
     var dbtn = '<button class="sbtn" data-id="' + c.id + '" data-cod="' + c.codigo + '" onclick="delCodigo(this)" style="margin-left:4px;color:#ff6b6b;border-color:rgba(255,107,107,.3)" onmouseover="this.style.borderColor=\'#ff6b6b\'" onmouseout="this.style.borderColor=\'rgba(255,107,107,.3)\'">✕</button>';
-    rows += '<tr><td class="ctb">' + c.codigo + '</td><td>' + c.plan + '</td><td>' + (c.val_limit || '—') + '</td><td>' + (c.gen_limit || '—') + '</td><td>' + c.veces_activado + '</td><td>' + vence + '</td><td>' + badge + '</td><td style="white-space:nowrap">' + tbtn + dbtn + '</td></tr>';
+    rows += '<tr><td class="ctb">' + c.codigo + '<button class="copy-cod-btn" onclick="copCod(this,\''+c.codigo+'\')" title="Copiar">⎘</button></td><td>' + c.plan + '</td><td>' + (c.val_limit || '—') + '</td><td>' + (c.gen_limit || '—') + '</td><td>' + c.veces_activado + '</td><td>' + vence + '</td><td>' + badge + '</td><td style="white-space:nowrap">' + tbtn + dbtn + '</td></tr>';
   }
   tb.innerHTML = rows;
 }

@@ -298,6 +298,32 @@ footer a{color:var(--muted);text-decoration:underline}
     @keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
 @keyframes slideIn{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:translateX(0)}}
 @keyframes spin{to{transform:rotate(360deg)}}
+
+/* COPY ALL BTN */
+.copy-all-btn{width:100%;margin-top:.75rem;padding:.6rem;background:var(--surface2);border:1px solid var(--border-strong);border-radius:8px;color:var(--text);font-family:'Sora',sans-serif;font-size:.78rem;font-weight:600;cursor:pointer;transition:all .15s;display:none}
+.copy-all-btn:hover{background:var(--border-strong)}
+.copy-all-btn.visible{display:block}
+
+/* BETA TOAST */
+#beta-notice{position:fixed;bottom:1.5rem;right:1.5rem;width:280px;background:var(--surface);border:1px solid var(--border-strong);border-radius:14px;padding:1rem 1.25rem;z-index:50;box-shadow:0 8px 32px rgba(0,0,0,.4);animation:slideInRight .3s ease}
+@keyframes slideInRight{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+#beta-notice.hidden{display:none}
+.beta-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem}
+.beta-badge{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);background:var(--accent-dim);border:1px solid rgba(230,57,70,.3);padding:2px 8px;border-radius:100px}
+.beta-close{background:none;border:none;color:var(--muted);cursor:pointer;font-size:.9rem;line-height:1;padding:2px}
+.beta-close:hover{color:var(--text)}
+.beta-notice-text{font-size:.75rem;color:var(--muted);line-height:1.5;margin-bottom:.875rem}
+.beta-divider{height:1px;background:var(--border);margin:.875rem 0}
+.beta-comment-label{font-size:.68rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.4rem}
+.beta-textarea{width:100%;background:var(--surface2);border:1px solid var(--border-strong);border-radius:8px;color:var(--text);font-family:'Sora',sans-serif;font-size:.78rem;padding:.6rem .75rem;outline:none;resize:none;height:70px;transition:border-color .15s;line-height:1.5}
+.beta-textarea:focus{border-color:var(--accent)}
+.beta-textarea::placeholder{color:rgba(255,255,255,.2)}
+.beta-char{font-size:.65rem;color:var(--muted);text-align:right;margin-top:3px}
+.beta-char.warn{color:var(--accent)}
+.beta-send{width:100%;margin-top:.5rem;padding:.55rem;background:var(--accent);border:none;border-radius:8px;color:#fff;font-family:'Sora',sans-serif;font-size:.75rem;font-weight:600;cursor:pointer;transition:opacity .15s}
+.beta-send:hover{opacity:.88}
+.beta-send:disabled{opacity:.4;cursor:not-allowed}
+.beta-ok{font-size:.72rem;color:var(--green);text-align:center;margin-top:.4rem;display:none}
 @media(max-width:860px){.plans-grid{grid-template-columns:repeat(2,1fr)}.casos-grid{grid-template-columns:repeat(2,1fr)!important}}
 @media(max-width:520px){.casos-grid{grid-template-columns:1fr!important}}
 @media(max-width:520px){header{padding:1rem}.nav-wa span{display:none}main{padding:3rem 1rem 2rem}.plans-grid{grid-template-columns:1fr}.panel{padding:1.5rem}.wa-float{padding:.75rem 1rem;font-size:.75rem}}
@@ -310,6 +336,21 @@ footer a{color:var(--muted);text-decoration:underline}
 <body>
 
 <!-- TOAST -->
+<!-- BETA NOTICE -->
+<div id="beta-notice">
+  <div class="beta-header">
+    <span class="beta-badge">⚠ Beta</span>
+    <button class="beta-close" onclick="cerrarBeta()">✕</button>
+  </div>
+  <p class="beta-notice-text">Este proyecto está en fases tempranas. Podrías encontrar errores o comportamientos inesperados. ¡Gracias por probar!</p>
+  <div class="beta-divider"></div>
+  <div class="beta-comment-label">¿Encontraste algo? Cuéntanos</div>
+  <textarea class="beta-textarea" id="beta-msg" placeholder="Describe el error o comentario..." maxlength="350"></textarea>
+  <div class="beta-char"><span id="beta-char-count">0</span>/350</div>
+  <button class="beta-send" id="beta-send-btn" onclick="enviarComentario()">Enviar comentario</button>
+  <div class="beta-ok" id="beta-ok">✓ Comentario enviado, gracias.</div>
+</div>
+
 <div id="gen-toast">✓ RUTs generados</div>
 
 <!-- MODAL AD -->
@@ -435,6 +476,7 @@ footer a{color:var(--muted);text-decoration:underline}
         <div id="gen-session-count" style="display:none;font-size:.72rem;color:var(--muted);margin-top:.5rem;text-align:center"></div>
       </div>
       <div class="rut-list" id="rut-list"></div>
+      <button class="copy-all-btn" id="copy-all-btn" onclick="copiarTodos()">⎘ Copiar todos los RUTs</button>
       <p id="gen-note" style="display:none;margin-top:1rem;font-size:.72rem;color:var(--muted);line-height:1.6">RUTs válidos matemáticamente para <strong style="color:var(--text)">testing y desarrollo</strong> únicamente.</p>
 
       <!-- ACCESS CODE -->
@@ -1048,12 +1090,53 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
         toast.classList.add('show');
         setTimeout(function(){toast.classList.remove('show');},1500);
       }
+      var copyAllBtn=document.getElementById('copy-all-btn');
+      if(copyAllBtn) copyAllBtn.classList.add('visible');
       updatePhaseUI();
       document.getElementById('gen-note').style.display='block';
     }, 30);
   }
 
   window.copyRut=function(rut,btn){navigator.clipboard.writeText(rut).then(function(){btn.textContent='¡Copiado!';setTimeout(function(){btn.textContent='Copiar';},1500);});};
+
+  window.copiarTodos=function(){
+    var items=document.querySelectorAll('#rut-list .rut-item code');
+    if(!items.length) return;
+    var txt=Array.from(items).map(function(el){return el.textContent;}).join('\n');
+    var btn=document.getElementById('copy-all-btn');
+    navigator.clipboard.writeText(txt).then(function(){
+      btn.textContent='✓ ¡Copiados!';
+      setTimeout(function(){btn.textContent='⎘ Copiar todos los RUTs';},1800);
+    });
+  };
+
+  // ── BETA NOTICE ──
+  if(localStorage.getItem('_beta_closed')) document.getElementById('beta-notice').classList.add('hidden');
+  window.cerrarBeta=function(){
+    document.getElementById('beta-notice').classList.add('hidden');
+    localStorage.setItem('_beta_closed','1');
+  };
+  document.getElementById('beta-msg').addEventListener('input',function(){
+    var len=this.value.length;
+    var counter=document.getElementById('beta-char-count');
+    counter.textContent=len;
+    counter.parentElement.className='beta-char'+(len>300?' warn':'');
+  });
+  window.enviarComentario=function(){
+    var msg=document.getElementById('beta-msg').value.trim();
+    if(!msg||!_sb) return;
+    var btn=document.getElementById('beta-send-btn');
+    btn.disabled=true; btn.textContent='Enviando...';
+    _sb.from('comentarios').insert({mensaje:msg,pagina:'index'}).then(function(r){
+      btn.disabled=false; btn.textContent='Enviar comentario';
+      if(r.error){ btn.textContent='Error, intenta de nuevo'; setTimeout(function(){btn.textContent='Enviar comentario';},2000); return; }
+      document.getElementById('beta-msg').value='';
+      document.getElementById('beta-char-count').textContent='0';
+      var ok=document.getElementById('beta-ok');
+      ok.style.display='block';
+      setTimeout(function(){ok.style.display='none';},3000);
+    });
+  };
 
   // ── USER AUTH ──
   if(_sb) _sb.auth.getSession().then(function(res){
