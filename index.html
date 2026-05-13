@@ -893,10 +893,7 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
   updateValUI();
   updatePhaseUI();
 
-  // On load: if plan active redirect to mi-plan
-  if(getPlan()){
-    window.location.href = 'mi-plan.html';
-  }
+  // plan detection handled by updatePhaseUI
 
   // ── ACTIVAR CÓDIGO (SUPABASE) ──
   window.activarCodigo=function(panel){
