@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Validador de RUT Chile Gratis y Online – Verifica tu RUT | RUT.tools</title>
+<title>Mi Plan — RUT.tools</title>
 
 <!-- SEO Meta Tags -->
 <meta name="keywords" content="validador RUT Chile, validar RUT online, generador RUT Chile, verificador RUT, digito verificador RUT, RUT valido, herramienta RUT, validar RUT gratis"/>
@@ -408,34 +408,17 @@ window.onerror = function(msg, src, line, col, err) {
     <!-- GENERAR -->
     <div class="panel" id="panel-generar">
       <!-- SIN PLAN: flujo normal con anuncios -->
-      <div id="gen-free-ui">
-        <div class="phase-pills" id="phase-pills">
-          <div class="phase-pill active" id="pill-0">10 gratis<span class="pill-label">Sin anuncio</span></div>
-          <div class="phase-pill pending" id="pill-1">+10<span class="pill-label">1 anuncio</span></div>
-          <div class="phase-pill pending" id="pill-2">+10<span class="pill-label">1 anuncio</span></div>
-        </div>
-        <div class="gen-count-row">
-          <label>Cantidad</label>
-          <input type="number" id="gen-count" value="10" min="1" max="10"/>
-          <span style="font-size:.75rem;color:var(--muted)">máx. 10 por vez</span>
-        </div>
-        <button class="btn btn-full" id="gen-btn" onclick="solicitarGenerar()">Generar 10 RUTs gratis</button>
-        <p id="gen-hint" style="font-size:.72rem;color:var(--muted);text-align:center;margin-top:8px;line-height:1.5">
-          Primera tanda sin anuncio · <a onclick="goTo('precios')" style="color:var(--accent);cursor:pointer;text-decoration:none">Planes sin límite →</a>
-        </p>
+      <div id="plan-badge-header" style="background:var(--accent-dim);border:1px solid rgba(230,57,70,.3);border-radius:10px;padding:.65rem 1rem;margin-bottom:1rem;display:flex;align-items:center;gap:8px">
+        <span style="color:var(--accent);font-size:.8rem">⚡</span>
+        <span id="gen-plan-label" style="color:var(--text);font-size:.82rem;font-weight:600">Plan activo</span>
       </div>
-
-      <!-- CON PLAN: input libre sin anuncios -->
-      <div id="gen-plan-ui" style="display:none">
-        <div class="plan-badge" style="margin-bottom:1.25rem">⚡ Plan activo: <span id="gen-plan-name">—</span></div>
-        <label>Cantidad de RUTs a generar</label>
-        <div class="input-row" style="margin-top:.5rem">
-          <input type="number" id="gen-count-plan" value="10" min="1" style="font-size:1.1rem;font-family:DM Mono,monospace"/>
-          <button class="btn" onclick="ejecutarGenerar()">Generar</button>
-        </div>
-        <p id="gen-plan-hint" style="font-size:.72rem;color:var(--muted);margin-top:.5rem"></p>
-        <div id="gen-session-count" style="display:none;font-size:.72rem;color:var(--muted);margin-top:.5rem;text-align:center"></div>
+      <div class="gen-count-row">
+        <label>Cantidad de RUTs</label>
+        <input type="number" id="gen-count" value="10" min="1" max="10000"/>
+        <span id="gen-max-hint" style="font-size:.75rem;color:var(--muted)">máx. según plan</span>
       </div>
+      <button class="btn btn-full" id="gen-btn" onclick="ejecutarGenerar()">Generar RUTs</button>
+      <p id="gen-hint" style="font-size:.72rem;color:var(--muted);text-align:center;margin-top:8px"></p>
       <div class="rut-list" id="rut-list"></div>
       <p id="gen-note" style="display:none;margin-top:1rem;font-size:.72rem;color:var(--muted);line-height:1.6">RUTs válidos matemáticamente para <strong style="color:var(--text)">testing y desarrollo</strong> únicamente.</p>
 
@@ -818,8 +801,14 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
   if(localStorage.getItem('_vd')!==td){localStorage.setItem('_vu','0');localStorage.setItem('_vd',td);}
 
   if(localStorage.getItem('_gd')!==td){localStorage.setItem('_gp','0');localStorage.setItem('_gd',td);}
+  // mi-plan.html: redirect to index if no plan
+  var _checkPlan = getPlan();
+  if(!_checkPlan || !_checkPlan.genLimit){
+    window.location.href = 'index.html';
+  }
+
   var valUsed=parseInt(localStorage.getItem('_vu')||'0');
-  var genPhase=0;try{genPhase=parseInt(localStorage.getItem('_gp')||'0')||0;}catch(e){genPhase=0;}
+  var genPhase=0;
   // activeCodes defined globally above
 
   function saveVal(){localStorage.setItem('_vu',valUsed);}
@@ -861,42 +850,26 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
   }
 
   function updatePhaseUI(){
-    var unlocked=getGenUnlocked();
-    var pills=['pill-0','pill-1','pill-2'];
-    var btn=document.getElementById('gen-btn');
-    var hint=document.getElementById('gen-hint');
-
-    if(unlocked){
-      var p=getPlan();
-      document.getElementById('gen-plan-badge').style.display='block';
-      document.getElementById('gen-plan-name').textContent=p.plan;
-      document.getElementById('phase-pills').style.display='none';
-      document.getElementById('gen-max-hint').textContent='máx. '+p.genLimit+' por vez';
-      document.getElementById('gen-count').max=p.genLimit;
-      document.getElementById('gen-count').value=Math.min(parseInt(document.getElementById('gen-count').value),p.genLimit);
-      btn.textContent='Generar RUTs — Plan '+p.plan;
-      btn.disabled=false;
-      hint.style.display='none';
-      return;
-    }
-
-    pills.forEach(function(id,i){
-      var el=document.getElementById(id);
-      el.className='phase-pill '+(i<genPhase?'done':i===genPhase?'active':'pending');
-    });
-    if(genPhase===0){btn.textContent='Generar 10 RUTs gratis';hint.innerHTML='Primera tanda sin anuncio · <a onclick="goTo(\'precios\')" style="color:var(--accent);cursor:pointer;text-decoration:none">Planes sin límite →</a>';btn.disabled=false;}
-    else if(genPhase===1){btn.textContent='Obtener 10 RUTs más — ver anuncio';hint.innerHTML='Segunda tanda · 1 anuncio breve · <a onclick="goTo(\'precios\')" style="color:var(--accent);cursor:pointer;text-decoration:none">Planes sin anuncios →</a>';btn.disabled=false;}
-    else if(genPhase===2){btn.textContent='Obtener 10 RUTs más — ver anuncio';hint.innerHTML='Tercera tanda · 1 anuncio breve · <a onclick="goTo(\'precios\')" style="color:var(--accent);cursor:pointer;text-decoration:none">Planes sin anuncios →</a>';btn.disabled=false;}
-    else{btn.textContent='Límite diario alcanzado (30 RUTs)';btn.disabled=true;hint.innerHTML='Vuelve mañana o <a onclick="goTo(\'precios\')" style="color:var(--accent);cursor:pointer;text-decoration:none">elige un plan →</a>';}
+    var p = getPlan();
+    if(!p) return;
+    var btn = document.getElementById('gen-btn');
+    var genCount = document.getElementById('gen-count');
+    var maxHint = document.getElementById('gen-max-hint');
+    var hint = document.getElementById('gen-hint');
+    var label = document.getElementById('gen-plan-label');
+    var planEl = document.getElementById('code-active-plan-gen');
+    if(label) label.textContent = 'Plan activo: ' + p.plan;
+    if(planEl) planEl.textContent = p.plan;
+    if(genCount){ genCount.max = p.genLimit || 1000; }
+    if(maxHint) maxHint.textContent = 'máx. ' + (p.genLimit || 1000) + ' por generación';
+    if(btn){ btn.disabled = false; btn.textContent = 'Generar RUTs'; }
+    if(hint) hint.textContent = '';
   }
 
   updateValUI();
   updatePhaseUI();
 
-  // On load: if plan active redirect to mi-plan
-  if(getPlan()){
-    window.location.href = 'mi-plan.html';
-  }
+  // Plan UI applied via updatePhaseUI() on load
 
   // ── ACTIVAR CÓDIGO (SUPABASE) ──
   window.activarCodigo=function(panel){
@@ -923,8 +896,8 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
       _sb.from('activaciones').insert({codigo:code}).then(function(){});
       _sb.from('codigos').update({veces_activado:d.veces_activado+1}).eq('id',d.id).then(function(){});
       el.className='code-result ok';
-      el.textContent='✓ Plan "'+d.plan+'" activado. Abriendo...';
-      setTimeout(function(){ window.location.href='mi-plan.html'; }, 1000);
+      el.textContent='✓ Plan "'+d.plan+'" activado. Cargando...';
+      setTimeout(function(){ location.reload(); }, 1200);
     });
   };
 
@@ -972,15 +945,7 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
 
   // ── AD MODAL ──
   var adTimer=null,pendingAction=null;
-  window.solicitarGenerar=function(){
-    var p=getPlan();
-    // Plan activo: genera siempre sin restricciones
-    if(p && p.genLimit){ejecutarGenerar();return;}
-    // Sin plan: flujo normal
-    if(genPhase>=3){updatePhaseUI();return;}
-    if(genPhase===0){ejecutarGenerar();}
-    else{pendingAction='generar';openModal('Obteniendo 10 RUTs más','Mira este breve anuncio para continuar');}
-  };
+  window.solicitarGenerar=function(){ ejecutarGenerar(); };
   function openModal(title,sub){
     document.getElementById('modal-title').textContent=title;
     document.getElementById('modal-subtitle').textContent=sub;
