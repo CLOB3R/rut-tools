@@ -935,7 +935,7 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
     });
   };
 
-  function showCodeBadge(panel, planName){
+  window.showCodeBadge=function(panel, planName){
     var badge = document.getElementById('code-active-badge-'+panel);
     var inputSec = document.getElementById('code-input-section-'+panel);
     var planLabel = document.getElementById('code-active-plan-'+panel);
