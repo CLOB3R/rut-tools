@@ -903,8 +903,9 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
     if(!code){el.className='code-result err';el.textContent='Ingresa un código.';return;}
     if(activeCodes.indexOf(code)>-1){
       el.className='code-result ok';
-      el.textContent='✓ Plan activo. Abriendo...';
-      setTimeout(function(){  }, 800);
+      el.textContent='✓ Plan activo.';
+      updateValUI();
+      updatePhaseUI();
       return;
     }
     el.className='code-result ok';el.textContent='Verificando...';
