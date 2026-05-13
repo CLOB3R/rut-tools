@@ -425,6 +425,7 @@ footer a{color:var(--muted);text-decoration:underline}
           <button class="btn" onclick="ejecutarGenerar()">Generar</button>
         </div>
         <p id="gen-plan-hint" style="font-size:.72rem;color:var(--muted);margin-top:.5rem"></p>
+        <div id="gen-session-count" style="display:none;font-size:.72rem;color:var(--muted);margin-top:.5rem;text-align:center"></div>
       </div>
       <div class="rut-list" id="rut-list"></div>
       <p id="gen-note" style="display:none;margin-top:1rem;font-size:.72rem;color:var(--muted);line-height:1.6">RUTs válidos matemáticamente para <strong style="color:var(--text)">testing y desarrollo</strong> únicamente.</p>
@@ -973,6 +974,15 @@ try {
     var used=new Set();var n=0;
     while(n<count){var num=Math.floor(Math.random()*(25000000-1000000+1))+1000000;if(used.has(num))continue;used.add(num);var dv=getDV(num);var rut=fmtR(num,dv);var div=document.createElement('div');div.className='rut-item';div.style.animationDelay=n*0.04+'s';div.innerHTML='<code>'+rut+'</code><button class="btn-outline" onclick="copyRut(\''+rut+'\',this)">Copiar</button>';list.appendChild(div);n++;}
     if(!p||!p.genLimit){genPhase++;saveGen();}
+    else{
+      // Update session counter for plan users
+      sessionGenCount += count;
+      var sc = document.getElementById('gen-session-count');
+      if(sc){
+        sc.style.display='block';
+        sc.textContent=sessionGenCount+' RUT'+(sessionGenCount===1?'':'s')+' generado'+(sessionGenCount===1?'':'s')+' en esta sesión · Copia los que uses para marcarlos';
+      }
+    }
     updatePhaseUI();
     document.getElementById('gen-note').style.display='block';
   }
