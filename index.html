@@ -803,15 +803,18 @@ try {
   // ── STATE ──
   var td=new Date().toDateString();
   if(localStorage.getItem('_vd')!==td){localStorage.setItem('_vu','0');localStorage.setItem('_vd',td);}
-  // On load: if code already active, show badge
-  setTimeout(function(){
+  // On load: if code already active, apply plan UI immediately
+  (function(){
     var p = getPlan();
     if(p){
-      showCodeBadge('gen', p.plan);
-      showCodeBadge('val', p.plan);
-      applyPlanToUI(p);
+      // Wait for DOM to be ready
+      setTimeout(function(){
+        showCodeBadge('gen', p.plan);
+        showCodeBadge('val', p.plan);
+        applyPlanToUI(p);
+      }, 50);
     }
-  }, 100);
+  })();
   if(localStorage.getItem('_gd')!==td){localStorage.setItem('_gp','0');localStorage.setItem('_gd',td);}
   var valUsed=parseInt(localStorage.getItem('_vu')||'0');
   var genPhase=parseInt(localStorage.getItem('_gp')||'0');
@@ -909,9 +912,9 @@ try {
       localStorage.setItem('_cd_'+code,JSON.stringify(planData));
       _sb.from('activaciones').insert({codigo:code}).then(function(){});
       _sb.from('codigos').update({veces_activado:d.veces_activado+1}).eq('id',d.id).then(function(){});
-      showCodeBadge(panel, d.plan);
-      applyPlanToUI(planData);
-      updateValUI();
+      el.className='code-result ok';
+      el.textContent='✓ Plan "'+d.plan+'" activado. Cargando...';
+      setTimeout(function(){ location.reload(); }, 1200);
     });
   };
 
