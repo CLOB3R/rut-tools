@@ -1231,6 +1231,27 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
     updatePhaseUI();
   };
 
+  // ── VERIFICAR CÓDIGOS AL CARGAR ──
+  // Si el admin eliminó/desactivó un código, se revoca el acceso automáticamente
+  if(_sb){
+    var _codigosLS = activeCodes.filter(function(c){ return c.indexOf('user_') < 0; });
+    if(_codigosLS.length > 0){
+      _sb.from('codigos').select('codigo,activo').in('codigo', _codigosLS).then(function(res){
+        if(!res || !res.data) return;
+        var activos = res.data.filter(function(r){ return r.activo; }).map(function(r){ return r.codigo; });
+        var revocados = _codigosLS.filter(function(c){ return activos.indexOf(c) < 0; });
+        if(revocados.length === 0) return;
+        revocados.forEach(function(c){
+          activeCodes = activeCodes.filter(function(a){ return a !== c; });
+          localStorage.removeItem('_cd_' + c);
+        });
+        localStorage.setItem('_ac', JSON.stringify(activeCodes));
+        updateValUI();
+        updatePhaseUI();
+      });
+    }
+  }
+
 })();
 </script>
 
