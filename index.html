@@ -997,9 +997,8 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
   function ejecutarGenerar(){
     var p=getPlan();
     var maxCount=p&&p.genLimit?p.genLimit:10;
-    // Use plan input if available, else free input
-    var inputEl = p&&p.genLimit ? document.getElementById('gen-count-plan') : document.getElementById('gen-count');
-    var count=Math.min(maxCount,Math.max(1,parseInt(inputEl.value)||10));
+    var inputEl = document.getElementById('gen-count');
+    var count=Math.min(maxCount,Math.max(1,parseInt(inputEl?inputEl.value:'10')||10));
     var list=document.getElementById('rut-list');
     var used=new Set();var n=0;
     while(n<count){var num=Math.floor(Math.random()*(25000000-1000000+1))+1000000;if(used.has(num))continue;used.add(num);var dv=getDV(num);var rut=fmtR(num,dv);var div=document.createElement('div');div.className='rut-item';div.style.animationDelay=n*0.04+'s';div.innerHTML='<code>'+rut+'</code><button class="btn-outline" onclick="copyRut(\''+rut+'\',this)">Copiar</button>';list.appendChild(div);n++;}
