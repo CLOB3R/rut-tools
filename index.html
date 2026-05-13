@@ -992,6 +992,11 @@ try {
   // ── USER AUTH ──
   if(_sb) _sb.auth.getSession().then(function(res){
     if(res.data && res.data.session) onUserLogin(res.data.session.user);
+    else {
+      // Check localStorage for code-based plan
+      var p = getPlan();
+      if(p) applyPlanToUI(p);
+    }
   });
 
   window.openUserModal=function(){
@@ -1025,22 +1030,28 @@ try {
     }
     // Load plan
     if(_sb){
-      _sb.from('usuario_planes').select('*').eq('user_id',user.id).eq('activo',true).single().then(function(res){
-        if(res.data){
-          var p=res.data;
-          document.getElementById('u-plan-label').textContent='Plan '+p.plan;
-          // Apply plan
-          var planData={plan:p.plan,valLimit:p.val_limit,genLimit:p.gen_limit,noAds:true};
-          localStorage.setItem('_cd_user_'+user.id, JSON.stringify(planData));
-          if(activeCodes.indexOf('user_'+user.id)<0){
-            activeCodes.push('user_'+user.id);
-            localStorage.setItem('_ac',JSON.stringify(activeCodes));
+      _sb.auth.getSession().then(function(sessionRes){
+        var token = sessionRes.data && sessionRes.data.session ? sessionRes.data.session.access_token : null;
+        _sb.from('usuario_planes').select('*').eq('user_id',user.id).eq('activo',true).then(function(res){
+          if(res.error){
+            document.getElementById('u-plan-label').textContent='Error: '+res.error.message;
+            return;
           }
-          updateValUI();
-          updatePhaseUI();
-        } else {
-          document.getElementById('u-plan-label').textContent='Plan gratuito';
-        }
+          if(res.data && res.data.length > 0){
+            var p=res.data[0];
+            document.getElementById('u-plan-label').textContent='Plan '+p.plan;
+            var planData={plan:p.plan,valLimit:p.val_limit,genLimit:p.gen_limit,noAds:true};
+            localStorage.setItem('_cd_user_'+user.id, JSON.stringify(planData));
+            if(activeCodes.indexOf('user_'+user.id)<0){
+              activeCodes.push('user_'+user.id);
+              localStorage.setItem('_ac',JSON.stringify(activeCodes));
+            }
+            updateValUI();
+            updatePhaseUI();
+          } else {
+            document.getElementById('u-plan-label').textContent='Sin plan asignado (user: '+user.id.slice(0,8)+')';
+          }
+        });
       });
     }
   }
