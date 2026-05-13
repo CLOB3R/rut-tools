@@ -302,15 +302,6 @@ footer a{color:var(--muted);text-decoration:underline}
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-HY2JWNDTDX"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-HY2JWNDTDX');</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-window.onerror = function(msg, src, line, col, err) {
-  var d = document.createElement('div');
-  d.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:#ff4444;color:#fff;padding:12px;font-size:12px;font-family:monospace;z-index:99999;word-break:break-all';
-  d.textContent = 'ERROR L' + line + ':' + col + ' — ' + msg;
-  document.body.appendChild(d);
-  return false;
-};
-</script>
 </head>
 <body>
 
@@ -862,24 +853,28 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
 
   function updatePhaseUI(){
     var unlocked=getGenUnlocked();
-    var pills=['pill-0','pill-1','pill-2'];
-    var btn=document.getElementById('gen-btn');
-    var hint=document.getElementById('gen-hint');
+    var freeUI=document.getElementById('gen-free-ui');
+    var planUI=document.getElementById('gen-plan-ui');
 
     if(unlocked){
       var p=getPlan();
-      document.getElementById('gen-plan-badge').style.display='block';
+      // Show plan UI, hide free UI
+      freeUI.style.display='none';
+      planUI.style.display='block';
       document.getElementById('gen-plan-name').textContent=p.plan;
-      document.getElementById('phase-pills').style.display='none';
-      document.getElementById('gen-max-hint').textContent='máx. '+p.genLimit+' por vez';
-      document.getElementById('gen-count').max=p.genLimit;
-      document.getElementById('gen-count').value=Math.min(parseInt(document.getElementById('gen-count').value),p.genLimit);
-      btn.textContent='Generar RUTs — Plan '+p.plan;
-      btn.disabled=false;
-      hint.style.display='none';
+      var planHint=document.getElementById('gen-plan-hint');
+      if(planHint) planHint.textContent='máx. '+p.genLimit+' RUTs por generación';
+      var countPlan=document.getElementById('gen-count-plan');
+      if(countPlan){ countPlan.max=p.genLimit; }
       return;
     }
 
+    // No plan: show free UI, hide plan UI
+    freeUI.style.display='block';
+    planUI.style.display='none';
+    var pills=['pill-0','pill-1','pill-2'];
+    var btn=document.getElementById('gen-btn');
+    var hint=document.getElementById('gen-hint');
     pills.forEach(function(id,i){
       var el=document.getElementById(id);
       el.className='phase-pill '+(i<genPhase?'done':i===genPhase?'active':'pending');
@@ -1001,7 +996,7 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
   function ejecutarGenerar(){
     var p=getPlan();
     var maxCount=p&&p.genLimit?p.genLimit:10;
-    var inputEl = document.getElementById('gen-count');
+    var inputEl = p&&p.genLimit ? document.getElementById('gen-count-plan') : document.getElementById('gen-count');
     var count=Math.min(maxCount,Math.max(1,parseInt(inputEl?inputEl.value:'10')||10));
     var list=document.getElementById('rut-list');
     var used=new Set();var n=0;
@@ -1028,7 +1023,7 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
     else {
       // Check localStorage for code-based plan
       var p = getPlan();
-      if(p) applyPlanToUI(p);
+      if(p){ updateValUI(); updatePhaseUI(); }
     }
   });
 
@@ -1111,12 +1106,8 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
   // ── ACTIVAR UI DE PLAN ──
   window.activarUIPlan = function(p){
     if(!p || !p.genLimit) return;
-    var panel = document.getElementById('panel-generar');
-    if(!panel) return;
-    panel.innerHTML = '<div style="background:var(--accent-dim);border:1px solid rgba(230,57,70,.3);border-radius:10px;padding:.65rem 1rem;margin-bottom:1rem;display:flex;align-items:center;gap:8px"><span style="color:var(--accent);font-size:.8rem">⚡</span><span style="color:var(--text);font-size:.82rem;font-weight:600">Plan activo: ' + p.plan + '</span></div>'
-      + '<div class="gen-count-row"><label>Cantidad de RUTs</label><input type="number" id="gen-count" value="10" min="1" max="'+p.genLimit+'" style="font-family:DM Mono,monospace"/><span style="font-size:.75rem;color:var(--muted)">máx. '+p.genLimit+' por generación</span></div>'
-      + '<button class="btn btn-full" onclick="ejecutarGenerar()">Generar RUTs</button>'
-      + '<div id="gen-note" style="display:none" class="gen-note"></div>';
+    updateValUI();
+    updatePhaseUI();
   };
 
 })();
