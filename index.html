@@ -294,6 +294,7 @@ footer a{color:var(--muted);text-decoration:underline}
 
     @keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
 @keyframes slideIn{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:translateX(0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
 @media(max-width:860px){.plans-grid{grid-template-columns:repeat(2,1fr)}.casos-grid{grid-template-columns:repeat(2,1fr)!important}}
 @media(max-width:520px){.casos-grid{grid-template-columns:1fr!important}}
 @media(max-width:520px){header{padding:1rem}.nav-wa span{display:none}main{padding:3rem 1rem 2rem}.plans-grid{grid-template-columns:1fr}.panel{padding:1.5rem}.wa-float{padding:.75rem 1rem;font-size:.75rem}}
@@ -422,7 +423,7 @@ footer a{color:var(--muted);text-decoration:underline}
         <label>Cantidad de RUTs a generar</label>
         <div class="input-row" style="margin-top:.5rem">
           <input type="number" id="gen-count-plan" value="10" min="1" style="font-size:1.1rem;font-family:DM Mono,monospace"/>
-          <button class="btn" onclick="ejecutarGenerar()">Generar</button>
+          <button class="btn" id="gen-plan-btn" onclick="ejecutarGenerar()"><span id="gen-btn-text">Generar</span><span id="gen-spinner" style="display:none;width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;display:none;animation:spin .7s linear infinite;margin-left:6px;vertical-align:middle"></span></button>
         </div>
         <p id="gen-plan-hint" style="font-size:.72rem;color:var(--muted);margin-top:.5rem"></p>
         <div id="gen-session-count" style="display:none;font-size:.72rem;color:var(--muted);margin-top:.5rem;text-align:center"></div>
@@ -999,6 +1000,18 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
     var maxCount=p&&p.genLimit?p.genLimit:10;
     var inputEl = p&&p.genLimit ? document.getElementById('gen-count-plan') : document.getElementById('gen-count');
     var count=Math.min(maxCount,Math.max(1,parseInt(inputEl?inputEl.value:'10')||10));
+
+    // Mostrar spinner
+    var btnEl=document.getElementById('gen-plan-btn');
+    var btnText=document.getElementById('gen-btn-text');
+    var spinner=document.getElementById('gen-spinner');
+    if(btnEl&&count>500){
+      btnEl.disabled=true;
+      if(btnText) btnText.textContent='Generando...';
+      if(spinner){spinner.style.display='inline-block';}
+    }
+
+    setTimeout(function(){
     var list=document.getElementById('rut-list');
     var used=new Set();var n=0;
     while(n<count){var num=Math.floor(Math.random()*(25000000-1000000+1))+1000000;if(used.has(num))continue;used.add(num);var dv=getDV(num);var rut=fmtR(num,dv);var div=document.createElement('div');div.className='rut-item';div.style.animationDelay=n*0.04+'s';div.innerHTML='<code>'+rut+'</code><button class="btn-outline" onclick="copyRut(\''+rut+'\',this)">Copiar</button>';list.appendChild(div);n++;}
@@ -1012,8 +1025,13 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
         sc.textContent=sessionGenCount+' RUT'+(sessionGenCount===1?'':'s')+' generado'+(sessionGenCount===1?'':'s')+' en esta sesión · Copia los que uses para marcarlos';
       }
     }
+    // Ocultar spinner
+    if(btnEl){btnEl.disabled=false;}
+    if(btnText) btnText.textContent='Generar';
+    if(spinner) spinner.style.display='none';
     updatePhaseUI();
     document.getElementById('gen-note').style.display='block';
+    }, count>500?50:0);
   }
 
   window.copyRut=function(rut,btn){navigator.clipboard.writeText(rut).then(function(){btn.textContent='¡Copiado!';setTimeout(function(){btn.textContent='Copiar';},1500);});};
