@@ -1008,7 +1008,7 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
   window.closeModal=function(){clearInterval(adTimer);document.getElementById('ad-modal').classList.remove('open');};
   document.getElementById('ad-modal').addEventListener('click',function(e){if(e.target===this)closeModal();});
 
-  function ejecutarGenerar(){
+  window.ejecutarGenerar = function ejecutarGenerar(){
     var p=getPlan();
     var maxCount=p&&p.genLimit?p.genLimit:10;
     var inputEl = p&&p.genLimit ? document.getElementById('gen-count-plan') : document.getElementById('gen-count');
