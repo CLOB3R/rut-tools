@@ -158,6 +158,9 @@ input[type="number"]:focus{border-color:var(--accent)}
 .rut-list{margin-top:1.25rem;display:flex;flex-direction:column;gap:8px;max-height:300px;overflow-y:auto}
 .rut-item{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:.65rem 1rem;display:flex;align-items:center;justify-content:space-between;animation:slideIn .2s ease}
 .rut-item code{font-family:'DM Mono',monospace;font-size:.95rem;letter-spacing:.04em}
+.rut-num{font-family:'DM Mono',monospace;font-size:.72rem;color:var(--muted);min-width:28px;user-select:none;pointer-events:none;flex-shrink:0}
+#gen-toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(20px);background:#2f9e44;color:#fff;font-family:'Sora',sans-serif;font-size:.85rem;font-weight:600;padding:.65rem 1.25rem;border-radius:100px;box-shadow:0 4px 20px rgba(47,158,68,.4);opacity:0;transition:opacity .25s ease,transform .25s ease;pointer-events:none;z-index:999;white-space:nowrap}
+#gen-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .phase-pills{display:flex;gap:6px;margin-bottom:1.25rem;flex-wrap:wrap}
 .phase-pill{flex:1;min-width:90px;border-radius:8px;padding:.5rem .6rem;text-align:center;border:1px solid var(--border);font-size:.7rem;font-weight:600;transition:all .2s}
 .phase-pill.done{background:var(--green-bg);border-color:rgba(47,158,68,.3);color:var(--green)}
@@ -306,6 +309,9 @@ footer a{color:var(--muted);text-decoration:underline}
 </head>
 <body>
 
+<!-- TOAST -->
+<div id="gen-toast">✓ RUTs generados</div>
+
 <!-- MODAL AD -->
 <div class="modal-overlay" id="ad-modal">
   <div class="modal">
@@ -422,8 +428,8 @@ footer a{color:var(--muted);text-decoration:underline}
         <div class="plan-badge" style="margin-bottom:1.25rem">⚡ Plan activo: <span id="gen-plan-name">—</span></div>
         <label>Cantidad de RUTs a generar</label>
         <div class="input-row" style="margin-top:.5rem">
-          <input type="number" id="gen-count-plan" value="10" min="1" style="font-size:1.1rem;font-family:DM Mono,monospace"/>
-          <button class="btn" id="gen-plan-btn" onclick="ejecutarGenerar()"><span id="gen-btn-text">Generar</span><span id="gen-spinner" style="display:none;width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;display:none;animation:spin .7s linear infinite;margin-left:6px;vertical-align:middle"></span></button>
+          <input type="number" id="gen-count-plan" value="10" min="1" max="10000" style="font-size:1.1rem;font-family:DM Mono,monospace"/>
+          <button class="btn" id="gen-plan-btn" onclick="ejecutarGenerar()"><span id="gen-btn-text">Generar</span><span id="gen-spinner" style="display:none;width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;margin-left:6px;vertical-align:middle"></span></button>
         </div>
         <p id="gen-plan-hint" style="font-size:.72rem;color:var(--muted);margin-top:.5rem"></p>
         <div id="gen-session-count" style="display:none;font-size:.72rem;color:var(--muted);margin-top:.5rem;text-align:center"></div>
@@ -1001,37 +1007,43 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
     var inputEl = p&&p.genLimit ? document.getElementById('gen-count-plan') : document.getElementById('gen-count');
     var count=Math.min(maxCount,Math.max(1,parseInt(inputEl?inputEl.value:'10')||10));
 
-    // Mostrar spinner
+    // Mostrar spinner siempre
     var btnEl=document.getElementById('gen-plan-btn');
     var btnText=document.getElementById('gen-btn-text');
     var spinner=document.getElementById('gen-spinner');
-    if(btnEl&&count>500){
-      btnEl.disabled=true;
-      if(btnText) btnText.textContent='Generando...';
-      if(spinner){spinner.style.display='inline-block';}
-    }
+    if(btnEl){ btnEl.disabled=true; }
+    if(btnText) btnText.textContent='Generando...';
+    if(spinner) spinner.style.display='inline-block';
 
     setTimeout(function(){
-    var list=document.getElementById('rut-list');
-    var used=new Set();var n=0;
-    while(n<count){var num=Math.floor(Math.random()*(25000000-1000000+1))+1000000;if(used.has(num))continue;used.add(num);var dv=getDV(num);var rut=fmtR(num,dv);var div=document.createElement('div');div.className='rut-item';div.style.animationDelay=n*0.04+'s';div.innerHTML='<code>'+rut+'</code><button class="btn-outline" onclick="copyRut(\''+rut+'\',this)">Copiar</button>';list.appendChild(div);n++;}
-    if(!p||!p.genLimit){genPhase++;saveGen();}
-    else{
-      // Update session counter for plan users
-      sessionGenCount += count;
-      var sc = document.getElementById('gen-session-count');
-      if(sc){
-        sc.style.display='block';
-        sc.textContent=sessionGenCount+' RUT'+(sessionGenCount===1?'':'s')+' generado'+(sessionGenCount===1?'':'s')+' en esta sesión · Copia los que uses para marcarlos';
+      var list=document.getElementById('rut-list');
+      // Limpiar lista anterior cuando hay plan
+      if(p&&p.genLimit) list.innerHTML='';
+      var used=new Set();var n=0;
+      while(n<count){var num=Math.floor(Math.random()*(25000000-1000000+1))+1000000;if(used.has(num))continue;used.add(num);var dv=getDV(num);var rut=fmtR(num,dv);var div=document.createElement('div');div.className='rut-item';div.style.animationDelay=(n*0.02)+'s';div.innerHTML='<span class="rut-num">'+(n+1)+'.</span><code>'+rut+'</code><button class="btn-outline" onclick="copyRut(\''+rut+'\',this)">Copiar</button>';list.appendChild(div);n++;}
+      if(!p||!p.genLimit){genPhase++;saveGen();}
+      else{
+        sessionGenCount += count;
+        var sc = document.getElementById('gen-session-count');
+        if(sc){
+          sc.style.display='block';
+          sc.textContent=sessionGenCount+' RUT'+(sessionGenCount===1?'':'s')+' generado'+(sessionGenCount===1?'':'s')+' en esta sesión';
+        }
       }
-    }
-    // Ocultar spinner
-    if(btnEl){btnEl.disabled=false;}
-    if(btnText) btnText.textContent='Generar';
-    if(spinner) spinner.style.display='none';
-    updatePhaseUI();
-    document.getElementById('gen-note').style.display='block';
-    }, count>500?50:0);
+      // Ocultar spinner
+      if(btnEl) btnEl.disabled=false;
+      if(btnText) btnText.textContent='Generar';
+      if(spinner) spinner.style.display='none';
+      // Mostrar toast
+      var toast=document.getElementById('gen-toast');
+      if(toast){
+        toast.textContent='✓ '+count+' RUT'+(count===1?'':'s')+' generado'+(count===1?'':'s');
+        toast.classList.add('show');
+        setTimeout(function(){toast.classList.remove('show');},1500);
+      }
+      updatePhaseUI();
+      document.getElementById('gen-note').style.display='block';
+    }, 30);
   }
 
   window.copyRut=function(rut,btn){navigator.clipboard.writeText(rut).then(function(){btn.textContent='¡Copiado!';setTimeout(function(){btn.textContent='Copiar';},1500);});};
