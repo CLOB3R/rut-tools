@@ -818,6 +818,7 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
   if(localStorage.getItem('_gd')!==td){localStorage.setItem('_gp','0');localStorage.setItem('_gd',td);}
   var valUsed=parseInt(localStorage.getItem('_vu')||'0');
   var genPhase=0;try{genPhase=parseInt(localStorage.getItem('_gp')||'0')||0;}catch(e){genPhase=0;}
+  var sessionGenCount=0;
   // activeCodes defined globally above
 
   function saveVal(){localStorage.setItem('_vu',valUsed);}
