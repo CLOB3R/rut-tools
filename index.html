@@ -896,8 +896,7 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
   // On load: if plan with genLimit exists, go to mi-plan
   var _ip = getPlan();
   if(_ip && _ip.genLimit){
-    window.location.href = 'mi-plan.html';
-  }
+      }
 
   // ── ACTIVAR CÓDIGO (SUPABASE) ──
   window.activarCodigo=function(panel){
@@ -910,7 +909,7 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
     if(activeCodes.indexOf(code)>-1){
       el.className='code-result ok';
       el.textContent='✓ Plan activo. Abriendo...';
-      setTimeout(function(){ window.location.href='mi-plan.html'; }, 800);
+      setTimeout(function(){  }, 800);
       return;
     }
     el.className='code-result ok';el.textContent='Verificando...';
