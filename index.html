@@ -803,6 +803,15 @@ try {
   // ── STATE ──
   var td=new Date().toDateString();
   if(localStorage.getItem('_vd')!==td){localStorage.setItem('_vu','0');localStorage.setItem('_vd',td);}
+  // On load: if code already active, show badge
+  setTimeout(function(){
+    var p = getPlan();
+    if(p){
+      showCodeBadge('gen', p.plan);
+      showCodeBadge('val', p.plan);
+      applyPlanToUI(p);
+    }
+  }, 100);
   if(localStorage.getItem('_gd')!==td){localStorage.setItem('_gp','0');localStorage.setItem('_gd',td);}
   var valUsed=parseInt(localStorage.getItem('_vu')||'0');
   var genPhase=parseInt(localStorage.getItem('_gp')||'0');
@@ -884,7 +893,11 @@ try {
     var el=document.getElementById(resultId);
     el.style.display='block';
     if(!code){el.className='code-result err';el.textContent='Ingresa un código.';return;}
-    if(activeCodes.indexOf(code)>-1){el.className='code-result ok';el.textContent='✓ Este código ya está activo.';return;}
+    if(activeCodes.indexOf(code)>-1){
+      el.className='code-result ok';el.textContent='✓ Este código ya está activo.';
+      showCodeBadge(panel, getPlan() ? getPlan().plan : code);
+      return;
+    }
     el.className='code-result ok';el.textContent='Verificando...';
     if(!_sb){el.className='code-result err';el.textContent='Error de conexión. Intenta más tarde.';return;}
     _sb.from('codigos').select('*').eq('codigo',code).eq('activo',true).single().then(function(res){
@@ -894,17 +907,24 @@ try {
       activeCodes.push(code);
       localStorage.setItem('_ac',JSON.stringify(activeCodes));
       localStorage.setItem('_cd_'+code,JSON.stringify(planData));
-      // Log activation
       _sb.from('activaciones').insert({codigo:code}).then(function(){});
-      // Update count
       _sb.from('codigos').update({veces_activado:d.veces_activado+1}).eq('id',d.id).then(function(){});
-      el.className='code-result ok';
-      el.textContent='✓ Plan "'+d.plan+'" activado correctamente.';
-      document.getElementById(inputId).value='';
+      showCodeBadge(panel, d.plan);
+      applyPlanToUI(planData);
       updateValUI();
-      updatePhaseUI();
     });
   };
+
+  function showCodeBadge(panel, planName){
+    var badge = document.getElementById('code-active-badge-'+panel);
+    var inputSec = document.getElementById('code-input-section-'+panel);
+    var planLabel = document.getElementById('code-active-plan-'+panel);
+    if(badge && inputSec && planLabel){
+      planLabel.textContent = planName;
+      badge.style.display = 'flex';
+      inputSec.style.display = 'none';
+    }
+  }
 
   // ── NAV ──
   window.switchTab=function(t){document.querySelectorAll('.tab').forEach(function(el,i){el.classList.toggle('active',(i===0&&t==='validar')||(i===1&&t==='generar'));});document.getElementById('panel-validar').classList.toggle('active',t==='validar');document.getElementById('panel-generar').classList.toggle('active',t==='generar');};
@@ -940,10 +960,10 @@ try {
   // ── AD MODAL ──
   var adTimer=null,pendingAction=null;
   window.solicitarGenerar=function(){
-    var unlocked=getGenUnlocked();
-    var hasPlan=getPlan()!==null;
-    // Si tiene plan activo: genera directo sin anuncio
-    if(unlocked||hasPlan){ejecutarGenerar();return;}
+    var p=getPlan();
+    // Plan activo: genera siempre sin restricciones
+    if(p && p.genLimit){ejecutarGenerar();return;}
+    // Sin plan: flujo normal
     if(genPhase>=3){updatePhaseUI();return;}
     if(genPhase===0){ejecutarGenerar();}
     else{pendingAction='generar';openModal('Obteniendo 10 RUTs más','Mira este breve anuncio para continuar');}
