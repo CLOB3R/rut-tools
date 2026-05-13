@@ -801,6 +801,12 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
   if(localStorage.getItem('_vd')!==td){localStorage.setItem('_vu','0');localStorage.setItem('_vd',td);}
 
   if(localStorage.getItem('_gd')!==td){localStorage.setItem('_gp','0');localStorage.setItem('_gd',td);}
+  // Protect page: redirect to index if no valid plan
+  var _guardPlan = getPlan();
+  if(!_guardPlan || !_guardPlan.genLimit){
+    window.location.href = 'index.html';
+  }
+
   var valUsed=parseInt(localStorage.getItem('_vu')||'0');
   var genPhase=0;
   // activeCodes defined globally above
