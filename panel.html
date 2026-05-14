@@ -5,16 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Panel — RUT.tools</title>
 <meta name="robots" content="noindex,nofollow"/>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
-async function delCodigo(btn) {
-  var id = btn.getAttribute('data-id');
-  var cod = btn.getAttribute('data-cod');
-  if(!confirm('¿Eliminar el código "' + cod + '"? Esta acción no se puede deshacer.')) return;
-  await sb.from('codigos').update({activo: false}).eq('id', id);
-  await sb.from('codigos').delete().eq('id', id);
-  lc(); ls();
-}
-</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Sora:wght@300;400;600;700&display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -217,6 +208,19 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
     <div class="sec">
       <div class="sec-hdr">
+        <div class="sec-t">Planes de usuarios</div>
+        <button class="sbtn" onclick="lup()">↻ Actualizar</button>
+      </div>
+      <div style="overflow-x:auto">
+        <table>
+          <thead><tr><th>User ID</th><th>Plan</th><th>Val/día</th><th>Gen/vez</th><th>Estado</th><th></th></tr></thead>
+          <tbody id="uptb"><tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--muted)">Cargando...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-hdr">
         <div class="sec-t">Comentarios de usuarios</div>
         <button class="sbtn" onclick="lcoms()">↻ Actualizar</button>
       </div>
@@ -303,7 +307,7 @@ function showAdmin() {
   document.getElementById('step-pin').style.display = 'none';
   document.getElementById('admin').style.display = 'flex';
   document.getElementById('aem').textContent = sessionUser.email;
-  ls(); lc(); lcoms();
+  ls(); lc(); lup(); lcoms();
 }
 
 async function otherAccount() {
@@ -450,6 +454,31 @@ async function delCodigo(btn) {
   await sb.from('codigos').update({activo: false}).eq('id', id);
   await sb.from('codigos').delete().eq('id', id);
   lc(); ls();
+}
+
+async function lup() {
+  var r = await sb.from('usuario_planes').select('*').order('created_at', {ascending: false});
+  var tb = document.getElementById('uptb');
+  if(!r.data || r.data.length === 0) {
+    tb.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--muted)">No hay planes asignados.</td></tr>';
+    return;
+  }
+  var rows = '';
+  for(var i = 0; i < r.data.length; i++) {
+    var u = r.data[i];
+    var badge = u.activo ? '<span class="bon">Activo</span>' : '<span class="boff">Inactivo</span>';
+    var dbtn = '<button class="sbtn" data-id="' + u.id + '" data-plan="' + esc(u.plan) + '" onclick="delPlan(this)" style="color:#ff6b6b;border-color:rgba(255,107,107,.3)" onmouseover="this.style.borderColor=\'#ff6b6b\'" onmouseout="this.style.borderColor=\'rgba(255,107,107,.3)\'">Eliminar</button>';
+    rows += '<tr><td style="font-family:monospace;font-size:.72rem">' + u.user_id.slice(0,16) + '…</td><td>' + esc(u.plan) + '</td><td>' + (u.val_limit || '—') + '</td><td>' + (u.gen_limit || '—') + '</td><td>' + badge + '</td><td>' + dbtn + '</td></tr>';
+  }
+  tb.innerHTML = rows;
+}
+
+async function delPlan(btn) {
+  var id = btn.getAttribute('data-id');
+  var plan = btn.getAttribute('data-plan');
+  if(!confirm('¿Eliminar el plan "' + plan + '" de este usuario?')) return;
+  await sb.from('usuario_planes').delete().eq('id', id);
+  lup();
 }
 </script>
 </body>
