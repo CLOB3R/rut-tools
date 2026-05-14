@@ -177,7 +177,9 @@ input[type="number"]:focus{border-color:var(--accent)}
 .code-box{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:1.25rem;margin-top:1.5rem}
 .code-box-title{font-size:.75rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.75rem}
 .code-input-row{display:flex;gap:8px}
-.code-input{flex:1;background:var(--bg);border:1px solid var(--border-strong);border-radius:8px;color:var(--text);font-family:'DM Mono',monospace;font-size:.95rem;font-weight:500;padding:.65rem .875rem;outline:none;transition:border-color .15s;letter-spacing:.1em;text-transform:uppercase}
+.code-input{width:100%;background:var(--bg);border:1px solid var(--border-strong);border-radius:8px;color:var(--text);font-family:'DM Mono',monospace;font-size:.95rem;font-weight:500;padding:.65rem 2.5rem .65rem .875rem;outline:none;transition:border-color .15s;letter-spacing:.1em;text-transform:uppercase}
+.eye-btn{position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--muted);font-size:1rem;padding:2px;line-height:1;transition:color .15s}
+.eye-btn:hover{color:var(--text)}
 .code-input:focus{border-color:var(--accent)}
 .code-input::placeholder{text-transform:none;letter-spacing:0;font-size:.85rem;color:rgba(255,255,255,.2)}
 .code-btn{background:var(--surface);border:1px solid var(--border-strong);color:var(--text);font-family:'Sora',sans-serif;font-size:.78rem;font-weight:600;border-radius:8px;padding:.65rem 1rem;cursor:pointer;transition:all .15s;white-space:nowrap}
@@ -434,10 +436,13 @@ footer a{color:var(--muted);text-decoration:underline}
       <div class="info-chips"><span class="chip">12345678-9</span><span class="chip">12.345.678-9</span><span class="chip">123456789</span></div>
 
       <!-- ACCESS CODE -->
-      <div class="code-box">
+      <div class="code-box" id="val-code-box">
         <div class="code-box-title">¿Tienes un código de acceso?</div>
         <div class="code-input-row">
-          <input type="text" class="code-input" id="code-input-val" placeholder="Ej: PRO-2847" maxlength="12"/>
+          <div style="position:relative;flex:1">
+            <input type="password" class="code-input" id="code-input-val" placeholder="Ej: PRO-2847" maxlength="12" autocomplete="off" oninput="this.value=this.value.toUpperCase()"/>
+            <button class="eye-btn" onclick="toggleCodeVis('val')" title="Mostrar/ocultar código" tabindex="-1">&#128065;</button>
+          </div>
           <button class="code-btn" onclick="activarCodigo('val')">Activar</button>
         </div>
         <div class="code-result" id="code-result-val"></div>
@@ -480,10 +485,13 @@ footer a{color:var(--muted);text-decoration:underline}
       <p id="gen-note" style="display:none;margin-top:1rem;font-size:.72rem;color:var(--muted);line-height:1.6">RUTs válidos matemáticamente para <strong style="color:var(--text)">testing y desarrollo</strong> únicamente.</p>
 
       <!-- ACCESS CODE -->
-      <div class="code-box" style="margin-top:1.5rem">
+      <div class="code-box" id="gen-code-box" style="margin-top:1.5rem">
         <div class="code-box-title">¿Tienes un código de acceso?</div>
         <div class="code-input-row">
-          <input type="text" class="code-input" id="code-input-gen" placeholder="Ej: DEV-5531" maxlength="12"/>
+          <div style="position:relative;flex:1">
+            <input type="password" class="code-input" id="code-input-gen" placeholder="Ej: DEV-5531" maxlength="12" autocomplete="off" oninput="this.value=this.value.toUpperCase()"/>
+            <button class="eye-btn" onclick="toggleCodeVis('gen')" title="Mostrar/ocultar código" tabindex="-1">&#128065;</button>
+          </div>
           <button class="code-btn" onclick="activarCodigo('gen')">Activar</button>
         </div>
         <div class="code-result" id="code-result-gen"></div>
@@ -878,6 +886,19 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
     return null;
   }
 
+  function updateCodeBoxes(){
+    var p=getPlan();
+    var gb=document.getElementById('gen-code-box');
+    var vb=document.getElementById('val-code-box');
+    if(gb) gb.style.display=(p&&p.genLimit)?'none':'';
+    if(vb) vb.style.display=(p&&p.valLimit)?'none':'';
+  }
+
+  window.toggleCodeVis=function(panel){
+    var inp=document.getElementById('code-input-'+panel);
+    if(inp) inp.type=inp.type==='password'?'text':'password';
+  };
+
   function getActiveKey(){
     if(!activeCodes||!Array.isArray(activeCodes))return null;
     for(var i=0;i<activeCodes.length;i++){if(localStorage.getItem('_cd_'+activeCodes[i]))return activeCodes[i];}
@@ -910,6 +931,7 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
       document.getElementById('val-plan-name').textContent=p.plan;
       document.getElementById('val-upgrade-hint').style.display='none';
     }
+    updateCodeBoxes();
   }
 
   function updatePhaseUI(){
@@ -951,6 +973,7 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
     else if(genPhase===1){btn.textContent='Obtener 10 RUTs más — ver anuncio';hint.innerHTML='Segunda tanda · 1 anuncio breve · <a onclick="goTo(\'precios\')" style="color:var(--accent);cursor:pointer;text-decoration:none">Planes sin anuncios →</a>';btn.disabled=false;}
     else if(genPhase===2){btn.textContent='Obtener 10 RUTs más — ver anuncio';hint.innerHTML='Tercera tanda · 1 anuncio breve · <a onclick="goTo(\'precios\')" style="color:var(--accent);cursor:pointer;text-decoration:none">Planes sin anuncios →</a>';btn.disabled=false;}
     else{btn.textContent='Límite diario alcanzado (30 RUTs)';btn.disabled=true;hint.innerHTML='Vuelve mañana o <a onclick="goTo(\'precios\')" style="color:var(--accent);cursor:pointer;text-decoration:none">elige un plan →</a>';}
+    updateCodeBoxes();
   }
 
   updateValUI();
