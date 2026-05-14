@@ -863,9 +863,6 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
   var sessionGenCount=0;
   // activeCodes defined globally above
 
-  // Restaurar plan al instante si hay datos en caché (la verificación async revocará si fue desactivado)
-  {var _p0=getPlan();if(_p0){updateValUI();updatePhaseUI();}}
-
   function saveVal(){localStorage.setItem('_vu',valUsed);}
   function saveGen(){localStorage.setItem('_gp',genPhase);}
 
@@ -1141,15 +1138,36 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
     });
   };
 
-  // ── USER AUTH ──
-  if(_sb) _sb.auth.getSession().then(function(res){
-    if(res.data && res.data.session) onUserLogin(res.data.session.user);
-    else {
-      // Check localStorage for code-based plan
-      var p = getPlan();
-      if(p){ updateValUI(); updatePhaseUI(); }
-    }
-  });
+  // ── USER AUTH + VERIFICACIÓN (en paralelo, verificar antes de mostrar plan) ──
+  if(_sb){
+    var _cLS = activeCodes.filter(function(c){ return c.indexOf('user_') < 0; });
+    var _p1 = _sb.auth.getSession();
+    var _p2 = _cLS.length > 0
+      ? _sb.from('codigos').select('codigo,activo').in('codigo', _cLS)
+      : Promise.resolve({data:[]});
+    Promise.all([_p1, _p2]).then(function(results){
+      var sessionRes = results[0];
+      var codigosRes = results[1];
+      if(codigosRes && codigosRes.data){
+        var _activos = codigosRes.data.filter(function(r){return r.activo;}).map(function(r){return r.codigo;});
+        var _rev = _cLS.filter(function(c){return _activos.indexOf(c)<0;});
+        _rev.forEach(function(c){
+          activeCodes = activeCodes.filter(function(a){return a!==c;});
+          localStorage.removeItem('_cd_'+c);
+        });
+        if(_rev.length>0) localStorage.setItem('_ac',JSON.stringify(activeCodes));
+      }
+      if(sessionRes && sessionRes.data && sessionRes.data.session){
+        onUserLogin(sessionRes.data.session.user);
+      } else {
+        var p = getPlan();
+        if(p){ updateValUI(); updatePhaseUI(); }
+      }
+    });
+  } else {
+    var p = getPlan();
+    if(p){ updateValUI(); updatePhaseUI(); }
+  }
 
   window.openUserModal=function(){
     document.getElementById('user-modal-bg').classList.add('open');
@@ -1233,27 +1251,6 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
     updateValUI();
     updatePhaseUI();
   };
-
-  // ── VERIFICAR CÓDIGOS AL CARGAR ──
-  // Si el admin eliminó/desactivó un código, se revoca el acceso automáticamente
-  if(_sb){
-    var _codigosLS = activeCodes.filter(function(c){ return c.indexOf('user_') < 0; });
-    if(_codigosLS.length > 0){
-      _sb.from('codigos').select('codigo,activo').in('codigo', _codigosLS).then(function(res){
-        if(!res || !res.data) return;
-        var activos = res.data.filter(function(r){ return r.activo; }).map(function(r){ return r.codigo; });
-        var revocados = _codigosLS.filter(function(c){ return activos.indexOf(c) < 0; });
-        if(revocados.length === 0) return;
-        revocados.forEach(function(c){
-          activeCodes = activeCodes.filter(function(a){ return a !== c; });
-          localStorage.removeItem('_cd_' + c);
-        });
-        localStorage.setItem('_ac', JSON.stringify(activeCodes));
-        updateValUI();
-        updatePhaseUI();
-      });
-    }
-  }
 
 })();
 </script>
