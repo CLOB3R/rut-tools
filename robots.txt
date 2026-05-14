@@ -1,3 +1,4 @@
 User-agent: *
 Allow: /
+Disallow: /panel.html
 Sitemap: https://rutificado.com/sitemap.xml
