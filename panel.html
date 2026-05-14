@@ -9,10 +9,8 @@
 async function delCodigo(btn) {
   var id = btn.getAttribute('data-id');
   var cod = btn.getAttribute('data-cod');
-  var first = confirm('¿Eliminar el código "' + cod + '"? Esta acción no se puede deshacer.');
-  if(!first) return;
-  var second = confirm('Confirma de nuevo: ¿eliminar "' + cod + '" permanentemente?');
-  if(!second) return;
+  if(!confirm('¿Eliminar el código "' + cod + '"? Esta acción no se puede deshacer.')) return;
+  await sb.from('codigos').update({activo: false}).eq('id', id);
   await sb.from('codigos').delete().eq('id', id);
   lc(); ls();
 }
@@ -396,7 +394,7 @@ async function lc() {
     var vence = c.fecha_expiracion ? new Date(c.fecha_expiracion).toLocaleDateString('es-CL') : '—';
     var badge = c.activo ? '<span class="bon">Activo</span>' : '<span class="boff">Inactivo</span>';
     var tbtn = '<button class="sbtn" data-id="' + c.id + '" data-activo="' + c.activo + '" onclick="tog(this)">' + (c.activo ? 'Desactivar' : 'Activar') + '</button>';
-    var dbtn = '<button class="sbtn" data-id="' + c.id + '" data-cod="' + c.codigo + '" onclick="delCodigo(this)" style="margin-left:4px;color:#ff6b6b;border-color:rgba(255,107,107,.3)" onmouseover="this.style.borderColor=\'#ff6b6b\'" onmouseout="this.style.borderColor=\'rgba(255,107,107,.3)\'">✕</button>';
+    var dbtn = '<button class="sbtn" data-id="' + c.id + '" data-cod="' + c.codigo + '" onclick="delCodigo(this)" style="margin-left:4px;color:#ff6b6b;border-color:rgba(255,107,107,.3)" onmouseover="this.style.borderColor=\'#ff6b6b\'" onmouseout="this.style.borderColor=\'rgba(255,107,107,.3)\'">Eliminar</button>';
     rows += '<tr><td class="ctb">' + c.codigo + '<button class="copy-cod-btn" onclick="copCod(this,\''+c.codigo+'\')" title="Copiar">⎘</button></td><td>' + c.plan + '</td><td>' + (c.val_limit || '—') + '</td><td>' + (c.gen_limit || '—') + '</td><td>' + c.veces_activado + '</td><td>' + vence + '</td><td>' + badge + '</td><td style="white-space:nowrap">' + tbtn + dbtn + '</td></tr>';
   }
   tb.innerHTML = rows;
@@ -448,10 +446,8 @@ async function cc() {
 async function delCodigo(btn) {
   var id = btn.getAttribute('data-id');
   var cod = btn.getAttribute('data-cod');
-  var first = confirm('¿Eliminar el código "' + cod + '"? Esta acción no se puede deshacer.');
-  if(!first) return;
-  var second = confirm('Confirma de nuevo: ¿eliminar "' + cod + '" permanentemente?');
-  if(!second) return;
+  if(!confirm('¿Eliminar el código "' + cod + '"? Esta acción no se puede deshacer.')) return;
+  await sb.from('codigos').update({activo: false}).eq('id', id);
   await sb.from('codigos').delete().eq('id', id);
   lc(); ls();
 }

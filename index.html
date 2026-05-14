@@ -863,6 +863,9 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
   var sessionGenCount=0;
   // activeCodes defined globally above
 
+  // Restaurar plan al instante si hay datos en caché (la verificación async revocará si fue desactivado)
+  {var _p0=getPlan();if(_p0){updateValUI();updatePhaseUI();}}
+
   function saveVal(){localStorage.setItem('_vu',valUsed);}
   function saveGen(){localStorage.setItem('_gp',genPhase);}
 
