@@ -878,6 +878,17 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
     return null;
   }
 
+  function getActiveKey(){
+    if(!activeCodes||!Array.isArray(activeCodes))return null;
+    for(var i=0;i<activeCodes.length;i++){if(localStorage.getItem('_cd_'+activeCodes[i]))return activeCodes[i];}
+    return null;
+  }
+  function getGenUsed(){var k=getActiveKey();if(!k)return 0;return parseInt(localStorage.getItem('_gu_'+k)||'0');}
+  function setGenUsed(n){var k=getActiveKey();if(k)localStorage.setItem('_gu_'+k,n);}
+  function getGenSet(){var k=getActiveKey();if(!k)return new Set();try{return new Set(JSON.parse(localStorage.getItem('_gs_'+k)||'[]'));}catch(e){return new Set();}}
+  function saveGenSet(s){var k=getActiveKey();if(!k)return;localStorage.setItem('_gs_'+k,JSON.stringify(Array.from(s)));}
+  function getGenRemaining(){var p=getPlan();if(!p||!p.genLimit)return null;return Math.max(0,p.genLimit-getGenUsed());}
+
   function getValLimit(){
     var p=getPlan();
     return (p&&p.valLimit)?p.valLimit:10;
@@ -912,14 +923,15 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
       freeUI.style.display='none';
       planUI.style.display='block';
       document.getElementById('gen-plan-name').textContent=p.plan;
+      var remaining=getGenRemaining();
       var planHint=document.getElementById('gen-plan-hint');
-      if(planHint) planHint.textContent='máx. '+p.genLimit+' RUTs por generación';
+      if(planHint) planHint.textContent=(remaining>0?remaining+' / '+p.genLimit+' RUTs restantes':'Límite alcanzado ('+p.genLimit+' RUTs)');
       var countPlan=document.getElementById('gen-count-plan');
-      if(countPlan){ countPlan.max=p.genLimit; }
+      if(countPlan){ countPlan.max=remaining>0?remaining:1; countPlan.value=Math.min(parseInt(countPlan.value)||10,remaining>0?remaining:1); }
       var planBtn=document.getElementById('gen-plan-btn');
-      if(planBtn) planBtn.disabled=false;
+      if(planBtn) planBtn.disabled=(remaining===0);
       var planBtnText=document.getElementById('gen-btn-text');
-      if(planBtnText) planBtnText.textContent='Generar';
+      if(planBtnText) planBtnText.textContent=remaining===0?'Límite alcanzado':'Generar';
       var planSpinner=document.getElementById('gen-spinner');
       if(planSpinner) planSpinner.style.display='none';
       return;
@@ -1052,9 +1064,17 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
 
   window.ejecutarGenerar = function ejecutarGenerar(){
     var p=getPlan();
-    var maxCount=p&&p.genLimit?p.genLimit:10;
     var inputEl = p&&p.genLimit ? document.getElementById('gen-count-plan') : document.getElementById('gen-count');
-    var count=Math.min(maxCount,Math.max(1,parseInt(inputEl?inputEl.value:'10')||10));
+
+    // Con plan: verificar límite total restante
+    if(p&&p.genLimit){
+      var remaining=getGenRemaining();
+      if(remaining<=0){updatePhaseUI();return;}
+      var maxCount=remaining;
+      var count=Math.min(maxCount,Math.max(1,parseInt(inputEl?inputEl.value:'10')||10));
+    } else {
+      var count=Math.min(10,Math.max(1,parseInt(inputEl?inputEl.value:'10')||10));
+    }
 
     // Mostrar spinner siempre
     var btnEl=document.getElementById('gen-plan-btn');
@@ -1066,17 +1086,30 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
 
     setTimeout(function(){
       var list=document.getElementById('rut-list');
-      // Limpiar lista anterior cuando hay plan
       if(p&&p.genLimit) list.innerHTML='';
-      var used=new Set();var n=0;
-      while(n<count){var num=Math.floor(Math.random()*(25000000-1000000+1))+1000000;if(used.has(num))continue;used.add(num);var dv=getDV(num);var rut=fmtR(num,dv);var div=document.createElement('div');div.className='rut-item';div.style.animationDelay=(n*0.02)+'s';div.innerHTML='<span class="rut-num">'+(n+1)+'.</span><code>'+rut+'</code><button class="btn-outline" onclick="copyRut(\''+rut+'\',this)">Copiar</button>';list.appendChild(div);n++;}
+      // Cargar set de RUTs ya generados (para evitar repetidos entre sesiones)
+      var genSet=p&&p.genLimit?getGenSet():new Set();
+      var batchSet=new Set();var n=0;
+      while(n<count){
+        var num=Math.floor(Math.random()*(25000000-1000000+1))+1000000;
+        if(batchSet.has(num)||genSet.has(num))continue;
+        batchSet.add(num);genSet.add(num);
+        var dv=getDV(num);var rut=fmtR(num,dv);
+        var div=document.createElement('div');div.className='rut-item';div.style.animationDelay=(n*0.02)+'s';
+        div.innerHTML='<span class="rut-num">'+(n+1)+'.</span><code>'+rut+'</code><button class="btn-outline" onclick="copyRut(\''+rut+'\',this)">Copiar</button>';
+        list.appendChild(div);n++;
+      }
       if(!p||!p.genLimit){genPhase++;saveGen();}
       else{
+        // Guardar set actualizado y contador total
+        saveGenSet(genSet);
+        setGenUsed(getGenUsed()+count);
         sessionGenCount += count;
         var sc = document.getElementById('gen-session-count');
         if(sc){
           sc.style.display='block';
-          sc.textContent=sessionGenCount+' RUT'+(sessionGenCount===1?'':'s')+' generado'+(sessionGenCount===1?'':'s')+' en esta sesión';
+          var rem2=getGenRemaining();
+          sc.textContent=sessionGenCount+' RUT'+(sessionGenCount===1?'':'s')+' en esta sesión · '+rem2+' restante'+(rem2===1?'':'s');
         }
       }
       // Ocultar spinner
@@ -1154,6 +1187,8 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
         _rev.forEach(function(c){
           activeCodes = activeCodes.filter(function(a){return a!==c;});
           localStorage.removeItem('_cd_'+c);
+          localStorage.removeItem('_gu_'+c);
+          localStorage.removeItem('_gs_'+c);
         });
         if(_rev.length>0) localStorage.setItem('_ac',JSON.stringify(activeCodes));
       }
@@ -1162,7 +1197,7 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
       } else {
         var _uc=activeCodes.filter(function(c){return c.indexOf('user_')===0;});
         if(_uc.length>0){
-          _uc.forEach(function(c){activeCodes=activeCodes.filter(function(a){return a!==c;});localStorage.removeItem('_cd_'+c);});
+          _uc.forEach(function(c){activeCodes=activeCodes.filter(function(a){return a!==c;});localStorage.removeItem('_cd_'+c);localStorage.removeItem('_gu_'+c);localStorage.removeItem('_gs_'+c);});
           localStorage.setItem('_ac',JSON.stringify(activeCodes));
         }
         var p = getPlan();
@@ -1227,6 +1262,8 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
             document.getElementById('u-plan-label').textContent='Sin plan asignado';
             activeCodes=activeCodes.filter(function(c){return c!=='user_'+user.id;});
             localStorage.removeItem('_cd_user_'+user.id);
+            localStorage.removeItem('_gu_user_'+user.id);
+            localStorage.removeItem('_gs_user_'+user.id);
             localStorage.setItem('_ac',JSON.stringify(activeCodes));
             updateValUI();
             updatePhaseUI();
@@ -1247,7 +1284,13 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
       document.getElementById('u-pass').value='';
       closeUserModal();
       // Remove user plan
-      activeCodes.forEach(function(c){if(c.indexOf('user_')===0)localStorage.removeItem('_cd_'+c);});
+      activeCodes.forEach(function(c){
+        if(c.indexOf('user_')===0){
+          localStorage.removeItem('_cd_'+c);
+          localStorage.removeItem('_gu_'+c);
+          localStorage.removeItem('_gs_'+c);
+        }
+      });
       activeCodes=activeCodes.filter(function(c){return c.indexOf('user_')<0;});
       localStorage.setItem('_ac',JSON.stringify(activeCodes));
       updateValUI();
