@@ -6,20 +6,32 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Static HTML/CSS/JS — no build system. All logic inline per file, no shared stylesheet (CSS vars duplicated across pages).
 
-- **Deploy:** push to `main` → Vercel auto-deploys in ~30s (`rut-tools.vercel.app`)
-- **Domain:** `rutificado.com` (Namecheap A record → 76.76.21.21, CNAME www → cname.vercel-dns.com)
+- **Deploy:** push to `main` → Vercel auto-deploys in ~30s
+- **Domain:** `rutificado.com` ✓ funcionando (Namecheap A → 76.76.21.21, CNAME www → cname.vercel-dns.com)
 - **DB:** Supabase `jcuhqhlbzgubnhhuqiqo.supabase.co`
-- **Analytics:** `G-HY2JWNDTDX`
+- **Analytics:** `G-HY2JWNDTDX` (propiedad GA4, renombrar a "rutificado.com" en Google Analytics)
+- **Search Console:** verificado, sitemap enviado (`https://rutificado.com/sitemap.xml`)
 - **CDN deps:** Supabase JS v2, SheetJS `xlsx.full.min.js`, Google Fonts (Sora, DM Mono, Share Tech Mono)
 
 ## Pages
 
-- `index.html` — validator + generator + pricing + login + SEO text
-- `otras-herramientas.html` — hub page linking to dedicated tool pages
-- `organizar-rut-excel.html` — bulk Excel RUT organizer
-- `validar-rut-empresa.html` — company RUT validator
-- `panel.html` — admin dashboard (Supabase auth + 4-digit PIN, max 3 attempts)
-- `contacto.html` / `privacidad.html` — static pages
+- `index.html` — página principal: validador + generador + pricing + login + textos SEO
+- `otras-herramientas.html` — hub que enlaza a las páginas dedicadas
+- `organizar-rut-excel.html` — organizador masivo de RUTs desde Excel
+- `validar-rut-empresa.html` — validador de RUT de empresas
+- `panel.html` — admin dashboard (Supabase auth + PIN 4 dígitos, máx 3 intentos)
+- `contacto.html` / `privacidad.html` — páginas estáticas
+
+## SEO actual
+
+**Keyword principal:** "rutificador" (~5M búsquedas/mes en Chile). Implementada en:
+- `<title>`: "Rutificador Chile Gratis – Valida y Genera RUTs Online | rutificado.com"
+- `<h1>`: "Rutificador Chile / Gratis y Online"
+- Meta description, og:title, schema name, textos del cuerpo
+
+**Keywords secundarias activas:** rutificador chileno, rutificador gratis, rutificador online, validar RUT Chile, generador RUT Chile.
+
+**NO apuntar a:** "buscar RUT por nombre" / "rutificador por nombre" — requieren base de datos del Registro Civil, el sitio no tiene esa funcionalidad.
 
 ## Supabase tables
 
