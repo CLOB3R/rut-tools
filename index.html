@@ -549,6 +549,18 @@ footer a{color:var(--muted);text-decoration:underline}
     </div>
   </div>
 
+  <!-- ORGANIZADOR BANNER -->
+  <div style="align-self:stretch;max-width:1020px;width:100%;margin:3rem auto 0;padding:0 .5rem;display:flex;justify-content:flex-end">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.25rem 1.5rem;max-width:420px;display:flex;flex-direction:column;gap:.5rem">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="font-size:1.2rem">📊</span>
+        <p style="font-size:.82rem;font-weight:700">Organizador de RUTs</p>
+        <a href="otras-herramientas.html" style="margin-left:auto;font-size:.72rem;color:var(--accent);text-decoration:none;font-weight:600;white-space:nowrap">Ir a la herramienta →</a>
+      </div>
+      <p style="font-size:.78rem;color:var(--muted);line-height:1.5">Formatea y valida cientos de RUTs desde un Excel en segundos. Sube tu archivo .xlsx o .csv, procesamos cada RUT y podés descargar el resultado limpio.</p>
+    </div>
+  </div>
+
   <!-- PRICING -->
   <div class="pricing-section" id="precios">
     <div class="section-header">
@@ -1172,6 +1184,7 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
     document.getElementById('beta-notice').classList.add('hidden');
     localStorage.setItem('_beta_closed','1');
   };
+  if(!localStorage.getItem('_beta_closed')) setTimeout(cerrarBeta, 3000);
   document.getElementById('beta-msg').addEventListener('input',function(){
     var len=this.value.length;
     var counter=document.getElementById('beta-char-count');
