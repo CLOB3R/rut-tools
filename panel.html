@@ -211,6 +211,25 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <div class="sec-t">Planes de usuarios</div>
         <button class="sbtn" onclick="lup()">↻ Actualizar</button>
       </div>
+      <div id="up-edit-form" style="display:none;background:var(--surface2);border:1px solid var(--border-strong);border-radius:10px;padding:1rem;margin-bottom:1rem">
+        <div class="g3" style="margin-bottom:.75rem">
+          <div class="fg"><label>Plan</label>
+            <select id="up-plan">
+              <option>Pro Validador</option>
+              <option>Plus Validador</option>
+              <option>Business Validador</option>
+              <option>Dev Generador</option>
+              <option>Pro Generador</option>
+              <option>Business Generador</option>
+            </select>
+          </div>
+          <div class="fg"><label>Val/día</label><input type="number" id="up-val" placeholder="—"/></div>
+          <div class="fg"><label>Gen/vez</label><input type="number" id="up-gen" placeholder="—"/></div>
+        </div>
+        <input type="hidden" id="up-id"/>
+        <button class="abtn" onclick="savePlan()">Guardar cambios</button>
+        <button class="sbtn" style="margin-left:8px" onclick="cancelEditPlan()">Cancelar</button>
+      </div>
       <div style="overflow-x:auto">
         <table>
           <thead><tr><th>User ID</th><th>Plan</th><th>Val/día</th><th>Gen/vez</th><th>Estado</th><th></th></tr></thead>
@@ -467,10 +486,35 @@ async function lup() {
   for(var i = 0; i < r.data.length; i++) {
     var u = r.data[i];
     var badge = u.activo ? '<span class="bon">Activo</span>' : '<span class="boff">Inactivo</span>';
+    var ebtn = '<button class="sbtn" onclick="editPlan(\''+u.id+'\',\''+esc(u.plan)+'\','+(u.val_limit||'null')+','+(u.gen_limit||'null')+')" style="margin-right:4px">Editar</button>';
     var dbtn = '<button class="sbtn" data-id="' + u.id + '" data-plan="' + esc(u.plan) + '" onclick="delPlan(this)" style="color:#ff6b6b;border-color:rgba(255,107,107,.3)" onmouseover="this.style.borderColor=\'#ff6b6b\'" onmouseout="this.style.borderColor=\'rgba(255,107,107,.3)\'">Eliminar</button>';
-    rows += '<tr><td style="font-family:monospace;font-size:.72rem">' + u.user_id.slice(0,16) + '…</td><td>' + esc(u.plan) + '</td><td>' + (u.val_limit || '—') + '</td><td>' + (u.gen_limit || '—') + '</td><td>' + badge + '</td><td>' + dbtn + '</td></tr>';
+    rows += '<tr><td style="font-family:monospace;font-size:.72rem">' + u.user_id.slice(0,16) + '…</td><td>' + esc(u.plan) + '</td><td>' + (u.val_limit || '—') + '</td><td>' + (u.gen_limit || '—') + '</td><td>' + badge + '</td><td style="white-space:nowrap">' + ebtn + dbtn + '</td></tr>';
   }
   tb.innerHTML = rows;
+}
+
+function editPlan(id, plan, val, gen) {
+  document.getElementById('up-id').value = id;
+  document.getElementById('up-plan').value = plan;
+  document.getElementById('up-val').value = val !== null ? val : '';
+  document.getElementById('up-gen').value = gen !== null ? gen : '';
+  document.getElementById('up-edit-form').style.display = 'block';
+  document.getElementById('up-edit-form').scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+async function savePlan() {
+  var id = document.getElementById('up-id').value;
+  var plan = document.getElementById('up-plan').value;
+  var val = parseInt(document.getElementById('up-val').value) || null;
+  var gen = parseInt(document.getElementById('up-gen').value) || null;
+  if(!plan) { alert('Selecciona un plan.'); return; }
+  await sb.from('usuario_planes').update({plan: plan, val_limit: val, gen_limit: gen}).eq('id', id);
+  document.getElementById('up-edit-form').style.display = 'none';
+  lup();
+}
+
+function cancelEditPlan() {
+  document.getElementById('up-edit-form').style.display = 'none';
 }
 
 async function delPlan(btn) {
@@ -478,6 +522,7 @@ async function delPlan(btn) {
   var plan = btn.getAttribute('data-plan');
   if(!confirm('¿Eliminar el plan "' + plan + '" de este usuario?')) return;
   await sb.from('usuario_planes').delete().eq('id', id);
+  cancelEditPlan();
   lup();
 }
 </script>

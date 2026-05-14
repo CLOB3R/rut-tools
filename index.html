@@ -1160,6 +1160,11 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
       if(sessionRes && sessionRes.data && sessionRes.data.session){
         onUserLogin(sessionRes.data.session.user);
       } else {
+        var _uc=activeCodes.filter(function(c){return c.indexOf('user_')===0;});
+        if(_uc.length>0){
+          _uc.forEach(function(c){activeCodes=activeCodes.filter(function(a){return a!==c;});localStorage.removeItem('_cd_'+c);});
+          localStorage.setItem('_ac',JSON.stringify(activeCodes));
+        }
         var p = getPlan();
         if(p){ updateValUI(); updatePhaseUI(); }
       }
@@ -1219,7 +1224,12 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
             updateValUI();
             updatePhaseUI();
           } else {
-            document.getElementById('u-plan-label').textContent='Sin plan asignado (user: '+user.id.slice(0,8)+')';
+            document.getElementById('u-plan-label').textContent='Sin plan asignado';
+            activeCodes=activeCodes.filter(function(c){return c!=='user_'+user.id;});
+            localStorage.removeItem('_cd_user_'+user.id);
+            localStorage.setItem('_ac',JSON.stringify(activeCodes));
+            updateValUI();
+            updatePhaseUI();
           }
         });
       });
@@ -1237,6 +1247,7 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
       document.getElementById('u-pass').value='';
       closeUserModal();
       // Remove user plan
+      activeCodes.forEach(function(c){if(c.indexOf('user_')===0)localStorage.removeItem('_cd_'+c);});
       activeCodes=activeCodes.filter(function(c){return c.indexOf('user_')<0;});
       localStorage.setItem('_ac',JSON.stringify(activeCodes));
       updateValUI();
