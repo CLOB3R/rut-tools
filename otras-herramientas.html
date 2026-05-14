@@ -219,34 +219,60 @@ function downloadFile(){
 <main>
 
   <div class="hero">
-    <p class="hero-label">Utilidades</p>
-    <p style="color:var(--muted);font-size:.95rem;font-weight:300;line-height:1.6">Herramientas adicionales para trabajar con RUTs chilenos.</p>
+    <p class="hero-label">Utilidades RUT</p>
+    <h1 style="font-size:clamp(1.75rem,4vw,2.5rem);font-weight:700;letter-spacing:-0.04em;line-height:1.1;margin-bottom:.75rem">Herramientas para<br/>RUTs chilenos</h1>
+    <p style="color:var(--muted);font-size:.95rem;font-weight:300;line-height:1.6">Valida empresas, formatea RUTs individuales y organiza archivos Excel completos.</p>
   </div>
 
   <div class="tool-card">
     <div class="tool-name">Validar RUT de empresa</div>
-    <div class="tool-desc">Verifica si el RUT de una empresa chilena es válido. Las empresas tienen RUT propio con dígito verificador calculado con el mismo algoritmo módulo 11.</div>
+    <div class="tool-desc">Las empresas y personas jurídicas en Chile tienen RUT propio, distinto al de sus representantes. El dígito verificador se calcula con el mismo algoritmo módulo 11 que los RUTs personales. Útil para verificar proveedores, clientes empresariales o datos del SII.</div>
     <div class="input-row">
       <input type="text" id="emp-input" placeholder="76.123.456-7" maxlength="12" oninput="formatRutInput(this)" onkeydown="if(event.key==='Enter')validarEmpresa()"/>
       <button class="btn" onclick="validarEmpresa()">Validar</button>
     </div>
     <div class="result" id="emp-result"></div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:1rem">
+      <span style="font-size:.68rem;background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:3px 9px;border-radius:100px">76.123.456-7</span>
+      <span style="font-size:.68rem;background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:3px 9px;border-radius:100px">96543210-K</span>
+      <span style="font-size:.68rem;background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:3px 9px;border-radius:100px">60.805.000-0</span>
+    </div>
   </div>
 
   <div class="tool-card">
-    <div class="tool-name">Organizar RUT</div>
-    <div class="tool-desc">Convierte un RUT sin formato (ej: 123456789) al formato estándar chileno con puntos y guión (ej: 12.345.678-9).</div>
+    <div class="tool-name">Organizar RUT individual</div>
+    <div class="tool-desc">Convierte cualquier RUT sin formato al estándar chileno con puntos y guión. Acepta RUTs con o sin dígito verificador — si falta, lo calcula automáticamente.</div>
     <div class="input-row">
       <input type="text" id="fmt-input" placeholder="Ej: 123456789" maxlength="10" onkeydown="if(event.key==='Enter')organizarRut()"/>
       <button class="btn" onclick="organizarRut()">Organizar</button>
     </div>
     <div class="result" id="fmt-result"></div>
+    <div style="margin-top:1rem;background:var(--surface2);border-radius:8px;padding:.75rem 1rem;font-size:.75rem;color:var(--muted);line-height:1.8">
+      <strong style="color:var(--text)">Formatos aceptados</strong><br/>
+      123456789 → <span style="font-family:DM Mono,monospace;color:var(--text)">12.345.678-9</span><br/>
+      12345678K → <span style="font-family:DM Mono,monospace;color:var(--text)">12.345.678-K</span><br/>
+      12345678 → calcula dígito verificador automáticamente
+    </div>
   </div>
-
 
   <div class="tool-card">
     <div class="tool-name">Organizar RUTs en Excel</div>
-    <div class="tool-desc">Sube un archivo Excel con RUTs en cualquier formato y los convierte automáticamente al formato estándar (XX.XXX.XXX-X). Solo toca las celdas que parezcan RUTs — nombres y otros datos quedan intactos.</div>
+    <div class="tool-desc">Sube un Excel o CSV con RUTs en cualquier formato y descargá el archivo con todos los RUTs en formato estándar. <strong style="color:var(--text)">Solo modifica las celdas que sean RUTs</strong> — nombres, fechas y otros datos quedan intactos.</div>
+
+    <div style="display:flex;flex-direction:column;gap:0;margin-bottom:1.25rem;margin-top:.25rem">
+      <div style="display:flex;gap:10px;align-items:flex-start;padding:.75rem 0;border-bottom:1px solid var(--border)">
+        <div style="width:22px;height:22px;background:var(--accent-dim,rgba(230,57,70,.1));border:1px solid rgba(230,57,70,.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;color:var(--accent);flex-shrink:0;margin-top:1px">1</div>
+        <p style="font-size:.78rem;color:var(--muted);line-height:1.5">Subí tu archivo <strong style="color:var(--text)">.xlsx, .xls o .csv</strong> con los RUTs a organizar</p>
+      </div>
+      <div style="display:flex;gap:10px;align-items:flex-start;padding:.75rem 0;border-bottom:1px solid var(--border)">
+        <div style="width:22px;height:22px;background:var(--accent-dim,rgba(230,57,70,.1));border:1px solid rgba(230,57,70,.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;color:var(--accent);flex-shrink:0;margin-top:1px">2</div>
+        <p style="font-size:.78rem;color:var(--muted);line-height:1.5">Hacé clic en <strong style="color:var(--text)">Organizar RUTs</strong> — el sistema detecta todas las celdas con RUTs y las formatea</p>
+      </div>
+      <div style="display:flex;gap:10px;align-items:flex-start;padding:.75rem 0">
+        <div style="width:22px;height:22px;background:rgba(47,158,68,.1);border:1px solid rgba(47,158,68,.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;color:var(--green);flex-shrink:0;margin-top:1px">3</div>
+        <p style="font-size:.78rem;color:var(--muted);line-height:1.5">Descargá el archivo con todos los RUTs en formato <span style="font-family:DM Mono,monospace;font-size:.78rem;color:var(--text)">XX.XXX.XXX-Y</span></p>
+      </div>
+    </div>
 
     <div class="upload-zone" id="drop-zone" onclick="document.getElementById('file-input').click()"
       ondragover="event.preventDefault();this.classList.add('drag')"
@@ -255,12 +281,46 @@ function downloadFile(){
       <input type="file" id="file-input" accept=".xlsx,.xls,.csv" onchange="handleFile(this.files[0])"/>
       <div class="upload-zone-icon">📊</div>
       <p>Arrastra tu archivo Excel aquí</p>
-      <span>.xlsx · .xls · .csv</span>
+      <span>.xlsx · .xls · .csv — procesado en tu navegador, sin subir datos</span>
     </div>
 
     <div class="process-log" id="process-log"></div>
     <button class="process-btn" id="process-btn" onclick="processFile()">Organizar RUTs</button>
     <button class="download-btn" id="download-btn" onclick="downloadFile()">⬇ Descargar archivo organizado</button>
+  </div>
+
+  <!-- FAQ -->
+  <section style="width:100%;max-width:540px;margin-top:3rem">
+    <h2 style="font-size:1.1rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:1.25rem">Preguntas frecuentes</h2>
+    <div style="display:flex;flex-direction:column;gap:1px;background:var(--border);border-radius:12px;overflow:hidden">
+      <div style="background:var(--surface);padding:1.1rem 1.25rem">
+        <p style="font-size:.85rem;font-weight:600;margin-bottom:.4rem">¿El RUT de empresa se valida igual que el de persona?</p>
+        <p style="font-size:.78rem;color:var(--muted);line-height:1.6">Sí. El algoritmo módulo 11 es el mismo para personas naturales y jurídicas. La diferencia es que los RUTs de empresa suelen tener entre 7 y 9 dígitos y pueden comenzar con 60, 76, 96 u otros prefijos según el tipo de sociedad.</p>
+      </div>
+      <div style="background:var(--surface);padding:1.1rem 1.25rem">
+        <p style="font-size:.85rem;font-weight:600;margin-bottom:.4rem">¿Qué pasa si el Excel tiene columnas con nombres y RUTs mezclados?</p>
+        <p style="font-size:.78rem;color:var(--muted);line-height:1.6">El organizador detecta automáticamente qué celdas son RUTs según su formato numérico. Las celdas con texto, fechas, montos u otros datos no son tocadas.</p>
+      </div>
+      <div style="background:var(--surface);padding:1.1rem 1.25rem">
+        <p style="font-size:.85rem;font-weight:600;margin-bottom:.4rem">¿Se sube el archivo a algún servidor?</p>
+        <p style="font-size:.78rem;color:var(--muted);line-height:1.6">No. El procesamiento ocurre completamente en tu navegador usando JavaScript. El archivo nunca sale de tu computador.</p>
+      </div>
+      <div style="background:var(--surface);padding:1.1rem 1.25rem">
+        <p style="font-size:.85rem;font-weight:600;margin-bottom:.4rem">¿Cuántos RUTs puede procesar el organizador?</p>
+        <p style="font-size:.78rem;color:var(--muted);line-height:1.6">No hay límite técnico. Archivos con miles de filas se procesan en segundos directamente en el navegador.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- LINK A HERRAMIENTA PRINCIPAL -->
+  <div style="width:100%;max-width:540px;margin-top:2rem;margin-bottom:1rem">
+    <a href="https://rutificado.com/" style="display:flex;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1rem 1.25rem;text-decoration:none;transition:border-color .2s" onmouseover="this.style.borderColor='var(--border-strong)'" onmouseout="this.style.borderColor='var(--border)'">
+      <div>
+        <p style="font-size:.82rem;font-weight:700;color:var(--text);margin-bottom:2px">Validador y Generador de RUT Chile</p>
+        <p style="font-size:.73rem;color:var(--muted)">Valida RUTs individuales y genera hasta 10.000 RUTs para testing</p>
+      </div>
+      <span style="font-size:.78rem;color:var(--accent);font-weight:600;white-space:nowrap;margin-left:1rem">Ir →</span>
+    </a>
   </div>
 
 </main>
