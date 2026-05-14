@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Organizar RUTs en Excel Gratis – Formateador Masivo de RUT Chile | RUT.tools</title>
+<meta name="description" content="Formatea y organiza RUTs chilenos desde Excel en segundos. Convierte RUTs sin puntos ni guión al formato estándar XX.XXX.XXX-Y. Gratis, sin registro y sin subir datos."/>
+<meta name="robots" content="index, follow"/>
+<link rel="canonical" href="https://rutificado.com/organizar-rut-excel.html"/>
+<meta property="og:type" content="website"/>
+<meta property="og:url" content="https://rutificado.com/organizar-rut-excel.html"/>
+<meta property="og:title" content="Organizar RUTs en Excel – Gratis | RUT.tools"/>
+<meta property="og:description" content="Sube tu Excel con RUTs mal formateados y descarga el archivo limpio en segundos. También formatea RUTs individuales al instante."/>
+<meta property="og:locale" content="es_CL"/>
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Organizar RUTs en Excel – RUT.tools"/>
+<meta name="twitter:description" content="Formatea RUTs masivamente desde Excel. Gratis, sin registro, sin subir datos."/>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Organizador de RUTs en Excel – RUT.tools",
+  "url": "https://rutificado.com/organizar-rut-excel.html",
+  "description": "Formatea y organiza RUTs chilenos desde Excel al formato estándar XX.XXX.XXX-Y. Procesamiento local sin subir datos.",
+  "isPartOf": {"@type": "WebSite", "name": "RUT.tools", "url": "https://rutificado.com"},
+  "mainEntity": {
+    "@type": "SoftwareApplication",
+    "name": "Organizador de RUTs desde Excel",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Web",
+    "description": "Sube un archivo Excel o CSV con RUTs en cualquier formato y descarga el archivo con todos los RUTs en formato estándar chileno XX.XXX.XXX-Y.",
+    "offers": {"@type": "Offer", "price": "0", "priceCurrency": "CLP"},
+    "inLanguage": "es-CL"
+  }
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Sora:wght@300;400;600;700&display=swap&font-display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0e0f11;--surface:#16181c;--surface2:#1e2127;--border:rgba(255,255,255,0.08);--border-strong:rgba(255,255,255,0.15);--text:#f0f0ef;--muted:#7a7b7d;--accent:#e63946;--accent-dim:rgba(230,57,70,0.1);--green:#2f9e44;--green-bg:rgba(47,158,68,0.1);--red-bg:rgba(224,49,49,0.1)}
+body{background:var(--bg);color:var(--text);font-family:'Sora',sans-serif;min-height:100vh;display:flex;flex-direction:column}
+header{border-bottom:1px solid var(--border);padding:1.25rem 2rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg);z-index:10}
+.logo{font-size:1rem;font-weight:700;letter-spacing:-0.02em;display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--text)}
+.logo-dot{width:8px;height:8px;background:var(--accent);border-radius:50%}
+.back-link{color:var(--muted);text-decoration:none;font-size:.82rem;font-weight:500;display:flex;align-items:center;gap:6px;transition:color .15s}
+.back-link:hover{color:var(--text)}
+main{flex:1;display:flex;flex-direction:column;align-items:center;padding:5rem 1.5rem 3rem}
+.hero{text-align:center;margin-bottom:3rem;max-width:560px}
+.hero-label{font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:.75rem}
+.tool-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;width:100%;max-width:540px;padding:2rem;margin-bottom:1.25rem}
+input[type="text"]{flex:1;background:var(--surface2);border:1px solid var(--border-strong);border-radius:10px;color:var(--text);font-family:'DM Mono',monospace;font-size:1.2rem;font-weight:500;padding:.85rem 1rem;outline:none;transition:border-color .15s;letter-spacing:.05em}
+input[type="text"]::placeholder{color:rgba(255,255,255,.18);font-size:1rem}
+input[type="text"]:focus{border-color:var(--accent)}
+.input-row{display:flex;gap:10px}
+.btn{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:0 1.25rem;font-family:'Sora',sans-serif;font-size:.875rem;font-weight:600;cursor:pointer;transition:opacity .15s,transform .1s;white-space:nowrap}
+.btn:hover{opacity:.88}
+.btn:active{transform:scale(.97)}
+.result{border-radius:10px;padding:1rem 1.25rem;margin-top:1rem;display:none;animation:fadeIn .2s ease}
+.result.valid{background:var(--green-bg);border:1px solid rgba(47,158,68,.3);display:flex;align-items:center;gap:12px}
+.result.invalid{background:var(--red-bg);border:1px solid rgba(224,49,49,.3);display:flex;align-items:flex-start;gap:12px}
+.result-icon{font-size:1.4rem;flex-shrink:0}
+.result-text strong{display:block;font-size:.875rem;font-weight:600;margin-bottom:2px}
+.result-text span{font-size:.8rem;opacity:.75;line-height:1.5}
+.upload-zone{border:2px dashed var(--border-strong);border-radius:12px;padding:2rem;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;margin-bottom:1rem}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--accent);background:rgba(230,57,70,.05)}
+.upload-zone input{display:none}
+.upload-zone-icon{font-size:2rem;margin-bottom:.5rem}
+.upload-zone p{font-size:.85rem;color:var(--muted);margin-bottom:.25rem}
+.upload-zone span{font-size:.72rem;color:var(--muted);opacity:.6}
+.process-btn{width:100%;padding:.85rem;background:var(--accent);color:#fff;border:none;border-radius:10px;font-family:'Sora',sans-serif;font-size:.9rem;font-weight:600;cursor:pointer;transition:opacity .15s;display:none;margin-top:.75rem}
+.process-btn:hover{opacity:.88}
+.process-btn:disabled{opacity:.5;cursor:not-allowed}
+.download-btn{width:100%;padding:.85rem;background:var(--green);color:#fff;border:none;border-radius:10px;font-family:'Sora',sans-serif;font-size:.9rem;font-weight:600;cursor:pointer;transition:opacity .15s;display:none;margin-top:.75rem}
+.download-btn:hover{opacity:.88}
+.process-log{background:var(--surface2);border-radius:8px;padding:.875rem 1rem;font-size:.78rem;color:var(--muted);line-height:1.8;margin-top:.75rem;display:none}
+.process-log strong{color:var(--text)}
+footer{border-top:1px solid var(--border);padding:1.5rem 2rem;text-align:center;margin-top:2rem}
+footer p{color:var(--muted);font-size:.75rem}
+footer a{color:var(--muted);text-decoration:underline}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:520px){header{padding:1rem}main{padding:3rem 1rem 2rem}.tool-card{padding:1.5rem}}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+<header>
+  <a class="logo" href="https://rutificado.com/"><div class="logo-dot"></div>RUT.tools</a>
+  <a class="back-link" href="https://rutificado.com/">← Validador de RUT Chile</a>
+</header>
+<main>
+
+  <div class="hero">
+    <p class="hero-label">Formateo Masivo</p>
+    <h1 style="font-size:clamp(1.75rem,4vw,2.5rem);font-weight:700;letter-spacing:-0.04em;line-height:1.1;margin-bottom:.75rem">Organizar RUTs<br/>en Excel</h1>
+    <p style="color:var(--muted);font-size:.95rem;font-weight:300;line-height:1.6">Convierte cientos de RUTs mal formateados al estándar chileno en segundos. También formatea RUTs individuales al instante.</p>
+  </div>
+
+  <!-- HERRAMIENTA EXCEL -->
+  <div class="tool-card">
+    <div style="font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.75rem">Organizar RUTs en Excel</div>
+    <p style="font-size:.82rem;color:var(--muted);line-height:1.6;margin-bottom:1.25rem">Sube un Excel o CSV con RUTs en cualquier formato. El organizador detecta todas las celdas con RUTs y las convierte al formato estándar <span style="font-family:DM Mono,monospace;font-size:.8rem;color:var(--text)">XX.XXX.XXX-Y</span>. Nombres, fechas y otros datos quedan intactos.</p>
+
+    <div style="display:flex;flex-direction:column;gap:0;margin-bottom:1.5rem">
+      <div style="display:flex;gap:10px;align-items:flex-start;padding:.65rem 0;border-bottom:1px solid var(--border)">
+        <div style="width:22px;height:22px;background:var(--accent-dim);border:1px solid rgba(230,57,70,.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;color:var(--accent);flex-shrink:0;margin-top:1px">1</div>
+        <p style="font-size:.78rem;color:var(--muted);line-height:1.5">Subí tu archivo <strong style="color:var(--text)">.xlsx, .xls o .csv</strong></p>
+      </div>
+      <div style="display:flex;gap:10px;align-items:flex-start;padding:.65rem 0;border-bottom:1px solid var(--border)">
+        <div style="width:22px;height:22px;background:var(--accent-dim);border:1px solid rgba(230,57,70,.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;color:var(--accent);flex-shrink:0;margin-top:1px">2</div>
+        <p style="font-size:.78rem;color:var(--muted);line-height:1.5">Hacé clic en <strong style="color:var(--text)">Organizar RUTs</strong></p>
+      </div>
+      <div style="display:flex;gap:10px;align-items:flex-start;padding:.65rem 0">
+        <div style="width:22px;height:22px;background:var(--green-bg);border:1px solid rgba(47,158,68,.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;color:var(--green);flex-shrink:0;margin-top:1px">3</div>
+        <p style="font-size:.78rem;color:var(--muted);line-height:1.5">Descargá el archivo con los RUTs formateados</p>
+      </div>
+    </div>
+
+    <div class="upload-zone" id="drop-zone" onclick="document.getElementById('file-input').click()"
+      ondragover="event.preventDefault();this.classList.add('drag')"
+      ondragleave="this.classList.remove('drag')"
+      ondrop="handleDrop(event)">
+      <input type="file" id="file-input" accept=".xlsx,.xls,.csv" onchange="handleFile(this.files[0])"/>
+      <div class="upload-zone-icon">📊</div>
+      <p>Arrastra tu archivo Excel aquí</p>
+      <span>.xlsx · .xls · .csv — procesado en tu navegador, sin subir datos</span>
+    </div>
+    <div class="process-log" id="process-log"></div>
+    <button class="process-btn" id="process-btn" onclick="processFile()">Organizar RUTs</button>
+    <button class="download-btn" id="download-btn" onclick="downloadFile()">⬇ Descargar archivo organizado</button>
+  </div>
+
+  <!-- HERRAMIENTA INDIVIDUAL -->
+  <div class="tool-card">
+    <div style="font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.4rem">Organizar RUT individual</div>
+    <p style="font-size:.82rem;color:var(--muted);line-height:1.6;margin-bottom:1rem">Convierte un RUT sin formato al estándar chileno con puntos y guión. Si no tiene dígito verificador, lo calcula automáticamente.</p>
+    <div class="input-row">
+      <input type="text" id="fmt-input" placeholder="Ej: 123456789" maxlength="10" onkeydown="if(event.key==='Enter')organizarRut()"/>
+      <button class="btn" onclick="organizarRut()">Organizar</button>
+    </div>
+    <div class="result" id="fmt-result"></div>
+    <div style="margin-top:1rem;background:var(--surface2);border-radius:8px;padding:.75rem 1rem;font-size:.75rem;color:var(--muted);line-height:1.9">
+      <strong style="color:var(--text)">Formatos aceptados</strong><br/>
+      123456789 → <span style="font-family:DM Mono,monospace;color:var(--text)">12.345.678-9</span><br/>
+      12345678K → <span style="font-family:DM Mono,monospace;color:var(--text)">12.345.678-K</span><br/>
+      12345678 → calcula el dígito verificador automáticamente
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <section style="width:100%;max-width:540px;margin-bottom:2rem">
+    <h2 style="font-size:1rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:1rem">Preguntas frecuentes</h2>
+    <div style="display:flex;flex-direction:column;gap:1px;background:var(--border);border-radius:12px;overflow:hidden">
+      <div style="background:var(--surface);padding:1.1rem 1.25rem">
+        <p style="font-size:.85rem;font-weight:600;margin-bottom:.4rem">¿Qué formatos de RUT detecta el organizador de Excel?</p>
+        <p style="font-size:.78rem;color:var(--muted);line-height:1.6">Detecta RUTs con puntos y guión (12.345.678-9), sin puntos (12345678-9), sin guión (123456789), con K mayúscula o minúscula, y RUTs sin dígito verificador de 7 u 8 dígitos.</p>
+      </div>
+      <div style="background:var(--surface);padding:1.1rem 1.25rem">
+        <p style="font-size:.85rem;font-weight:600;margin-bottom:.4rem">¿Modifica otros datos del archivo?</p>
+        <p style="font-size:.78rem;color:var(--muted);line-height:1.6">No. El organizador solo toca las celdas que reconoce como RUTs. Nombres, correos, fechas, montos y cualquier otro tipo de dato quedan exactamente igual.</p>
+      </div>
+      <div style="background:var(--surface);padding:1.1rem 1.25rem">
+        <p style="font-size:.85rem;font-weight:600;margin-bottom:.4rem">¿Se sube el archivo a algún servidor?</p>
+        <p style="font-size:.78rem;color:var(--muted);line-height:1.6">No. Todo el procesamiento ocurre directamente en tu navegador. El archivo nunca sale de tu computador ni se almacena en ningún servidor.</p>
+      </div>
+      <div style="background:var(--surface);padding:1.1rem 1.25rem">
+        <p style="font-size:.85rem;font-weight:600;margin-bottom:.4rem">¿Cuántos RUTs puede procesar?</p>
+        <p style="font-size:.78rem;color:var(--muted);line-height:1.6">No hay límite. Archivos con miles de filas y múltiples hojas se procesan en segundos. El rendimiento depende del navegador y el tamaño del archivo.</p>
+      </div>
+      <div style="background:var(--surface);padding:1.1rem 1.25rem">
+        <p style="font-size:.85rem;font-weight:600;margin-bottom:.4rem">¿Para qué se usa el formato estándar de RUT?</p>
+        <p style="font-size:.78rem;color:var(--muted);line-height:1.6">El formato <span style="font-family:DM Mono,monospace;font-size:.78rem">XX.XXX.XXX-Y</span> es el estándar requerido por el SII, instituciones bancarias, sistemas de RRHH y software contable en Chile. Usar RUTs sin formato puede generar errores al importar datos.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- LINKS -->
+  <div style="width:100%;max-width:540px;display:flex;flex-direction:column;gap:10px;margin-bottom:1rem">
+    <a href="https://rutificado.com/validar-rut-empresa.html" style="display:flex;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1rem 1.25rem;text-decoration:none;transition:border-color .2s" onmouseover="this.style.borderColor='var(--border-strong)'" onmouseout="this.style.borderColor='var(--border)'">
+      <div>
+        <p style="font-size:.82rem;font-weight:700;color:var(--text);margin-bottom:2px">Validador de RUT Empresa</p>
+        <p style="font-size:.73rem;color:var(--muted)">Verifica el RUT de cualquier empresa o sociedad chilena</p>
+      </div>
+      <span style="font-size:.78rem;color:var(--accent);font-weight:600;white-space:nowrap;margin-left:1rem">Ir →</span>
+    </a>
+    <a href="https://rutificado.com/" style="display:flex;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1rem 1.25rem;text-decoration:none;transition:border-color .2s" onmouseover="this.style.borderColor='var(--border-strong)'" onmouseout="this.style.borderColor='var(--border)'">
+      <div>
+        <p style="font-size:.82rem;font-weight:700;color:var(--text);margin-bottom:2px">Validador y Generador de RUT Chile</p>
+        <p style="font-size:.73rem;color:var(--muted)">Valida RUTs personales y genera hasta 10.000 RUTs para testing</p>
+      </div>
+      <span style="font-size:.78rem;color:var(--accent);font-weight:600;white-space:nowrap;margin-left:1rem">Ir →</span>
+    </a>
+  </div>
+
+</main>
+
+<footer>
+  <p>RUT.tools · <a href="https://rutificado.com/">Validador y Generador de RUT Chile</a> · <a href="https://rutificado.com/otras-herramientas.html">Más herramientas</a> · <a href="https://rutificado.com/privacidad.html">Privacidad</a></p>
+</footer>
+
+<script>
+function getDV(n){var s=1,m=0;for(var r=n;r;r=Math.floor(r/10))s=(s+r%10*(9-m++%6))%11;return String.fromCharCode(s?s-1+48:107);}
+function clean(v){return v.replace(/[.\s-]/g,'').toUpperCase();}
+function fmtN(n){return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g,'.');}
+function fmtR(n,d){return fmtN(n)+'-'+d;}
+
+function organizarRut(){
+  var box=document.getElementById('fmt-result');
+  var raw=document.getElementById('fmt-input').value.replace(/[^0-9kK]/g,'').toUpperCase();
+  if(raw.length<2){box.className='result invalid';box.style.display='flex';box.innerHTML='<div class="result-icon">⚠️</div><div class="result-text"><strong>Ingresa un RUT</strong><span>Sin puntos ni guión. Ej: 123456789</span></div>';return;}
+  var dv=raw.slice(-1);var ns=raw.slice(0,-1).replace(/^0+/,'');var num=parseInt(ns);
+  if(isNaN(num)){box.className='result invalid';box.style.display='flex';box.innerHTML='<div class="result-icon">❌</div><div class="result-text"><strong>Formato inválido</strong><span>Solo números y la letra K al final.</span></div>';return;}
+  var formatted=fmtR(num,dv);
+  box.className='result valid';box.style.display='flex';
+  box.innerHTML='<div class="result-icon">✅</div><div class="result-text"><strong>RUT organizado</strong><span style="font-family:DM Mono,monospace;font-size:1.05rem;letter-spacing:.05em">'+formatted+'</span></div>';
+}
+
+var workbookData=null,processedWB=null,originalFileName='';
+function handleDrop(e){e.preventDefault();document.getElementById('drop-zone').classList.remove('drag');var f=e.dataTransfer.files[0];if(f)handleFile(f);}
+function handleFile(file){if(!file)return;originalFileName=file.name;document.getElementById('process-log').style.display='block';document.getElementById('process-log').innerHTML='<strong>Archivo cargado:</strong> '+file.name;document.getElementById('process-btn').style.display='block';document.getElementById('download-btn').style.display='none';var r=new FileReader();r.onload=function(e){workbookData=e.target.result;};r.readAsArrayBuffer(file);}
+function looksLikeRut(val){if(val===null||val===undefined)return false;var str=String(val).trim();return/^\d{1,2}\.?\d{3}\.?\d{3}[-]?[\dkK]?$/.test(str)||/^\d{7,9}$/.test(str)||/^\d{1,2}\.\d{3}\.\d{3}-[\dkK]$/.test(str);}
+function parseRut(val){var str=String(val).trim().replace(/[.\-]/g,'').toUpperCase();if(/^\d{7,8}[\dK]$/.test(str)){var dv=str.slice(-1);var num=parseInt(str.slice(0,-1));return{num:num,dv:dv};}if(/^\d{7,8}$/.test(str)){var num=parseInt(str);return{num:num,dv:getDV(num)};}return null;}
+function formatRutCell(val){var r=parseRut(val);if(!r)return val;return fmtR(r.num,r.dv);}
+function processFile(){if(!workbookData){alert('Primero sube un archivo.');return;}var btn=document.getElementById('process-btn');btn.disabled=true;btn.textContent='Procesando...';try{var wb=XLSX.read(workbookData,{type:'array'});var totalChanged=0;wb.SheetNames.forEach(function(sheetName){var ws=wb.Sheets[sheetName];var range=XLSX.utils.decode_range(ws['!ref']||'A1');for(var R=range.s.r;R<=range.e.r;R++){for(var C=range.s.c;C<=range.e.c;C++){var addr=XLSX.utils.encode_cell({r:R,c:C});var cell=ws[addr];if(!cell)continue;var val=cell.v;if(looksLikeRut(val)){var formatted=formatRutCell(val);if(formatted&&formatted!==String(val)){cell.v=formatted;cell.t='s';if(cell.w)cell.w=formatted;totalChanged++;}}}}});processedWB=wb;document.getElementById('process-log').innerHTML='<strong>Archivo:</strong> '+originalFileName+'<br/><strong>RUTs organizados:</strong> '+totalChanged+' celdas modificadas.';document.getElementById('download-btn').style.display='block';btn.textContent='Organizar RUTs';btn.disabled=false;}catch(err){document.getElementById('process-log').innerHTML='<strong style="color:var(--accent)">Error:</strong> No se pudo leer el archivo. Asegúrate que sea .xlsx, .xls o .csv válido.';btn.textContent='Organizar RUTs';btn.disabled=false;}}
+function downloadFile(){if(!processedWB)return;var name=originalFileName.replace(/\.[^.]+$/,'')+'_organizado.xlsx';XLSX.writeFile(processedWB,name);}
+</script>
+</body>
+</html>

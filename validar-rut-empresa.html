@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Validar RUT de Empresa Chile Gratis – Verificador Online | RUT.tools</title>
+<meta name="description" content="Verifica el RUT de cualquier empresa o sociedad chilena al instante. Valida el dígito verificador de RUTs de empresas SA, SpA, Ltda y más. Gratis y sin registro."/>
+<meta name="robots" content="index, follow"/>
+<link rel="canonical" href="https://rutificado.com/validar-rut-empresa.html"/>
+<meta property="og:type" content="website"/>
+<meta property="og:url" content="https://rutificado.com/validar-rut-empresa.html"/>
+<meta property="og:title" content="Validar RUT de Empresa Chile – Gratis | RUT.tools"/>
+<meta property="og:description" content="Verifica el RUT de cualquier empresa chilena al instante. Valida SA, SpA, Ltda, cooperativas y organismos del Estado."/>
+<meta property="og:locale" content="es_CL"/>
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Validar RUT Empresa Chile – RUT.tools"/>
+<meta name="twitter:description" content="Verifica el RUT de cualquier empresa o sociedad chilena. Gratis y sin registro."/>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Validador de RUT de Empresa Chile",
+  "url": "https://rutificado.com/validar-rut-empresa.html",
+  "description": "Verifica el RUT de cualquier empresa o sociedad chilena al instante usando el algoritmo módulo 11.",
+  "isPartOf": {"@type": "WebSite", "name": "RUT.tools", "url": "https://rutificado.com"},
+  "mainEntity": {
+    "@type": "SoftwareApplication",
+    "name": "Validador de RUT Empresa",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Web",
+    "description": "Valida el RUT de cualquier empresa chilena verificando el dígito verificador con el algoritmo módulo 11.",
+    "offers": {"@type": "Offer", "price": "0", "priceCurrency": "CLP"},
+    "inLanguage": "es-CL"
+  }
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Sora:wght@300;400;600;700&display=swap&font-display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0e0f11;--surface:#16181c;--surface2:#1e2127;--border:rgba(255,255,255,0.08);--border-strong:rgba(255,255,255,0.15);--text:#f0f0ef;--muted:#7a7b7d;--accent:#e63946;--accent-dim:rgba(230,57,70,0.1);--green:#2f9e44;--green-bg:rgba(47,158,68,0.1);--red-bg:rgba(224,49,49,0.1)}
+body{background:var(--bg);color:var(--text);font-family:'Sora',sans-serif;min-height:100vh;display:flex;flex-direction:column}
+header{border-bottom:1px solid var(--border);padding:1.25rem 2rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg);z-index:10}
+.logo{font-size:1rem;font-weight:700;letter-spacing:-0.02em;display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--text)}
+.logo-dot{width:8px;height:8px;background:var(--accent);border-radius:50%}
+.back-link{color:var(--muted);text-decoration:none;font-size:.82rem;font-weight:500;display:flex;align-items:center;gap:6px;transition:color .15s}
+.back-link:hover{color:var(--text)}
+main{flex:1;display:flex;flex-direction:column;align-items:center;padding:5rem 1.5rem 3rem}
+.hero{text-align:center;margin-bottom:3rem;max-width:540px}
+.hero-label{font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:.75rem}
+.tool-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;width:100%;max-width:540px;padding:2rem;margin-bottom:1.25rem}
+input[type="text"]{flex:1;background:var(--surface2);border:1px solid var(--border-strong);border-radius:10px;color:var(--text);font-family:'DM Mono',monospace;font-size:1.2rem;font-weight:500;padding:.85rem 1rem;outline:none;transition:border-color .15s;letter-spacing:.05em}
+input[type="text"]::placeholder{color:rgba(255,255,255,.18);font-size:1rem}
+input[type="text"]:focus{border-color:var(--accent)}
+.input-row{display:flex;gap:10px}
+.btn{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:0 1.25rem;font-family:'Sora',sans-serif;font-size:.875rem;font-weight:600;cursor:pointer;transition:opacity .15s,transform .1s;white-space:nowrap}
+.btn:hover{opacity:.88}
+.btn:active{transform:scale(.97)}
+.result{border-radius:10px;padding:1rem 1.25rem;margin-top:1rem;display:none;animation:fadeIn .2s ease}
+.result.valid{background:var(--green-bg);border:1px solid rgba(47,158,68,.3);display:flex;align-items:center;gap:12px}
+.result.invalid{background:var(--red-bg);border:1px solid rgba(224,49,49,.3);display:flex;align-items:flex-start;gap:12px}
+.result-icon{font-size:1.4rem;flex-shrink:0}
+.result-text strong{display:block;font-size:.875rem;font-weight:600;margin-bottom:2px}
+.result-text span{font-size:.8rem;opacity:.75;line-height:1.5}
+footer{border-top:1px solid var(--border);padding:1.5rem 2rem;text-align:center;margin-top:2rem}
+footer p{color:var(--muted);font-size:.75rem}
+footer a{color:var(--muted);text-decoration:underline}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:520px){header{padding:1rem}main{padding:3rem 1rem 2rem}.tool-card{padding:1.5rem}}
+</style>
+</head>
+<body>
+<header>
+  <a class="logo" href="https://rutificado.com/"><div class="logo-dot"></div>RUT.tools</a>
+  <a class="back-link" href="https://rutificado.com/">← Validador de RUT Chile</a>
+</header>
+<main>
+
+  <div class="hero">
+    <p class="hero-label">Empresas y Sociedades</p>
+    <h1 style="font-size:clamp(1.75rem,4vw,2.5rem);font-weight:700;letter-spacing:-0.04em;line-height:1.1;margin-bottom:.75rem">Validador de RUT<br/>de Empresa Chile</h1>
+    <p style="color:var(--muted);font-size:.95rem;font-weight:300;line-height:1.6">Verifica al instante si el RUT de cualquier empresa o sociedad chilena es válido. SA, SpA, Ltda, EIRL, cooperativas y organismos del Estado.</p>
+  </div>
+
+  <div class="tool-card">
+    <label style="display:block;font-size:.72rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.5rem">RUT de empresa</label>
+    <div class="input-row">
+      <input type="text" id="emp-input" placeholder="76.123.456-7" maxlength="12" oninput="formatRutInput(this)" onkeydown="if(event.key==='Enter')validarEmpresa()"/>
+      <button class="btn" onclick="validarEmpresa()">Validar</button>
+    </div>
+    <div class="result" id="emp-result"></div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:1rem">
+      <span style="font-size:.68rem;background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:3px 9px;border-radius:100px">76.123.456-7</span>
+      <span style="font-size:.68rem;background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:3px 9px;border-radius:100px">96.543.210-K</span>
+      <span style="font-size:.68rem;background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:3px 9px;border-radius:100px">60.805.000-0</span>
+    </div>
+  </div>
+
+  <!-- INFO SECTION -->
+  <section style="width:100%;max-width:540px;margin-bottom:1.25rem">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:2rem">
+      <h2 style="font-size:.95rem;font-weight:700;margin-bottom:1rem">¿Cómo funciona el RUT de empresa en Chile?</h2>
+      <p style="font-size:.82rem;color:var(--muted);line-height:1.7;margin-bottom:1rem">En Chile, toda empresa o persona jurídica recibe un <strong style="color:var(--text)">RUT (Rol Único Tributario)</strong> al momento de su constitución. Este número es asignado por el SII y es único e intransferible.</p>
+      <p style="font-size:.82rem;color:var(--muted);line-height:1.7;margin-bottom:1rem">El dígito verificador del RUT de empresa se calcula con el mismo <strong style="color:var(--text)">algoritmo módulo 11</strong> que los RUTs de personas naturales. No hay diferencia matemática entre ambos.</p>
+      <p style="font-size:.82rem;color:var(--muted);line-height:1.7">Los RUTs de empresa suelen comenzar con prefijos como <span style="font-family:DM Mono,monospace;font-size:.8rem;color:var(--text)">60</span>, <span style="font-family:DM Mono,monospace;font-size:.8rem;color:var(--text)">76</span>, <span style="font-family:DM Mono,monospace;font-size:.8rem;color:var(--text)">96</span> según el tipo de sociedad, aunque no existe una regla estricta de rango.</p>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section style="width:100%;max-width:540px;margin-bottom:2rem">
+    <h2 style="font-size:1rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:1rem">Preguntas frecuentes</h2>
+    <div style="display:flex;flex-direction:column;gap:1px;background:var(--border);border-radius:12px;overflow:hidden">
+      <div style="background:var(--surface);padding:1.1rem 1.25rem">
+        <p style="font-size:.85rem;font-weight:600;margin-bottom:.4rem">¿El RUT de empresa se valida igual que el de persona?</p>
+        <p style="font-size:.78rem;color:var(--muted);line-height:1.6">Sí. El algoritmo módulo 11 es idéntico. Ingresas el RUT completo con dígito verificador y la herramienta verifica matemáticamente si es correcto.</p>
+      </div>
+      <div style="background:var(--surface);padding:1.1rem 1.25rem">
+        <p style="font-size:.85rem;font-weight:600;margin-bottom:.4rem">¿Dónde encuentro el RUT de una empresa chilena?</p>
+        <p style="font-size:.78rem;color:var(--muted);line-height:1.6">En la escritura de constitución, en facturas emitidas por la empresa, en el portal del SII (sii.cl) buscando por razón social, o en el Registro de Comercio.</p>
+      </div>
+      <div style="background:var(--surface);padding:1.1rem 1.25rem">
+        <p style="font-size:.85rem;font-weight:600;margin-bottom:.4rem">¿Un RUT válido confirma que la empresa existe?</p>
+        <p style="font-size:.78rem;color:var(--muted);line-height:1.6">No. La validación solo confirma que el dígito verificador es matemáticamente correcto. Para verificar si una empresa existe y está activa, consultá directamente el SII o el Registro de Comercio.</p>
+      </div>
+      <div style="background:var(--surface);padding:1.1rem 1.25rem">
+        <p style="font-size:.85rem;font-weight:600;margin-bottom:.4rem">¿Qué significa que el dígito verificador sea K?</p>
+        <p style="font-size:.78rem;color:var(--muted);line-height:1.6">La K equivale al número 10 en el algoritmo módulo 11. Es completamente válido y muchos RUTs de empresas terminan en K.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- LINKS A OTRAS HERRAMIENTAS -->
+  <div style="width:100%;max-width:540px;display:flex;flex-direction:column;gap:10px;margin-bottom:1rem">
+    <a href="https://rutificado.com/organizar-rut-excel.html" style="display:flex;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1rem 1.25rem;text-decoration:none;transition:border-color .2s" onmouseover="this.style.borderColor='var(--border-strong)'" onmouseout="this.style.borderColor='var(--border)'">
+      <div>
+        <p style="font-size:.82rem;font-weight:700;color:var(--text);margin-bottom:2px">Organizar RUTs en Excel</p>
+        <p style="font-size:.73rem;color:var(--muted)">Formatea cientos de RUTs desde un archivo Excel en segundos</p>
+      </div>
+      <span style="font-size:.78rem;color:var(--accent);font-weight:600;white-space:nowrap;margin-left:1rem">Ir →</span>
+    </a>
+    <a href="https://rutificado.com/" style="display:flex;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1rem 1.25rem;text-decoration:none;transition:border-color .2s" onmouseover="this.style.borderColor='var(--border-strong)'" onmouseout="this.style.borderColor='var(--border)'">
+      <div>
+        <p style="font-size:.82rem;font-weight:700;color:var(--text);margin-bottom:2px">Validador y Generador de RUT Chile</p>
+        <p style="font-size:.73rem;color:var(--muted)">Valida RUTs personales y genera hasta 10.000 RUTs para testing</p>
+      </div>
+      <span style="font-size:.78rem;color:var(--accent);font-weight:600;white-space:nowrap;margin-left:1rem">Ir →</span>
+    </a>
+  </div>
+
+</main>
+
+<footer>
+  <p>RUT.tools · <a href="https://rutificado.com/">Validador y Generador de RUT Chile</a> · <a href="https://rutificado.com/otras-herramientas.html">Más herramientas</a> · <a href="https://rutificado.com/privacidad.html">Privacidad</a></p>
+</footer>
+
+<script>
+function getDV(n){var s=1,m=0;for(var r=n;r;r=Math.floor(r/10))s=(s+r%10*(9-m++%6))%11;return String.fromCharCode(s?s-1+48:107);}
+function clean(v){return v.replace(/[.\s-]/g,'').toUpperCase();}
+function fmtN(n){return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g,'.');}
+function fmtR(n,d){return fmtN(n)+'-'+d;}
+
+function formatRutInput(el){
+  var v=clean(el.value).replace(/[^0-9K]/g,'');
+  if(v.length>1){var d=v.slice(-1);var ns=v.slice(0,-1).replace(/^0+/,'')||'0';if(/^\d+$/.test(ns))el.value=fmtN(parseInt(ns))+'-'+d;else el.value=v;}
+  else el.value=v;
+}
+
+function validarEmpresa(){
+  var box=document.getElementById('emp-result');
+  var raw=clean(document.getElementById('emp-input').value);
+  if(raw.length<2){box.className='result invalid';box.style.display='flex';box.innerHTML='<div class="result-icon">⚠️</div><div class="result-text"><strong>Ingresa un RUT</strong><span>El campo no puede estar vacío.</span></div>';return;}
+  var dv=raw.slice(-1);var ns=raw.slice(0,-1).replace(/^0+/,'');var num=parseInt(ns);
+  if(isNaN(num)||ns.length<6||ns.length>8){box.className='result invalid';box.style.display='flex';box.innerHTML='<div class="result-icon">❌</div><div class="result-text"><strong>Formato inválido</strong><span>El número debe tener entre 6 y 8 dígitos.</span></div>';return;}
+  var exp=getDV(num);var ok=dv===exp;
+  box.style.display='flex';
+  if(ok){box.className='result valid';box.innerHTML='<div class="result-icon">✅</div><div class="result-text"><strong>RUT de empresa válido</strong><span>'+fmtR(num,dv)+' — dígito verificador correcto.</span></div>';}
+  else{box.className='result invalid';box.innerHTML='<div class="result-icon">❌</div><div class="result-text"><strong>Dígito verificador incorrecto</strong><span>El dígito correcto es <strong style="color:var(--text)">'+exp+'</strong>, no "'+dv+'".</span></div>';}
+}
+</script>
+</body>
+</html>
