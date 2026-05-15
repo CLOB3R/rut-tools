@@ -141,7 +141,7 @@ input[type="number"]:focus{border-color:var(--accent)}
 .result.valid{background:var(--green-bg);border:1px solid rgba(47,158,68,.3);display:flex;align-items:center;gap:12px}
 .result.invalid{background:var(--red-bg);border:1px solid rgba(224,49,49,.3);display:flex;align-items:flex-start;gap:12px}
 .result-icon{font-size:1.4rem;flex-shrink:0}
-.result-text strong{display:block;font-size:.875rem;font-weight:600;margin-bottom:2px}
+.result-text>strong{display:block;font-size:.875rem;font-weight:600;margin-bottom:2px}
 .result-text span{font-size:.8rem;opacity:.75;line-height:1.5}
 .divider{height:1px;background:var(--border);margin:1.5rem 0}
 .limit-bar-wrap{margin-top:1.25rem}
@@ -1130,7 +1130,7 @@ if(!_uid){_uid='u-'+Date.now().toString(36)+Math.random().toString(36).slice(2,7
   window.goTo=function(id){var el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});};
 
   // ── RUT ──
-  function getDV(n){var s=1,m=0;for(var r=n;r;r=Math.floor(r/10))s=(s+r%10*(9-m++%6))%11;return String.fromCharCode(s?s-1+48:107);}
+  function getDV(n){var s=1,m=0;for(var r=n;r;r=Math.floor(r/10))s=(s+r%10*(9-m++%6))%11;return String.fromCharCode(s?s-1+48:75);}
   function clean(v){return v.replace(/[.\s-]/g,'').toUpperCase();}
   function fmtN(n){return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g,'.');}
   function fmtR(n,d){return fmtN(n)+'-'+d;}
