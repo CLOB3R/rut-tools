@@ -946,11 +946,12 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
   }
 
   function updateCodeBoxes(){
-    var p=getPlan();
+    var gp=getGenPlan();
+    var vp=getPlan();
     var gb=document.getElementById('gen-code-box');
     var vb=document.getElementById('val-code-box');
-    if(gb) gb.style.display=(p&&p.genLimit)?'none':'';
-    if(vb) vb.style.display=(p&&p.valLimit)?'none':'';
+    if(gb) gb.style.display=(gp&&gp.genLimit)?'none':'';
+    if(vb) vb.style.display=(vp&&vp.valLimit)?'none':'';
   }
 
   window.toggleCodeVis=function(panel){
