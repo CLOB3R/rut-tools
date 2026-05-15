@@ -1068,8 +1068,8 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
       el.className='code-result ok';
       el.textContent='✓ Plan "'+d.plan+'" activado correctamente.';
       activarUIPlan(planData);
-      mostrarMiCodigo('val', code);
-      mostrarMiCodigo('gen', code);
+      if(planData.valLimit) mostrarMiCodigo('val', code);
+      if(planData.genLimit) mostrarMiCodigo('gen', code);
     });
   };
 
@@ -1309,7 +1309,13 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
   // Mostrar en carga si ya hay código activo guardado
   (function(){
     var codes=activeCodes.filter(function(c){return c.indexOf('user_')<0;});
-    if(codes.length>0){mostrarMiCodigo('val',codes[0]);mostrarMiCodigo('gen',codes[0]);}
+    codes.forEach(function(c){
+      try{
+        var pd=JSON.parse(localStorage.getItem('_cd_'+c)||'{}');
+        if(pd.valLimit) mostrarMiCodigo('val',c);
+        if(pd.genLimit) mostrarMiCodigo('gen',c);
+      }catch(e){}
+    });
   })();
 
   // ── USER AUTH + VERIFICACIÓN (en paralelo, verificar antes de mostrar plan) ──
