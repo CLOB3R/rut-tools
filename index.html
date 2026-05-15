@@ -243,8 +243,22 @@ input[type="number"]:focus{border-color:var(--accent)}
 .feat.yes{color:var(--text)}
 .feat.no{color:var(--muted)}
 .feat-icon{flex-shrink:0;margin-top:1px;font-size:.85rem}
-.plan-cta-wa{background:var(--wa);border:none;color:#fff;font-family:'Sora',sans-serif;font-size:.78rem;font-weight:600;border-radius:8px;padding:.6rem;cursor:pointer;transition:opacity .15s;text-align:center;text-decoration:none;display:block}
+.plan-cta-wa{background:var(--accent);border:none;color:#fff;font-family:'Sora',sans-serif;font-size:.78rem;font-weight:600;border-radius:8px;padding:.6rem;cursor:pointer;transition:opacity .15s;text-align:center;text-decoration:none;display:block}
 .plan-cta-wa:hover{opacity:.88}
+/* CONTRATAR MODAL */
+.c-field{margin-bottom:.875rem}
+.c-field label{display:block;font-size:.65rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.35rem}
+.c-field input{width:100%;background:var(--surface2);border:1px solid var(--border-strong);border-radius:8px;color:var(--text);font-family:'Sora',sans-serif;font-size:.875rem;padding:.7rem .9rem;outline:none;transition:border-color .15s}
+.c-field input:focus{border-color:var(--accent)}
+.c-field input::placeholder{color:rgba(255,255,255,.2)}
+/* MI CÓDIGO */
+.mi-codigo-box{display:none;align-items:center;gap:10px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:.65rem 1rem;margin-top:.75rem}
+.mi-codigo-label{font-size:.65rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;white-space:nowrap}
+.mi-codigo-val{font-family:'DM Mono',monospace;font-size:.9rem;flex:1;letter-spacing:.08em;color:var(--text)}
+.mi-codigo-eye{background:none;border:none;color:var(--muted);cursor:pointer;font-size:1rem;padding:2px;line-height:1;transition:color .15s}
+.mi-codigo-eye:hover{color:var(--text)}
+.mi-codigo-copy{background:none;border:1px solid var(--border);color:var(--muted);font-family:'Sora',sans-serif;font-size:.68rem;font-weight:600;border-radius:6px;padding:3px 10px;cursor:pointer;transition:all .15s;white-space:nowrap}
+.mi-codigo-copy:hover{background:var(--surface);color:var(--text)}
 .plan-cta{background:var(--surface2);border:1px solid var(--border-strong);color:var(--text);font-family:'Sora',sans-serif;font-size:.78rem;font-weight:600;border-radius:8px;padding:.6rem;cursor:pointer;transition:all .15s;text-align:center}
 .plan-cta:hover{background:var(--border-strong)}
 .plan-cta.primary{background:var(--accent);border-color:var(--accent);color:#fff}
@@ -381,6 +395,25 @@ footer a{color:var(--muted);text-decoration:underline}
   </div>
 </div>
 
+<!-- CONTRATAR MODAL -->
+<div class="modal-bg" id="contratar-modal">
+  <div class="user-modal">
+    <button class="modal-close" onclick="cerrarContratar()">✕</button>
+    <h3>Solicitar plan</h3>
+    <p id="contratar-plan-desc" style="font-size:.78rem;color:var(--muted);margin-bottom:1.5rem;line-height:1.5"></p>
+    <div class="c-field">
+      <label>Nombre</label>
+      <input type="text" id="contratar-nombre" placeholder="Tu nombre completo"/>
+    </div>
+    <div class="c-field">
+      <label>Email</label>
+      <input type="email" id="contratar-email" placeholder="tu@email.com"/>
+    </div>
+    <button class="u-login-btn" onclick="enviarSolicitud()">Enviar solicitud</button>
+    <div id="contratar-result" style="margin-top:.75rem;font-size:.78rem;line-height:1.5;display:none"></div>
+  </div>
+</div>
+
 <!-- FLOATING WHATSAPP -->
 <a class="wa-float" href="https://wa.me/56993149165?text=Hola%2C%20quiero%20contratar%20un%20plan%20de%20RUT.tools" target="_blank">
   <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.118 1.528 5.855L.057 23.58a.75.75 0 00.916.917l5.733-1.473A11.943 11.943 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75a9.694 9.694 0 01-4.951-1.358l-.355-.211-3.676.944.973-3.562-.232-.368A9.694 9.694 0 012.25 12C2.25 6.615 6.615 2.25 12 2.25S21.75 6.615 21.75 12 17.385 21.75 12 21.75z"/></svg>
@@ -451,6 +484,12 @@ footer a{color:var(--muted);text-decoration:underline}
           <button class="code-btn" onclick="activarCodigo('val')">Activar</button>
         </div>
         <div class="code-result" id="code-result-val"></div>
+        <div class="mi-codigo-box" id="mi-codigo-box-val">
+          <span class="mi-codigo-label">Mi código</span>
+          <span class="mi-codigo-val" id="mi-codigo-text-val">••••••••</span>
+          <button class="mi-codigo-eye" onclick="toggleMiCodigo('val')" title="Mostrar/ocultar">&#128065;</button>
+          <button class="mi-codigo-copy" onclick="copiarMiCodigo('val')">Copiar</button>
+        </div>
       </div>
     </div>
 
@@ -500,6 +539,12 @@ footer a{color:var(--muted);text-decoration:underline}
           <button class="code-btn" onclick="activarCodigo('gen')">Activar</button>
         </div>
         <div class="code-result" id="code-result-gen"></div>
+        <div class="mi-codigo-box" id="mi-codigo-box-gen">
+          <span class="mi-codigo-label">Mi código</span>
+          <span class="mi-codigo-val" id="mi-codigo-text-gen">••••••••</span>
+          <button class="mi-codigo-eye" onclick="toggleMiCodigo('gen')" title="Mostrar/ocultar">&#128065;</button>
+          <button class="mi-codigo-copy" onclick="copiarMiCodigo('gen')">Copiar</button>
+        </div>
       </div>
     </div>
     </div>
@@ -643,7 +688,7 @@ footer a{color:var(--muted);text-decoration:underline}
           <div class="feat yes"><span class="feat-icon">✓</span>Validación masiva Excel</div>
           <div class="feat yes"><span class="feat-icon">✓</span>Sin publicidad</div>
         </div>
-        <a class="plan-cta-wa" href="https://wa.me/56993149165?text=Hola%2C%20quiero%20contratar%20el%20plan%20Pro%20Validador%20%28%243.990%2Fmes%29" target="_blank">💬 Contratar por WhatsApp</a>
+        <button class="plan-cta-wa" onclick="abrirContratar('Pro Validador','$3.990/mes')">Contratar plan</button>
       </div>
       <div class="plan-card featured">
         <div class="featured-badge">Popular</div>
@@ -655,7 +700,7 @@ footer a{color:var(--muted);text-decoration:underline}
           <div class="feat yes"><span class="feat-icon">✓</span>Validación masiva Excel</div>
           <div class="feat yes"><span class="feat-icon">✓</span>Sin publicidad</div>
         </div>
-        <a class="plan-cta-wa" href="https://wa.me/56993149165?text=Hola%2C%20quiero%20contratar%20el%20plan%20Plus%20Validador%20%28%247.990%2Fmes%29" target="_blank">💬 Contratar por WhatsApp</a>
+        <button class="plan-cta-wa" onclick="abrirContratar('Plus Validador','$7.990/mes')">Contratar plan</button>
       </div>
       <div class="plan-card">
         <div class="plan-name">Business</div>
@@ -666,7 +711,7 @@ footer a{color:var(--muted);text-decoration:underline}
           <div class="feat yes"><span class="feat-icon">✓</span>Validación masiva Excel</div>
           <div class="feat yes"><span class="feat-icon">✓</span>Sin publicidad</div>
         </div>
-        <a class="plan-cta-wa" href="https://wa.me/56993149165?text=Hola%2C%20quiero%20contratar%20el%20plan%20Business%20Validador%20%2814.990%2Fmes%29" target="_blank">💬 Contratar por WhatsApp</a>
+        <button class="plan-cta-wa" onclick="abrirContratar('Business Validador','$14.990/mes')">Contratar plan</button>
       </div>
     </div>
 
@@ -692,7 +737,7 @@ footer a{color:var(--muted);text-decoration:underline}
           <div class="feat yes"><span class="feat-icon">✓</span>Exportar CSV / Excel</div>
           <div class="feat yes"><span class="feat-icon">✓</span>Sin publicidad</div>
         </div>
-        <a class="plan-cta-wa" href="https://wa.me/56993149165?text=Hola%2C%20quiero%20contratar%20el%20plan%20Dev%20Generador%20%28%243.990%2Fmes%29" target="_blank">💬 Contratar por WhatsApp</a>
+        <button class="plan-cta-wa" onclick="abrirContratar('Dev Generador','$3.990/mes')">Contratar plan</button>
       </div>
       <div class="plan-card featured">
         <div class="featured-badge">Popular</div>
@@ -704,7 +749,7 @@ footer a{color:var(--muted);text-decoration:underline}
           <div class="feat yes"><span class="feat-icon">✓</span>Exportar CSV / Excel</div>
           <div class="feat yes"><span class="feat-icon">✓</span>Sin publicidad</div>
         </div>
-        <a class="plan-cta-wa" href="https://wa.me/56993149165?text=Hola%2C%20quiero%20contratar%20el%20plan%20Pro%20Generador%20%28%247.990%2Fmes%29" target="_blank">💬 Contratar por WhatsApp</a>
+        <button class="plan-cta-wa" onclick="abrirContratar('Pro Generador','$7.990/mes')">Contratar plan</button>
       </div>
       <div class="plan-card">
         <div class="plan-name">Business</div>
@@ -715,7 +760,7 @@ footer a{color:var(--muted);text-decoration:underline}
           <div class="feat yes"><span class="feat-icon">✓</span>Exportar CSV / Excel</div>
           <div class="feat yes"><span class="feat-icon">✓</span>Sin publicidad</div>
         </div>
-        <a class="plan-cta-wa" href="https://wa.me/56993149165?text=Hola%2C%20quiero%20contratar%20el%20plan%20Business%20Generador%20%2814.990%2Fmes%29" target="_blank">💬 Contratar por WhatsApp</a>
+        <button class="plan-cta-wa" onclick="abrirContratar('Business Generador','$14.990/mes')">Contratar plan</button>
       </div>
     </div>
 
@@ -1029,6 +1074,7 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
       el.className='code-result ok';
       el.textContent='✓ Plan "'+d.plan+'" activado correctamente.';
       activarUIPlan(planData);
+      mostrarMiCodigo(panel, code);
     });
   };
 
@@ -1210,6 +1256,66 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
       setTimeout(function(){ok.style.display='none';},3000);
     });
   };
+
+  // ── CONTRATAR MODAL ──
+  var _contratarPlan='';
+  window.abrirContratar=function(plan,precio){
+    _contratarPlan=plan;
+    document.getElementById('contratar-plan-desc').innerHTML='Plan seleccionado: <strong style="color:var(--text)">'+plan+'</strong> — '+precio;
+    document.getElementById('contratar-nombre').value='';
+    document.getElementById('contratar-nombre').disabled=false;
+    document.getElementById('contratar-email').value='';
+    document.getElementById('contratar-email').disabled=false;
+    document.getElementById('contratar-result').style.display='none';
+    document.getElementById('contratar-modal').classList.add('open');
+  };
+  window.cerrarContratar=function(){document.getElementById('contratar-modal').classList.remove('open');};
+  document.getElementById('contratar-modal').addEventListener('click',function(e){if(e.target===this)cerrarContratar();});
+  window.enviarSolicitud=function(){
+    var nombre=document.getElementById('contratar-nombre').value.trim();
+    var email=document.getElementById('contratar-email').value.trim();
+    var res=document.getElementById('contratar-result');
+    res.style.display='block';
+    if(!nombre||!email){res.style.color='var(--accent)';res.textContent='Completa todos los campos.';return;}
+    if(!email.includes('@')){res.style.color='var(--accent)';res.textContent='Ingresa un email válido.';return;}
+    res.style.color='var(--muted)';res.textContent='Enviando...';
+    if(!_sb){res.style.color='var(--accent)';res.textContent='Error de conexión.';return;}
+    _sb.from('solicitudes').insert({nombre:nombre,email:email,plan:_contratarPlan}).then(function(r){
+      if(r&&r.error){res.style.color='var(--accent)';res.textContent='Error al enviar. Intenta de nuevo.';}
+      else{
+        res.style.color='var(--green)';
+        res.textContent='✓ Solicitud enviada. Te contactaremos en menos de 24 horas.';
+        document.getElementById('contratar-nombre').disabled=true;
+        document.getElementById('contratar-email').disabled=true;
+      }
+    });
+  };
+
+  // ── MI CÓDIGO ──
+  var _miCodigo={val:'',gen:''};
+  var _miCodigoVis={val:false,gen:false};
+  function mostrarMiCodigo(panel,code){
+    _miCodigo[panel]=code;
+    var box=document.getElementById('mi-codigo-box-'+panel);
+    var txt=document.getElementById('mi-codigo-text-'+panel);
+    if(box&&txt){txt.textContent='••••••••';_miCodigoVis[panel]=false;box.style.display='flex';}
+  }
+  window.toggleMiCodigo=function(panel){
+    var txt=document.getElementById('mi-codigo-text-'+panel);
+    _miCodigoVis[panel]=!_miCodigoVis[panel];
+    txt.textContent=_miCodigoVis[panel]?_miCodigo[panel]:'••••••••';
+  };
+  window.copiarMiCodigo=function(panel){
+    var btn=event.currentTarget;
+    navigator.clipboard.writeText(_miCodigo[panel]).then(function(){
+      btn.textContent='✓ Copiado';setTimeout(function(){btn.textContent='Copiar';},1500);
+    });
+  };
+  // Mostrar en carga si ya hay código activo guardado
+  (function(){
+    var codes=activeCodes.filter(function(c){return c.indexOf('user_')<0;});
+    if(codes.length>0){mostrarMiCodigo('val',codes[0]);mostrarMiCodigo('gen',codes[0]);}
+  })();
 
   // ── USER AUTH + VERIFICACIÓN (en paralelo, verificar antes de mostrar plan) ──
   if(_sb){

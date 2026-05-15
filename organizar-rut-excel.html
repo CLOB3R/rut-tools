@@ -171,6 +171,24 @@ footer a{color:var(--muted);text-decoration:underline}
       </div>
     </div>
 
+    <div style="margin-bottom:1.25rem">
+      <p style="font-size:.72rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.6rem">Formato de salida</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <label style="display:flex;align-items:center;gap:7px;font-size:.78rem;color:var(--text);cursor:pointer;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:.5rem .85rem;transition:border-color .15s">
+          <input type="radio" name="rut-format" value="dots" checked onchange="setRutFormat(this.value)" style="accent-color:var(--accent)"/>
+          <span style="font-family:DM Mono,monospace">12.345.678-9</span>
+        </label>
+        <label style="display:flex;align-items:center;gap:7px;font-size:.78rem;color:var(--text);cursor:pointer;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:.5rem .85rem;transition:border-color .15s">
+          <input type="radio" name="rut-format" value="nodots" onchange="setRutFormat(this.value)" style="accent-color:var(--accent)"/>
+          <span style="font-family:DM Mono,monospace">12345678-9</span>
+        </label>
+        <label style="display:flex;align-items:center;gap:7px;font-size:.78rem;color:var(--text);cursor:pointer;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:.5rem .85rem;transition:border-color .15s">
+          <input type="radio" name="rut-format" value="plain" onchange="setRutFormat(this.value)" style="accent-color:var(--accent)"/>
+          <span style="font-family:DM Mono,monospace">123456789</span>
+        </label>
+      </div>
+    </div>
+
     <div class="upload-zone" id="drop-zone" onclick="document.getElementById('file-input').click()"
       ondragover="event.preventDefault();this.classList.add('drag')"
       ondragleave="this.classList.remove('drag')"
@@ -278,9 +296,17 @@ function organizarRut(){
   if(raw.length<2){box.className='result invalid';box.style.display='flex';box.innerHTML='<div class="result-icon">⚠️</div><div class="result-text"><strong>Ingresa un RUT</strong><span>Sin puntos ni guión. Ej: 123456789</span></div>';return;}
   var dv=raw.slice(-1);var ns=raw.slice(0,-1).replace(/^0+/,'');var num=parseInt(ns);
   if(isNaN(num)){box.className='result invalid';box.style.display='flex';box.innerHTML='<div class="result-icon">❌</div><div class="result-text"><strong>Formato inválido</strong><span>Solo números y la letra K al final.</span></div>';return;}
-  var formatted=fmtR(num,dv);
+  var formatted=fmtROutput(num,dv);
   box.className='result valid';box.style.display='flex';
   box.innerHTML='<div class="result-icon">✅</div><div class="result-text"><strong>RUT organizado</strong><span style="font-family:DM Mono,monospace;font-size:1.05rem;letter-spacing:.05em">'+formatted+'</span></div>';
+}
+
+var rutOutputFormat='dots';
+window.setRutFormat=function(v){rutOutputFormat=v;};
+function fmtROutput(n,d){
+  if(rutOutputFormat==='nodots') return n.toString()+'-'+d;
+  if(rutOutputFormat==='plain') return n.toString()+d;
+  return fmtN(n)+'-'+d;
 }
 
 var workbookData=null,processedWB=null,processedBlob=null,originalFileName='',currentFileType='excel';
@@ -302,12 +328,12 @@ function handleFile(file){
 
 function looksLikeRut(val){if(val===null||val===undefined)return false;var str=String(val).trim();return/^\d{1,2}\.?\d{3}\.?\d{3}[-]?[\dkK]?$/.test(str)||/^\d{7,9}$/.test(str)||/^\d{1,2}\.\d{3}\.\d{3}-[\dkK]$/.test(str);}
 function parseRut(val){var str=String(val).trim().replace(/[.\-]/g,'').toUpperCase();if(/^\d{7,8}[\dK]$/.test(str)){var dv=str.slice(-1);var num=parseInt(str.slice(0,-1));return{num:num,dv:dv};}if(/^\d{7,8}$/.test(str)){var num=parseInt(str);return{num:num,dv:getDV(num)};}return null;}
-function formatRutCell(val){var r=parseRut(val);if(!r)return val;return fmtR(r.num,r.dv);}
+function formatRutCell(val){var r=parseRut(val);if(!r)return val;return fmtROutput(r.num,r.dv);}
 
 function formatRutText(str){
   var c=str.replace(/[.\s-]/g,'').toUpperCase();
-  if(/^\d{7,8}[\dK]$/.test(c)){var dv=c.slice(-1);var num=parseInt(c.slice(0,-1));if(!isNaN(num))return fmtR(num,dv);}
-  if(/^\d{7,8}$/.test(c)){var num=parseInt(c);if(!isNaN(num))return fmtR(num,getDV(num));}
+  if(/^\d{7,8}[\dK]$/.test(c)){var dv=c.slice(-1);var num=parseInt(c.slice(0,-1));if(!isNaN(num))return fmtROutput(num,dv);}
+  if(/^\d{7,8}$/.test(c)){var num=parseInt(c);if(!isNaN(num))return fmtROutput(num,getDV(num));}
   return str;
 }
 
