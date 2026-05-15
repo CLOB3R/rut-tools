@@ -924,9 +924,13 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
   var td=new Date().toDateString();
   if(localStorage.getItem('_vd')!==td){localStorage.setItem('_vu','0');localStorage.setItem('_vd',td);}
 
-  if(localStorage.getItem('_gd')!==td){localStorage.setItem('_gp','0');localStorage.setItem('_gd',td);}
   var valUsed=parseInt(localStorage.getItem('_vu')||'0');
-  var genPhase=0;try{genPhase=parseInt(localStorage.getItem('_gp')||'0')||0;}catch(e){genPhase=0;}
+  var genPhase=0;
+  (function(){
+    var gt=parseInt(localStorage.getItem('_gt')||'0');
+    if(gt && Date.now()-gt>=3600000){localStorage.removeItem('_gp');localStorage.removeItem('_gt');}
+    try{genPhase=parseInt(localStorage.getItem('_gp')||'0')||0;}catch(e){genPhase=0;}
+  })();
   var sessionGenCount=0;
   // activeCodes defined globally above
 
@@ -1052,12 +1056,24 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
     if(genPhase===0){btn.textContent='Generar 10 RUTs gratis';hint.innerHTML='Primera tanda sin anuncio · <a onclick="goTo(\'precios\')" style="color:var(--accent);cursor:pointer;text-decoration:none">Planes sin límite →</a>';btn.disabled=false;}
     else if(genPhase===1){btn.textContent='Obtener 10 RUTs más — ver anuncio';hint.innerHTML='Segunda tanda · 1 anuncio breve · <a onclick="goTo(\'precios\')" style="color:var(--accent);cursor:pointer;text-decoration:none">Planes sin anuncios →</a>';btn.disabled=false;}
     else if(genPhase===2){btn.textContent='Obtener 10 RUTs más — ver anuncio';hint.innerHTML='Tercera tanda · 1 anuncio breve · <a onclick="goTo(\'precios\')" style="color:var(--accent);cursor:pointer;text-decoration:none">Planes sin anuncios →</a>';btn.disabled=false;}
-    else{btn.textContent='Límite diario alcanzado (30 RUTs)';btn.disabled=true;hint.innerHTML='Vuelve mañana o <a onclick="goTo(\'precios\')" style="color:var(--accent);cursor:pointer;text-decoration:none">elige un plan →</a>';}
+    else{
+      btn.textContent='Límite alcanzado (30 RUTs)';btn.disabled=true;
+      var _gt=parseInt(localStorage.getItem('_gt')||'0');
+      var _minLeft=_gt?Math.max(0,Math.ceil((_gt+3600000-Date.now())/60000)):0;
+      hint.innerHTML=(_minLeft>0?'Se recarga en <strong style="color:var(--text)">'+_minLeft+' min</strong>':'Recargando...')+' · <a onclick="goTo(\'precios\')" style="color:var(--accent);cursor:pointer;text-decoration:none">elige un plan →</a>';
+    }
     updateCodeBoxes();
   }
 
   updateValUI();
   updatePhaseUI();
+  setInterval(function(){
+    if(genPhase>=3){
+      var _gt=parseInt(localStorage.getItem('_gt')||'0');
+      if(_gt && Date.now()-_gt>=3600000){genPhase=0;localStorage.removeItem('_gp');localStorage.removeItem('_gt');}
+      updatePhaseUI();
+    }
+  },60000);
 
   // On load: if plan with genLimit exists, go to mi-plan
   var _ip = getPlan();
@@ -1205,7 +1221,7 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
         div.innerHTML='<span class="rut-num">'+(offset+n+1)+'.</span><code>'+rut+'</code><button class="btn-outline" onclick="copyRut(\''+rut+'\',this)">Copiar</button>';
         list.appendChild(div);n++;
       }
-      if(!p||!p.genLimit){genPhase++;saveGen();}
+      if(!p||!p.genLimit){genPhase++;saveGen();if(genPhase>=3)localStorage.setItem('_gt',Date.now().toString());}
       else{
         // Guardar set actualizado y contador total
         saveGenSet(genSet);
