@@ -971,8 +971,12 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
   }
 
   function getGenUnlocked(){
-    var p=getPlan();
-    return (p&&p.genLimit)?true:false;
+    if(!activeCodes||!Array.isArray(activeCodes))return false;
+    for(var i=0;i<activeCodes.length;i++){
+      var _cached=localStorage.getItem('_cd_'+activeCodes[i]);
+      if(_cached)try{var _cp=JSON.parse(_cached);if(_cp&&_cp.genLimit)return true;}catch(e){}
+    }
+    return false;
   }
 
   // ── UPDATE UI ──
@@ -1336,6 +1340,13 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
           localStorage.removeItem('_cd_'+c);
           localStorage.removeItem('_gu_'+c);
           localStorage.removeItem('_gs_'+c);
+          ['val','gen'].forEach(function(panel){
+            if(_miCodigo[panel]===c){
+              _miCodigo[panel]='';
+              var box=document.getElementById('mi-codigo-box-'+panel);
+              if(box) box.style.display='none';
+            }
+          });
         });
         if(_rev.length>0) localStorage.setItem('_ac',JSON.stringify(activeCodes));
       }
@@ -1448,7 +1459,6 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
 
   // ── ACTIVAR UI DE PLAN ──
   window.activarUIPlan = function(p){
-    if(!p || !p.genLimit) return;
     updateValUI();
     updatePhaseUI();
   };
