@@ -1234,6 +1234,8 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
           sc.textContent=sessionGenCount+' RUT'+(sessionGenCount===1?'':'s')+' en esta sesión · '+rem2+' restante'+(rem2===1?'':'s');
         }
       }
+      // Registrar generación en Supabase (fire-and-forget)
+      if(_sb) _sb.from('generaciones').insert({cantidad:count,tipo:(p&&p.genLimit)?'plan':'free'}).then(function(){});
       // Ocultar spinner
       if(btnEl) btnEl.disabled=false;
       if(btnText) btnText.textContent='Generar';

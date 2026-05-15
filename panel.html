@@ -105,6 +105,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .com-del-btn{background:none;border:1px solid rgba(255,107,107,.25);color:#ff6b6b;font-family:'Sora',sans-serif;font-size:.72rem;padding:.45rem .75rem;border-radius:8px;cursor:pointer;transition:all .15s}
 .com-del-btn:hover{border-color:#ff6b6b;background:rgba(255,107,107,.08)}
 .com-empty{text-align:center;padding:2rem;color:var(--muted);font-size:.82rem}
+.active-filter{border-color:var(--accent)!important;color:var(--accent)!important}
 @media(max-width:700px){.stats{grid-template-columns:1fr 1fr}.g3{grid-template-columns:1fr}.ah{padding:1rem}}
 </style>
 </head>
@@ -202,6 +203,51 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <table>
           <thead><tr><th>Código</th><th>Plan</th><th>Val/día</th><th>Gen/vez</th><th>Activaciones</th><th>Vence</th><th>Estado</th><th></th></tr></thead>
           <tbody id="ctb"><tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--muted)">Cargando...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-hdr">
+        <div class="sec-t">RUTs generados</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <button class="sbtn gen-filter active-filter" onclick="lgen('all')">Siempre</button>
+          <button class="sbtn gen-filter" onclick="lgen('year')">1 año</button>
+          <button class="sbtn gen-filter" onclick="lgen('30d')">30 días</button>
+          <button class="sbtn gen-filter" onclick="lgen('7d')">7 días</button>
+          <button class="sbtn gen-filter" onclick="lgen('today')">Hoy</button>
+          <button class="sbtn gen-filter" onclick="lgen('1h')">1 hora</button>
+        </div>
+      </div>
+      <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+        <div>
+          <div class="sl">Total RUTs</div>
+          <div class="sv" id="gen-total" style="font-size:2.2rem">—</div>
+        </div>
+        <div>
+          <div class="sl">Con plan</div>
+          <div class="sv" id="gen-plan" style="font-size:1.4rem;color:var(--green)">—</div>
+        </div>
+        <div>
+          <div class="sl">Gratis</div>
+          <div class="sv" id="gen-free" style="font-size:1.4rem;color:var(--muted)">—</div>
+        </div>
+        <div>
+          <div class="sl">Sesiones</div>
+          <div class="sv" id="gen-sess" style="font-size:1.4rem">—</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-hdr">
+        <div class="sec-t">Activaciones recientes</div>
+        <button class="sbtn" onclick="lacts()">↻ Actualizar</button>
+      </div>
+      <div style="overflow-x:auto">
+        <table>
+          <thead><tr><th>Código</th><th>Fecha</th></tr></thead>
+          <tbody id="acts-tb"><tr><td colspan="2" style="text-align:center;padding:2rem;color:var(--muted)">Cargando...</td></tr></tbody>
         </table>
       </div>
     </div>
@@ -326,7 +372,7 @@ function showAdmin() {
   document.getElementById('step-pin').style.display = 'none';
   document.getElementById('admin').style.display = 'flex';
   document.getElementById('aem').textContent = sessionUser.email;
-  ls(); lc(); lup(); lcoms();
+  ls(); lc(); lup(); lcoms(); lgen('all'); lacts();
 }
 
 async function otherAccount() {
@@ -515,6 +561,42 @@ async function savePlan() {
 
 function cancelEditPlan() {
   document.getElementById('up-edit-form').style.display = 'none';
+}
+
+async function lgen(period) {
+  document.querySelectorAll('.gen-filter').forEach(function(b){ b.classList.remove('active-filter'); });
+  event.currentTarget.classList.add('active-filter');
+  var now = new Date();
+  var desde = null;
+  if(period === 'year')  { desde = new Date(now); desde.setFullYear(desde.getFullYear()-1); }
+  if(period === '30d')   { desde = new Date(now); desde.setDate(desde.getDate()-30); }
+  if(period === '7d')    { desde = new Date(now); desde.setDate(desde.getDate()-7); }
+  if(period === 'today') { desde = new Date(now.getFullYear(),now.getMonth(),now.getDate()); }
+  if(period === '1h')    { desde = new Date(now.getTime()-3600000); }
+  var q = sb.from('generaciones').select('cantidad,tipo');
+  if(desde) q = q.gte('fecha', desde.toISOString());
+  var r = await q;
+  if(!r.data) return;
+  var total = r.data.reduce(function(s,x){return s+x.cantidad;},0);
+  var plan  = r.data.filter(function(x){return x.tipo==='plan';}).reduce(function(s,x){return s+x.cantidad;},0);
+  var free  = r.data.filter(function(x){return x.tipo==='free';}).reduce(function(s,x){return s+x.cantidad;},0);
+  document.getElementById('gen-total').textContent = total.toLocaleString('es-CL');
+  document.getElementById('gen-plan').textContent  = plan.toLocaleString('es-CL');
+  document.getElementById('gen-free').textContent  = free.toLocaleString('es-CL');
+  document.getElementById('gen-sess').textContent  = r.data.length.toLocaleString('es-CL');
+}
+
+async function lacts() {
+  var r = await sb.from('activaciones').select('codigo,fecha').order('fecha',{ascending:false}).limit(50);
+  var tb = document.getElementById('acts-tb');
+  if(!r.data || r.data.length === 0) {
+    tb.innerHTML = '<tr><td colspan="2" style="text-align:center;padding:2rem;color:var(--muted)">Sin activaciones.</td></tr>';
+    return;
+  }
+  tb.innerHTML = r.data.map(function(a){
+    var f = new Date(a.fecha).toLocaleString('es-CL',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+    return '<tr><td class="ctb">'+esc(a.codigo)+'</td><td style="color:var(--muted);font-size:.72rem">'+f+'</td></tr>';
+  }).join('');
 }
 
 async function delPlan(btn) {
