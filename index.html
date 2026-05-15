@@ -917,6 +917,8 @@ try {
 // Global state
 var activeCodes = [];
 try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArray(_acp)) activeCodes = _acp; } catch(e) { activeCodes = []; }
+var _uid = localStorage.getItem('_uid');
+if(!_uid){_uid='u-'+Date.now().toString(36)+Math.random().toString(36).slice(2,7);localStorage.setItem('_uid',_uid);}
 
 (function(){
 
@@ -1235,7 +1237,7 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
         }
       }
       // Registrar generación en Supabase (fire-and-forget)
-      if(_sb) _sb.from('generaciones').insert({cantidad:count,tipo:(p&&p.genLimit)?'plan':'free'}).then(function(){});
+      if(_sb) _sb.from('generaciones').insert({cantidad:count,tipo:(p&&p.genLimit)?'plan':'free',uid:_uid}).then(function(){});
       // Ocultar spinner
       if(btnEl) btnEl.disabled=false;
       if(btnText) btnText.textContent='Generar';

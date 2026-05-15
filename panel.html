@@ -211,12 +211,12 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <div class="sec-hdr">
         <div class="sec-t">RUTs generados</div>
         <div style="display:flex;gap:6px;flex-wrap:wrap">
-          <button class="sbtn gen-filter active-filter" onclick="lgen('all')">Siempre</button>
-          <button class="sbtn gen-filter" onclick="lgen('year')">1 año</button>
-          <button class="sbtn gen-filter" onclick="lgen('30d')">30 días</button>
-          <button class="sbtn gen-filter" onclick="lgen('7d')">7 días</button>
-          <button class="sbtn gen-filter" onclick="lgen('today')">Hoy</button>
-          <button class="sbtn gen-filter" onclick="lgen('1h')">1 hora</button>
+          <button class="sbtn gen-filter active-filter" data-period="all" onclick="lgen('all',this)">Siempre</button>
+          <button class="sbtn gen-filter" data-period="year" onclick="lgen('year',this)">1 año</button>
+          <button class="sbtn gen-filter" data-period="30d" onclick="lgen('30d',this)">30 días</button>
+          <button class="sbtn gen-filter" data-period="7d" onclick="lgen('7d',this)">7 días</button>
+          <button class="sbtn gen-filter" data-period="today" onclick="lgen('today',this)">Hoy</button>
+          <button class="sbtn gen-filter" data-period="1h" onclick="lgen('1h',this)">1 hora</button>
         </div>
       </div>
       <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
@@ -236,6 +236,16 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <div class="sl">Sesiones</div>
           <div class="sv" id="gen-sess" style="font-size:1.4rem">—</div>
         </div>
+        <div>
+          <div class="sl">Usuarios únicos</div>
+          <div class="sv" id="gen-uids" style="font-size:1.4rem;color:var(--accent)">—</div>
+        </div>
+      </div>
+      <div style="margin-top:1.25rem;overflow-x:auto" id="gen-users-wrap">
+        <table>
+          <thead><tr><th>ID anónimo</th><th>RUTs</th><th>Sesiones</th><th>Tipo</th><th>Última vez</th></tr></thead>
+          <tbody id="gen-users-tb"></tbody>
+        </table>
       </div>
     </div>
 
@@ -563,9 +573,10 @@ function cancelEditPlan() {
   document.getElementById('up-edit-form').style.display = 'none';
 }
 
-async function lgen(period) {
+async function lgen(period, btn) {
   document.querySelectorAll('.gen-filter').forEach(function(b){ b.classList.remove('active-filter'); });
-  event.currentTarget.classList.add('active-filter');
+  var active = btn || document.querySelector('.gen-filter[data-period="'+period+'"]');
+  if(active) active.classList.add('active-filter');
   var now = new Date();
   var desde = null;
   if(period === 'year')  { desde = new Date(now); desde.setFullYear(desde.getFullYear()-1); }
@@ -584,6 +595,27 @@ async function lgen(period) {
   document.getElementById('gen-plan').textContent  = plan.toLocaleString('es-CL');
   document.getElementById('gen-free').textContent  = free.toLocaleString('es-CL');
   document.getElementById('gen-sess').textContent  = r.data.length.toLocaleString('es-CL');
+
+  // Agrupar por uid
+  var umap = {};
+  r.data.forEach(function(x){
+    var u = x.uid || '(sin ID)';
+    if(!umap[u]) umap[u] = {ruts:0, sess:0, tipo: x.tipo, ultima: x.fecha};
+    umap[u].ruts += x.cantidad;
+    umap[u].sess++;
+    if(x.tipo === 'plan') umap[u].tipo = 'plan';
+    if(x.fecha > umap[u].ultima) umap[u].ultima = x.fecha;
+  });
+  var ulist = Object.keys(umap).map(function(k){return {uid:k, ruts:umap[k].ruts, sess:umap[k].sess, tipo:umap[k].tipo, ultima:umap[k].ultima};});
+  ulist.sort(function(a,b){return b.ruts - a.ruts;});
+  document.getElementById('gen-uids').textContent = ulist.length.toLocaleString('es-CL');
+  var tb = document.getElementById('gen-users-tb');
+  if(!ulist.length){ tb.innerHTML='<tr><td colspan="5" style="text-align:center;padding:1rem;color:var(--muted)">Sin datos aún.</td></tr>'; return; }
+  tb.innerHTML = ulist.map(function(u){
+    var f = u.ultima ? new Date(u.ultima).toLocaleString('es-CL',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}) : '—';
+    var badge = u.tipo==='plan'?'<span class="bon">Plan</span>':'<span style="font-size:.65rem;color:var(--muted)">Free</span>';
+    return '<tr><td style="font-family:monospace;font-size:.72rem">'+esc(u.uid)+'</td><td style="font-weight:600">'+u.ruts.toLocaleString('es-CL')+'</td><td>'+u.sess+'</td><td>'+badge+'</td><td style="color:var(--muted);font-size:.72rem">'+f+'</td></tr>';
+  }).join('');
 }
 
 async function lacts() {
