@@ -963,11 +963,27 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
     for(var i=0;i<activeCodes.length;i++){if(localStorage.getItem('_cd_'+activeCodes[i]))return activeCodes[i];}
     return null;
   }
-  function getGenUsed(){var k=getActiveKey();if(!k)return 0;return parseInt(localStorage.getItem('_gu_'+k)||'0');}
-  function setGenUsed(n){var k=getActiveKey();if(k)localStorage.setItem('_gu_'+k,n);}
-  function getGenSet(){var k=getActiveKey();if(!k)return new Set();try{return new Set(JSON.parse(localStorage.getItem('_gs_'+k)||'[]'));}catch(e){return new Set();}}
-  function saveGenSet(s){var k=getActiveKey();if(!k)return;localStorage.setItem('_gs_'+k,JSON.stringify(Array.from(s)));}
-  function getGenRemaining(){var p=getPlan();if(!p||!p.genLimit)return null;return Math.max(0,p.genLimit-getGenUsed());}
+  function getGenPlan(){
+    if(!activeCodes||!Array.isArray(activeCodes))return null;
+    for(var i=0;i<activeCodes.length;i++){
+      var _c=localStorage.getItem('_cd_'+activeCodes[i]);
+      if(_c)try{var _p=JSON.parse(_c);if(_p&&_p.genLimit)return _p;}catch(e){}
+    }
+    return null;
+  }
+  function getGenKey(){
+    if(!activeCodes||!Array.isArray(activeCodes))return null;
+    for(var i=0;i<activeCodes.length;i++){
+      var _c=localStorage.getItem('_cd_'+activeCodes[i]);
+      if(_c)try{var _p=JSON.parse(_c);if(_p&&_p.genLimit)return activeCodes[i];}catch(e){}
+    }
+    return null;
+  }
+  function getGenUsed(){var k=getGenKey();if(!k)return 0;return parseInt(localStorage.getItem('_gu_'+k)||'0');}
+  function setGenUsed(n){var k=getGenKey();if(k)localStorage.setItem('_gu_'+k,n);}
+  function getGenSet(){var k=getGenKey();if(!k)return new Set();try{return new Set(JSON.parse(localStorage.getItem('_gs_'+k)||'[]'));}catch(e){return new Set();}}
+  function saveGenSet(s){var k=getGenKey();if(!k)return;localStorage.setItem('_gs_'+k,JSON.stringify(Array.from(s)));}
+  function getGenRemaining(){var p=getGenPlan();if(!p||!p.genLimit)return null;return Math.max(0,p.genLimit-getGenUsed());}
 
   function getValLimit(){
     var p=getPlan();
@@ -1003,7 +1019,7 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
     var planUI=document.getElementById('gen-plan-ui');
 
     if(unlocked){
-      var p=getPlan();
+      var p=getGenPlan();
       // Show plan UI, hide free UI
       freeUI.style.display='none';
       planUI.style.display='block';
@@ -1151,7 +1167,7 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
   document.getElementById('ad-modal').addEventListener('click',function(e){if(e.target===this)closeModal();});
 
   window.ejecutarGenerar = function ejecutarGenerar(){
-    var p=getPlan();
+    var p=getGenPlan();
     var inputEl = p&&p.genLimit ? document.getElementById('gen-count-plan') : document.getElementById('gen-count');
 
     // Con plan: verificar límite total restante
