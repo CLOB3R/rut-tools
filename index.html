@@ -457,7 +457,7 @@ footer a{color:var(--muted);text-decoration:underline}
         <div class="limit-bar-label"><span>Uso hoy</span><span id="val-label">0 / 10</span></div>
         <div class="limit-bar-track"><div class="limit-bar-fill" id="val-bar" style="width:0%"></div></div>
       </div>
-      <p class="upgrade-hint" id="val-upgrade-hint">Plan gratis: 10 validaciones/día · <a onclick="goTo('precios')">Ver planes →</a></p>
+      <p class="upgrade-hint" id="val-upgrade-hint">Plan gratis: 10 validaciones · anuncio para continuar · <a onclick="goTo('precios')">Ver planes →</a></p>
       <div class="divider"></div>
       <span class="lock-badge" id="excel-lock">🔒 Pro · Plus · Business</span>
       <div class="upload-zone upload-locked" id="excel-zone">
@@ -924,8 +924,6 @@ if(!_uid){_uid='u-'+Date.now().toString(36)+Math.random().toString(36).slice(2,7
 
   // ── STATE ──
   var td=new Date().toDateString();
-  if(localStorage.getItem('_vd')!==td){localStorage.setItem('_vu','0');localStorage.setItem('_vd',td);}
-
   var valUsed=parseInt(localStorage.getItem('_vu')||'0');
   var genPhase=0;
   (function(){
@@ -1142,9 +1140,15 @@ if(!_uid){_uid='u-'+Date.now().toString(36)+Math.random().toString(36).slice(2,7
   window.validar=function(){
     var box=document.getElementById('result-box');
     var lim=getValLimit();
+    var vp=getPlan();
     if(valUsed>=lim){
-      box.className='result invalid';box.style.display='flex';
-      box.innerHTML='<div class="result-icon">🔒</div><div class="result-text"><strong>Límite diario alcanzado</strong><span>Llegaste a las '+lim+' validaciones de hoy.<br/><a onclick="goTo(\'precios\')" style="color:var(--accent);cursor:pointer">Ver planes →</a></span></div>';
+      if(vp&&vp.valLimit){
+        box.className='result invalid';box.style.display='flex';
+        box.innerHTML='<div class="result-icon">🔒</div><div class="result-text"><strong>Límite del plan alcanzado</strong><span>Llegaste a las '+lim+' validaciones de tu plan.</span></div>';
+        return;
+      }
+      pendingAction='validar';
+      openModal('10 validaciones más','Mira este breve anuncio para seguir validando RUTs gratis.');
       return;
     }
     var raw=clean(document.getElementById('rut-input').value);
@@ -1181,7 +1185,12 @@ if(!_uid){_uid='u-'+Date.now().toString(36)+Math.random().toString(36).slice(2,7
     clearInterval(adTimer);
     adTimer=setInterval(function(){secs--;document.getElementById('ad-secs').textContent=secs;document.getElementById('ad-progress').style.width=((10-secs)/10*100)+'%';if(secs<=0){clearInterval(adTimer);document.getElementById('modal-countdown').style.display='none';document.getElementById('reward-btn').style.display='block';document.getElementById('ad-progress').style.width='100%';}},1000);
   }
-  window.claimReward=function(){closeModal();if(pendingAction==='generar')ejecutarGenerar();pendingAction=null;};
+  window.claimReward=function(){
+    closeModal();
+    if(pendingAction==='generar') ejecutarGenerar();
+    if(pendingAction==='validar'){valUsed=0;saveVal();updateValUI();validar();}
+    pendingAction=null;
+  };
   window.closeModal=function(){clearInterval(adTimer);document.getElementById('ad-modal').classList.remove('open');};
   document.getElementById('ad-modal').addEventListener('click',function(e){if(e.target===this)closeModal();});
 
