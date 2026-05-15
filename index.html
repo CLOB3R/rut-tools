@@ -479,12 +479,6 @@ footer a{color:var(--muted);text-decoration:underline}
         </div>
         <div class="code-result" id="code-result-val"></div>
       </div>
-      <div class="mi-codigo-box" id="mi-codigo-box-val">
-        <span class="mi-codigo-label">Mi código</span>
-        <span class="mi-codigo-val" id="mi-codigo-text-val">••••••••</span>
-        <button class="mi-codigo-eye" onclick="toggleMiCodigo('val')" title="Mostrar/ocultar">&#128065;</button>
-        <button class="mi-codigo-copy" onclick="copiarMiCodigo('val')">Copiar</button>
-      </div>
     </div>
 
     <!-- GENERAR -->
@@ -518,12 +512,6 @@ footer a{color:var(--muted);text-decoration:underline}
         <p id="gen-plan-hint" style="font-size:.72rem;color:var(--muted);margin-top:.5rem"></p>
         <div id="gen-session-count" style="display:none;font-size:.72rem;color:var(--muted);margin-top:.5rem;text-align:center"></div>
       </div>
-      <div class="mi-codigo-box" id="mi-codigo-box-gen">
-        <span class="mi-codigo-label">Mi código</span>
-        <span class="mi-codigo-val" id="mi-codigo-text-gen">••••••••</span>
-        <button class="mi-codigo-eye" onclick="toggleMiCodigo('gen')" title="Mostrar/ocultar">&#128065;</button>
-        <button class="mi-codigo-copy" onclick="copiarMiCodigo('gen')">Copiar</button>
-      </div>
       <div class="rut-list" id="rut-list"></div>
       <button class="copy-all-btn" id="copy-all-btn" onclick="copiarTodos()">⎘ Copiar todos los RUTs</button>
       <p id="gen-note" style="display:none;margin-top:1rem;font-size:.72rem;color:var(--muted);line-height:1.6">RUTs válidos matemáticamente para <strong style="color:var(--text)">testing y desarrollo</strong> únicamente.</p>
@@ -555,6 +543,22 @@ footer a{color:var(--muted);text-decoration:underline}
     <span class="native-ad-tag">Patrocinado</span>
   </a>
 
+
+  <!-- MI CÓDIGO SECTION -->
+  <div id="mi-codigo-section" style="width:100%;max-width:540px;display:flex;flex-direction:column;gap:.75rem;margin-top:1.5rem">
+    <div class="mi-codigo-box" id="mi-codigo-box-val">
+      <span class="mi-codigo-label">Mi código · Validar</span>
+      <span class="mi-codigo-val" id="mi-codigo-text-val">••••••••</span>
+      <button class="mi-codigo-eye" onclick="toggleMiCodigo('val')" title="Mostrar/ocultar">&#128065;</button>
+      <button class="mi-codigo-copy" onclick="copiarMiCodigo('val')">Copiar</button>
+    </div>
+    <div class="mi-codigo-box" id="mi-codigo-box-gen">
+      <span class="mi-codigo-label">Mi código · Generar</span>
+      <span class="mi-codigo-val" id="mi-codigo-text-gen">••••••••</span>
+      <button class="mi-codigo-eye" onclick="toggleMiCodigo('gen')" title="Mostrar/ocultar">&#128065;</button>
+      <button class="mi-codigo-copy" onclick="copiarMiCodigo('gen')">Copiar</button>
+    </div>
+  </div>
 
   <!-- CASOS DE USO -->
   <div style="width:100%;max-width:720px;margin-top:5rem;padding:0 .5rem">
@@ -1008,7 +1012,7 @@ try { var _acp = JSON.parse(localStorage.getItem('_ac') || '[]'); if(Array.isArr
       var planHint=document.getElementById('gen-plan-hint');
       if(planHint) planHint.textContent=(remaining>0?remaining+' / '+p.genLimit+' RUTs restantes':'Límite alcanzado ('+p.genLimit+' RUTs)');
       var countPlan=document.getElementById('gen-count-plan');
-      if(countPlan){ countPlan.max=remaining>0?remaining:1; }
+      if(countPlan && remaining>0) countPlan.max=p.genLimit;
       var planBtn=document.getElementById('gen-plan-btn');
       if(planBtn) planBtn.disabled=(remaining===0);
       var planBtnText=document.getElementById('gen-btn-text');
