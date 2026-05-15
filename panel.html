@@ -584,7 +584,7 @@ async function lgen(period, btn) {
   if(period === '7d')    { desde = new Date(now); desde.setDate(desde.getDate()-7); }
   if(period === 'today') { desde = new Date(now.getFullYear(),now.getMonth(),now.getDate()); }
   if(period === '1h')    { desde = new Date(now.getTime()-3600000); }
-  var q = sb.from('generaciones').select('cantidad,tipo');
+  var q = sb.from('generaciones').select('cantidad,tipo,uid,fecha').order('fecha',{ascending:false});
   if(desde) q = q.gte('fecha', desde.toISOString());
   var r = await q;
   if(!r.data) return;
